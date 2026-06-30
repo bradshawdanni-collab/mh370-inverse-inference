@@ -5,7 +5,11 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from mh370_inverse_inference.satcom.geometry import slant_range_m
-from mh370_inverse_inference.satcom.wgs84 import GeodeticPoint, geodetic_to_ecef
+from mh370_inverse_inference.satcom.wgs84 import (
+    ECEFPoint,
+    GeodeticPoint,
+    geodetic_to_ecef,
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -20,7 +24,7 @@ class LatitudeRoot:
 def slant_range_residual_m(
     point: GeodeticPoint,
     *,
-    satellite_ecef: object,
+    satellite_ecef: ECEFPoint,
     target_range_m: float,
 ) -> float:
     """Return modelled minus target slant range in metres."""
@@ -32,7 +36,7 @@ def _bisect_latitude(
     longitude_deg: float,
     lower_latitude_deg: float,
     upper_latitude_deg: float,
-    satellite_ecef: object,
+    satellite_ecef: ECEFPoint,
     target_range_m: float,
     altitude_m: float,
     tolerance_m: float,
@@ -73,7 +77,7 @@ def _bisect_latitude(
 def solve_latitudes_for_longitude(
     *,
     longitude_deg: float,
-    satellite_ecef: object,
+    satellite_ecef: ECEFPoint,
     target_range_m: float,
     altitude_m: float = 0.0,
     latitude_step_deg: float = 1.0,
