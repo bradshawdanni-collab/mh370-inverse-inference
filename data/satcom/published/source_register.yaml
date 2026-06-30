@@ -1,0 +1,16 @@
+schema_version: 1
+artifacts: []
+
+# Required fields for each admitted artifact:
+# - artifact_id
+# - publisher
+# - publication_title
+# - source_url
+# - publication_date
+# - retrieved_utc
+# - sha256
+# - licence_or_terms
+# - provenance
+# - transformation_history
+# - uncertainty_notes
+# - admission_status
