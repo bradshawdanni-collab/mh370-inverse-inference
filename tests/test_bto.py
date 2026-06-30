@@ -1,3 +1,5 @@
+import pytest
+
 from mh370_inverse_inference.satcom.bto import timing_error_to_range_m
 
 
@@ -14,6 +16,3 @@ def test_one_way_conversion_does_not_divide_by_two() -> None:
     round_trip = timing_error_to_range_m(20e-6)
     one_way = timing_error_to_range_m(20e-6, round_trip=False)
     assert one_way == pytest.approx(round_trip * 2.0)
-
-
-import pytest
