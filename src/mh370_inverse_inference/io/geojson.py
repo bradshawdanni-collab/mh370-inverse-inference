@@ -10,9 +10,7 @@ from mh370_inverse_inference.satcom.wgs84 import GeodeticPoint
 
 def locus_to_geojson(points: Sequence[GeodeticPoint], *, name: str) -> str:
     """Serialize a locus as a stable GeoJSON FeatureCollection."""
-    coordinates = [
-        [point.longitude_deg, point.latitude_deg] for point in points
-    ]
+    coordinates = [[point.longitude_deg, point.latitude_deg] for point in points]
     payload = {
         "features": [
             {
