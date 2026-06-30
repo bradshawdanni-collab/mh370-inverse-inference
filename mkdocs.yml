@@ -9,4 +9,5 @@ nav:
   - Assumptions: assumptions.md
   - Evidence Model: evidence-model.md
   - SATCOM Geometry: satcom-geometry.md
+  - BTO Locus: bto-locus.md
   - Validation: validation.md
