@@ -1,0 +1,72 @@
+name: L0.3.1 RGAP Data Change Audit Workflow
+
+on:
+  pull_request:
+    paths:
+      - "data/satcom/**"
+      - "data/source-register.csv"
+      - "tests/test_registry_integrity.py"
+      - ".github/workflows/rgap-audit.yml"
+      - "pyproject.toml"
+
+permissions:
+  contents: read
+
+jobs:
+  rgap-audit:
+    name: RGAP Multi-Layer Verification
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Layer 1 - coarse data gate
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git fetch origin "${{ github.base_ref }}" --depth=1
+          changed_files="$(git diff --name-only "origin/${{ github.base_ref }}...HEAD")"
+
+          echo "Changed files detected:"
+          printf '%s\n' "$changed_files"
+
+          registry_pattern='^(data/source-register\.csv|data/satcom/source_register\.yaml|data/satcom/published/source_register\.yaml)$'
+
+          data_changed="$(
+            printf '%s\n' "$changed_files" \
+              | grep '^data/satcom/' \
+              | grep -Ev "$registry_pattern" \
+              || true
+          )"
+          registry_changed="$(
+            printf '%s\n' "$changed_files" \
+              | grep -E "$registry_pattern" \
+              || true
+          )"
+
+          if [[ -n "$data_changed" && -z "$registry_changed" ]]; then
+            echo "::error::RGAP protocol violation: data/satcom content changed without a matching governance register update."
+            echo "Changed data files:"
+            printf '%s\n' "$data_changed"
+            exit 1
+          fi
+
+          echo "RGAP coarse gate passed."
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install development dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+
+      - name: Layer 2 - deep registry integrity check
+        run: pytest tests/test_registry_integrity.py
