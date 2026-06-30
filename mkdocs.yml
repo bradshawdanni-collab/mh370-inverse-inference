@@ -1,0 +1,11 @@
+site_name: MH370 Inverse Inference
+site_description: Reproducible scientific documentation for the MH370 inverse-inference framework
+repo_url: https://github.com/bradshawdanni-collab/mh370-inverse-inference
+theme:
+  name: material
+nav:
+  - Home: index.md
+  - Architecture: architecture.md
+  - Assumptions: assumptions.md
+  - Evidence Model: evidence-model.md
+  - Validation: validation.md
