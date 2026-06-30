@@ -72,9 +72,12 @@ def ecef_to_geodetic(point: ECEFPoint, *, max_iterations: int = 15) -> GeodeticP
             1.0 - WGS84_E2 * sin_lat * sin_lat
         )
         altitude_m = horizontal / cos(latitude) - prime_vertical_radius
-        denominator = horizontal * (
-            1.0 - WGS84_E2 * prime_vertical_radius / (prime_vertical_radius + altitude_m)
+        ratio = (
+            WGS84_E2
+            * prime_vertical_radius
+            / (prime_vertical_radius + altitude_m)
         )
+        denominator = horizontal * (1.0 - ratio)
         updated_latitude = atan2(point.z_m, denominator)
         if abs(updated_latitude - latitude) < 1e-12:
             latitude = updated_latitude
