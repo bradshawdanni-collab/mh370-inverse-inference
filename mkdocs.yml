@@ -8,4 +8,5 @@ nav:
   - Architecture: architecture.md
   - Assumptions: assumptions.md
   - Evidence Model: evidence-model.md
+  - SATCOM Geometry: satcom-geometry.md
   - Validation: validation.md
