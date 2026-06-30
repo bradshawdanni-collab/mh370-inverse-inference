@@ -39,9 +39,7 @@ def geodetic_to_ecef(point: GeodeticPoint) -> ECEFPoint:
 
     x_m = (prime_vertical_radius + point.altitude_m) * cos_lat * cos(longitude)
     y_m = (prime_vertical_radius + point.altitude_m) * cos_lat * sin(longitude)
-    z_m = (
-        prime_vertical_radius * (1.0 - WGS84_E2) + point.altitude_m
-    ) * sin_lat
+    z_m = (prime_vertical_radius * (1.0 - WGS84_E2) + point.altitude_m) * sin_lat
     return ECEFPoint(x_m=x_m, y_m=y_m, z_m=z_m)
 
 
@@ -68,15 +66,9 @@ def ecef_to_geodetic(point: ECEFPoint, *, max_iterations: int = 15) -> GeodeticP
 
     for _ in range(max_iterations):
         sin_lat = sin(latitude)
-        prime_vertical_radius = WGS84_A_M / sqrt(
-            1.0 - WGS84_E2 * sin_lat * sin_lat
-        )
+        prime_vertical_radius = WGS84_A_M / sqrt(1.0 - WGS84_E2 * sin_lat * sin_lat)
         altitude_m = horizontal / cos(latitude) - prime_vertical_radius
-        ratio = (
-            WGS84_E2
-            * prime_vertical_radius
-            / (prime_vertical_radius + altitude_m)
-        )
+        ratio = WGS84_E2 * prime_vertical_radius / (prime_vertical_radius + altitude_m)
         denominator = horizontal * (1.0 - ratio)
         updated_latitude = atan2(point.z_m, denominator)
         if abs(updated_latitude - latitude) < 1e-12:
