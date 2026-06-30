@@ -4,7 +4,11 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from mh370_inverse_inference.satcom.wgs84 import ECEFPoint, GeodeticPoint, geodetic_to_ecef
+from mh370_inverse_inference.satcom.wgs84 import (
+    ECEFPoint,
+    GeodeticPoint,
+    geodetic_to_ecef,
+)
 
 
 @dataclass(frozen=True, slots=True)
