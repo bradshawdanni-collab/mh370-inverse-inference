@@ -1,0 +1,16 @@
+schema_version: 1
+artifacts: []
+
+# Each artifact entry must include:
+# - artifact_id
+# - title
+# - source_url
+# - publisher
+# - publication_date
+# - retrieved_utc
+# - sha256
+# - licence_or_terms
+# - provenance
+# - transformation
+# - uncertainty_notes
+# - status
