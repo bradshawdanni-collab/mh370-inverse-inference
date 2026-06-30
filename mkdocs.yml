@@ -11,4 +11,5 @@ nav:
   - SATCOM Geometry: satcom-geometry.md
   - BTO Locus: bto-locus.md
   - Contributing: contributing.md
+  - BTO Validation: bto-validation.md
   - Validation: validation.md
