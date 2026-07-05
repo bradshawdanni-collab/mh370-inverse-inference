@@ -79,8 +79,7 @@ class CandidateAdmissibility:
 def _evaluate_constraint(
     *, residual: float | None, tolerance: float | None
 ) -> ConstraintDecision:
-    enabled = tolerance is not None
-    if not enabled:
+    if tolerance is None:
         return ConstraintDecision(
             enabled=False,
             passed=False,
