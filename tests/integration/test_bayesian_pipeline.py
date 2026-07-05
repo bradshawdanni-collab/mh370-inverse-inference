@@ -6,11 +6,12 @@ from pathlib import Path
 from typing import Any
 
 import pytest
-
 from mh370_inverse_inference.bayesian.contract import Hypothesis, fuse_evidence
 from mh370_inverse_inference.bayesian.orchestrator import EvidenceOrchestrator
 from mh370_inverse_inference.bayesian.satcom_adapter import SatcomLikelihoodAdapter
-from mh370_inverse_inference.bayesian.trajectory_adapter import TrajectoryConsistencyAdapter
+from mh370_inverse_inference.bayesian.trajectory_adapter import (
+    TrajectoryConsistencyAdapter,
+)
 
 FIXTURE_DIR = Path(__file__).parent.parent / "fixtures" / "bayesian"
 
