@@ -8,12 +8,13 @@ from mh370_inverse_inference.satcom.arc import (
 )
 from mh370_inverse_inference.satcom.geometry import geodesic_forward, slant_range_m
 from mh370_inverse_inference.satcom.wgs84 import (
+    ECEFPoint,
     GeodeticPoint,
     geodetic_to_ecef,
 )
 
 
-def _fixture_geometry() -> tuple[object, float, float]:
+def _fixture_geometry() -> tuple[ECEFPoint, float, float]:
     satellite = geodetic_to_ecef(
         GeodeticPoint(
             latitude_deg=0.0,
