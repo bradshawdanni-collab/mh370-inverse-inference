@@ -5,10 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from math import isfinite
 
-from mh370_inverse_inference.satcom.geometry import (
-    geodesic_forward,
-    slant_range_m,
-)
+from mh370_inverse_inference.satcom.geometry import geodesic_forward, slant_range_m
 from mh370_inverse_inference.satcom.wgs84 import (
     ECEFPoint,
     GeodeticPoint,
@@ -211,9 +208,7 @@ def solve_slant_range_point(
             upper_distance_m = midpoint_m
             upper_residual_m = candidate_residual_m
 
-    raise ValueError(
-        "Slant-range solver did not converge within the iteration limit"
-    )
+    raise ValueError("Slant-range solver did not converge within the iteration limit")
 
 
 def generate_slant_range_arc(
