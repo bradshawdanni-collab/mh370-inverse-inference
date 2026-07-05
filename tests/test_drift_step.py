@@ -89,9 +89,7 @@ def test_longitude_wraps_into_canonical_range() -> None:
         ({"lat": 90.0}, "poles"),
     ],
 )
-def test_invalid_inputs_fail_closed(
-    overrides: dict[str, float], message: str
-) -> None:
+def test_invalid_inputs_fail_closed(overrides: dict[str, float], message: str) -> None:
     arguments = {
         "lat": 0.0,
         "lon": 0.0,
