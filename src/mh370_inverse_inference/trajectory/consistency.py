@@ -104,9 +104,7 @@ def _great_circle_distance_m(first: AircraftState, second: AircraftState) -> flo
     latitude_delta = second.latitude - first.latitude
     longitude_delta = second.longitude - first.longitude
     haversine = sin(latitude_delta / 2.0) ** 2 + (
-        cos(first.latitude)
-        * cos(second.latitude)
-        * sin(longitude_delta / 2.0) ** 2
+        cos(first.latitude) * cos(second.latitude) * sin(longitude_delta / 2.0) ** 2
     )
     central_angle = 2.0 * asin(min(1.0, sqrt(haversine)))
     return EARTH_RADIUS_M * central_angle
@@ -143,9 +141,7 @@ def evaluate_trajectory(
         raise ValueError("A trajectory requires at least two points")
 
     decisions: list[SegmentDecision] = []
-    for index, (first, second) in enumerate(
-        zip(points, points[1:], strict=False)
-    ):
+    for index, (first, second) in enumerate(zip(points, points[1:], strict=False)):
         metrics = _segment_metrics(first, second)
         endpoints_admissible: bool | None = None
         if limits.require_candidate_admissibility:
@@ -160,12 +156,9 @@ def evaluate_trajectory(
                 speed_ok=(
                     metrics.implied_ground_speed_mps <= limits.max_ground_speed_mps
                 ),
-                climb_ok=(
-                    abs(metrics.climb_rate_mps) <= limits.max_abs_climb_rate_mps
-                ),
+                climb_ok=(abs(metrics.climb_rate_mps) <= limits.max_abs_climb_rate_mps),
                 turn_ok=(
-                    abs(metrics.turn_rate_rad_s)
-                    <= limits.max_abs_turn_rate_rad_s
+                    abs(metrics.turn_rate_rad_s) <= limits.max_abs_turn_rate_rad_s
                 ),
                 mass_ok=metrics.mass_change_kg <= limits.max_mass_increase_kg,
                 endpoints_admissible=endpoints_admissible,
