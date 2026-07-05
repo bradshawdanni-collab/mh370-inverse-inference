@@ -8,11 +8,20 @@ on:
 permissions:
   contents: read
 
+env:
+  TZ: UTC
+  LANG: C.UTF-8
+  LC_ALL: C.UTF-8
+
 jobs:
   quality:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Set source date epoch
+        run: echo "SOURCE_DATE_EPOCH=$(git log -1 --format=%ct)" >> "$GITHUB_ENV"
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
