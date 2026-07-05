@@ -56,5 +56,7 @@ class PerformanceEnvelope:
 
         base_rate = 1.95
         mass_factor = mass / cls.MTOW
-        altitude_factor = 1.0 + max(0.0, (10_000.0 - altitude) / 10_000.0) * 0.5
+        altitude_factor = (
+            1.0 + max(0.0, (10_000.0 - altitude) / 10_000.0) * 0.5
+        )
         return base_rate * mass_factor * altitude_factor
