@@ -156,8 +156,7 @@ def invert_downlink_range_rate_mps(
     """Recover required satellite-aircraft range rate from an observed BFO."""
     _validate_carrier_hz(downlink_carrier_hz)
     if not all(
-        isfinite(value)
-        for value in (observed_bfo_hz, uplink_doppler_hz, bias_hz)
+        isfinite(value) for value in (observed_bfo_hz, uplink_doppler_hz, bias_hz)
     ):
         raise ValueError("BFO inversion inputs must be finite")
 
