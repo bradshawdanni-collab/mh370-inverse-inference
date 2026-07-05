@@ -1,0 +1,16 @@
+{
+  "fixture_id": "L7-SEARCH-CASE-001",
+  "fixture_version": 1,
+  "purpose": "Verify deterministic L7 integration.",
+  "randomness": "none",
+  "generator": "tests/integration/test_search_pipeline.py",
+  "contract": "L7.1-L7.4",
+  "numeric_tolerance": 1e-12,
+  "invariants": [
+    "candidate_count_is_9",
+    "top_n_order_is_stable",
+    "scores_are_repeatable",
+    "summary_scores_are_fixed"
+  ],
+  "regeneration_policy": "Update only for an intentional L7 contract change."
+}
