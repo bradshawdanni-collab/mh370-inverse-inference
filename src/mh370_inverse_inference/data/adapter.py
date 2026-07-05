@@ -96,7 +96,13 @@ class EnvironmentalGridAdapter:
             v=v0 + time_fraction * (v1 - v0),
         )
 
-    def _bilinear(self, *, time_index: int, lat: float, lon: float) -> tuple[float, float]:
+    def _bilinear(
+        self,
+        *,
+        time_index: int,
+        lat: float,
+        lon: float,
+    ) -> tuple[float, float]:
         lat_index, lat_fraction = self._cell(self._lats, lat)
         lon_index, lon_fraction = self._cell(self._lons, lon)
 
