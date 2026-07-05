@@ -40,7 +40,8 @@ def test_exact_deterministic_bayesian_replay(
     first = fuse_evidence(base_hypotheses, (component,))
     second = fuse_evidence(base_hypotheses, (component,))
     probabilities = {
-        entry.hypothesis_id: entry.posterior_probability for entry in first
+        entry.hypothesis_id: entry.posterior_probability
+        for entry in first
     }
 
     assert first == second
@@ -65,7 +66,8 @@ def test_impossible_hypothesis_normalizes_with_remaining_support(
 
     results = fuse_evidence(base_hypotheses, (component,))
     probabilities = {
-        entry.hypothesis_id: entry.posterior_probability for entry in results
+        entry.hypothesis_id: entry.posterior_probability
+        for entry in results
     }
 
     assert probabilities["H-001"] == 0.0
@@ -148,10 +150,12 @@ def test_evidence_order_does_not_change_posterior(
     second = fuse_evidence(base_hypotheses, (bfo, bto))
 
     first_probs = {
-        entry.hypothesis_id: entry.posterior_probability for entry in first
+        entry.hypothesis_id: entry.posterior_probability
+        for entry in first
     }
     second_probs = {
-        entry.hypothesis_id: entry.posterior_probability for entry in second
+        entry.hypothesis_id: entry.posterior_probability
+        for entry in second
     }
     assert first_probs == second_probs
 
