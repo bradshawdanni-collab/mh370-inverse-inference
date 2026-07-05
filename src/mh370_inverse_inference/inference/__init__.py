@@ -5,9 +5,11 @@ from mh370_inverse_inference.inference.posterior import (
     PosteriorProbability,
     normalize_posteriors,
 )
+from mh370_inverse_inference.inference.ranking import rank_posteriors
 
 __all__ = [
     "HypothesisScore",
     "PosteriorProbability",
     "normalize_posteriors",
+    "rank_posteriors",
 ]
