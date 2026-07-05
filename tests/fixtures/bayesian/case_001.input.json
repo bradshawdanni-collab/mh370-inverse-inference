@@ -1,0 +1,36 @@
+{
+  "case_id": "CASE-001",
+  "hypotheses": [
+    {
+      "hypothesis_id": "H-001",
+      "prior_weight": 0.6
+    },
+    {
+      "hypothesis_id": "H-002",
+      "prior_weight": 0.4
+    }
+  ],
+  "parameters": {
+    "sigma_bto": 20.0,
+    "sigma_bfo": 4.3,
+    "sigma_residual": 1000.0
+  },
+  "observations": {
+    "observed_bto": 12500.0,
+    "observed_bfo": 140.0
+  },
+  "simulations": {
+    "simulated_bto": {
+      "H-001": 12510.0,
+      "H-002": 12490.0
+    },
+    "simulated_bfo": {
+      "H-001": 142.0,
+      "H-002": 138.0
+    },
+    "trajectory_residuals": {
+      "H-001": 250.0,
+      "H-002": 800.0
+    }
+  }
+}

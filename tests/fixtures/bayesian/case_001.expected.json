@@ -1,0 +1,17 @@
+{
+  "case_id": "CASE-001",
+  "posteriors": [
+    {
+      "hypothesis_id": "H-001",
+      "prior_weight": 0.6,
+      "joint_log_score": -14.894160375143507,
+      "posterior_probability": 0.6669039416449724
+    },
+    {
+      "hypothesis_id": "H-002",
+      "prior_weight": 0.4,
+      "joint_log_score": -15.58837548325167,
+      "posterior_probability": 0.33309605835502704
+    }
+  ]
+}

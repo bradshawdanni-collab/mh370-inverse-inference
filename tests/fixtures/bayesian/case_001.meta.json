@@ -1,0 +1,15 @@
+{
+  "case_id": "CASE-001",
+  "description": "Canonical multi-channel convergence baseline for SATCOM and trajectory consistency evidence.",
+  "schema_version": "L9.1-v1.0.0",
+  "generator_merge_commit": "dd7114f7e08efec3705b1f490c90c9232ca82122",
+  "fixture_hashes": {
+    "case_001.input.json": "905754d9396f4fbff48b8913444e7cecb50b56883496c30d5cd52b21604683a5",
+    "case_001.expected.json": "ea8299f1a2c14ee82d231ea414b6907f24729339d9e445adb6d4ae95d9d6b88b"
+  },
+  "numerical_assumptions": {
+    "likelihood_model": "independent_gaussian_channels",
+    "hypothesis_ordering_enforced": false,
+    "precision_limit_bits": 64
+  }
+}
