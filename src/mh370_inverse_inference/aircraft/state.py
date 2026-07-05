@@ -1,7 +1,7 @@
 """Immutable aircraft state representation for L1 dynamics."""
 
-from dataclasses import dataclass
 import math
+from dataclasses import dataclass
 
 
 @dataclass(frozen=True)
