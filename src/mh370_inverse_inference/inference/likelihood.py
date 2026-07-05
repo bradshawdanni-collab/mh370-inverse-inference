@@ -14,8 +14,7 @@ def gaussian_log_likelihood(evidence: GaussianEvidence) -> float:
     """Return the normalized Gaussian log-likelihood for one residual."""
     variance = evidence.sigma * evidence.sigma
     result = -0.5 * (
-        evidence.residual * evidence.residual / variance
-        + log(2.0 * pi * variance)
+        evidence.residual * evidence.residual / variance + log(2.0 * pi * variance)
     )
     if not isfinite(result):
         raise ValueError("log-likelihood must be finite")
