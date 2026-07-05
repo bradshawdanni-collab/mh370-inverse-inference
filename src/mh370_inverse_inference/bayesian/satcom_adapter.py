@@ -88,9 +88,7 @@ class SatcomLikelihoodAdapter:
             records.append(
                 EvidenceRecord(
                     hypothesis_id=hypothesis_id,
-                    log_likelihood=(
-                        normalization - 0.5 * standardized_residual**2
-                    ),
+                    log_likelihood=normalization - 0.5 * standardized_residual**2,
                 )
             )
 
