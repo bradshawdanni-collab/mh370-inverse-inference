@@ -52,9 +52,7 @@ def test_deterministic_adapter_dispatch_and_values(
     expected_peak = -math.log(20.0 * math.sqrt(2.0 * math.pi))
     expected_bto_likelihood = expected_peak - 0.5 * (10.0 / 20.0) ** 2
     assert stream[0].records[0].hypothesis_id == "H-1"
-    assert stream[0].records[0].log_likelihood == pytest.approx(
-        expected_bto_likelihood
-    )
+    assert stream[0].records[0].log_likelihood == pytest.approx(expected_bto_likelihood)
 
 
 def test_sequence_order_is_invariant(
