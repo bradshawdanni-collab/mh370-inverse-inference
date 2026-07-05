@@ -1,0 +1,11 @@
+{
+  "fixture_id": "L7-SEARCH-CASE-001",
+  "candidate_count": 9,
+  "best_score": 0.0,
+  "worst_score": -5.0,
+  "selected": [
+    {"candidate": {"x": 1.0, "y": 2.0}, "score": 0.0, "source_index": 5},
+    {"candidate": {"x": 0.0, "y": 2.0}, "score": -1.0, "source_index": 2},
+    {"candidate": {"x": 1.0, "y": 1.0}, "score": -1.0, "source_index": 4}
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "fixture_id": "L7-SEARCH-CASE-001",
+  "dimensions": [
+    {"name": "x", "lower": 0.0, "upper": 2.0, "step": 1.0},
+    {"name": "y", "lower": 0.0, "upper": 2.0, "step": 1.0}
+  ],
+  "reference_point": {"x": 1.0, "y": 2.0},
+  "top_n": 3
+}
