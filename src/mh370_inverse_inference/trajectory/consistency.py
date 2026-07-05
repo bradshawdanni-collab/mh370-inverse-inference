@@ -95,9 +95,9 @@ class TrajectoryEvaluation:
     @property
     def consistent(self) -> bool:
         """Return True when every segment is consistent."""
-        return bool(self.segments) and all(
-            segment.consistent for segment in self.segments
-        )
+        if not self.segments:
+            return False
+        return all(segment.consistent for segment in self.segments)
 
 
 def _great_circle_distance_m(first: AircraftState, second: AircraftState) -> float:
