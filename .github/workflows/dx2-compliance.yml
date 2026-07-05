@@ -1,0 +1,57 @@
+name: DX.2 Compliance Check
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  TZ: UTC
+  LANG: C.UTF-8
+  LC_ALL: C.UTF-8
+
+jobs:
+  build-canonical:
+    name: Build canonical source bundle
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set source date epoch
+        run: echo "SOURCE_DATE_EPOCH=$(git log -1 --format=%ct)" >> "$GITHUB_ENV"
+
+      - name: Build normalized archive
+        run: |
+          set -euo pipefail
+          mkdir -p dist_canonical
+          tar --sort=name \
+              --format=posix \
+              --pax-option=delete=atime,delete=ctime \
+              --mtime="@${SOURCE_DATE_EPOCH}" \
+              --owner=0 --group=0 --numeric-owner \
+              -cf dist_canonical/research-bundle.tar \
+              src
+          gzip -n dist_canonical/research-bundle.tar
+
+      - name: Generate and verify manifest
+        working-directory: dist_canonical
+        run: |
+          set -euo pipefail
+          sha256sum research-bundle.tar.gz > SHA256SUMS
+          sha256sum --check SHA256SUMS
+
+      - name: Upload canonical assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: canonical-source-bundle
+          path: |
+            dist_canonical/research-bundle.tar.gz
+            dist_canonical/SHA256SUMS
+          if-no-files-found: error
+          retention-days: 14
