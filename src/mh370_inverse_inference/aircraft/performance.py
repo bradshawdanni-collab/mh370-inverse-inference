@@ -25,9 +25,9 @@ class PerformanceEnvelope:
         else:
             temperature = 216.65
 
-        speed_of_sound = PerformanceEnvelope.SEA_LEVEL_SPEED_OF_SOUND * (
-            temperature / 288.15
-        ) ** 0.5
+        speed_of_sound = (
+            PerformanceEnvelope.SEA_LEVEL_SPEED_OF_SOUND * (temperature / 288.15) ** 0.5
+        )
         return 0.40 * speed_of_sound, 0.89 * speed_of_sound
 
     @classmethod
@@ -56,7 +56,5 @@ class PerformanceEnvelope:
 
         base_rate = 1.95
         mass_factor = mass / cls.MTOW
-        altitude_factor = (
-            1.0 + max(0.0, (10_000.0 - altitude) / 10_000.0) * 0.5
-        )
+        altitude_factor = 1.0 + max(0.0, (10_000.0 - altitude) / 10_000.0) * 0.5
         return base_rate * mass_factor * altitude_factor
