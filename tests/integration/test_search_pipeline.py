@@ -5,11 +5,11 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
-import pytest
 from mh370_inverse_inference.search.domain import SearchDimension, SearchDomain
 from mh370_inverse_inference.search.engine import evaluate_candidates
 from mh370_inverse_inference.search.generator import iter_candidates
 from mh370_inverse_inference.search.results import aggregate_results
+import pytest
 
 FIXTURE_DIR = Path(__file__).parents[1] / "fixtures" / "search"
 
