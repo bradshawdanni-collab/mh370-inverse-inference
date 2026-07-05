@@ -37,8 +37,7 @@ def test_frozen_deterministic_search_pipeline() -> None:
 
     def score(candidate: Mapping[str, float]) -> float:
         return -sum(
-            (candidate[name] - reference_point[name]) ** 2
-            for name in domain.names
+            (candidate[name] - reference_point[name]) ** 2 for name in domain.names
         )
 
     first_results = evaluate_candidates(iter_candidates(domain), score)
