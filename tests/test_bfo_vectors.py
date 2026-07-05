@@ -43,9 +43,7 @@ def test_separating_motion_produces_negative_doppler() -> None:
     )
 
     assert rate == 100.0
-    assert one_way_doppler_hz(
-        carrier_hz=1.0e9, range_rate_mps_value=rate
-    ) < 0.0
+    assert one_way_doppler_hz(carrier_hz=1.0e9, range_rate_mps_value=rate) < 0.0
 
 
 def test_closing_motion_produces_positive_doppler() -> None:
@@ -57,9 +55,7 @@ def test_closing_motion_produces_positive_doppler() -> None:
     )
 
     assert rate == -100.0
-    assert one_way_doppler_hz(
-        carrier_hz=1.0e9, range_rate_mps_value=rate
-    ) > 0.0
+    assert one_way_doppler_hz(carrier_hz=1.0e9, range_rate_mps_value=rate) > 0.0
 
 
 def test_coincident_positions_fail_closed() -> None:
