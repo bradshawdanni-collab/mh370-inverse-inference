@@ -64,9 +64,7 @@ def test_iter_candidates_handles_zero_width_dimension() -> None:
 
 def test_iter_candidates_returns_fresh_dictionaries() -> None:
     domain = SearchDomain(
-        dimensions=(
-            SearchDimension(name="x", lower=0.0, upper=1.0, step=1.0),
-        )
+        dimensions=(SearchDimension(name="x", lower=0.0, upper=1.0, step=1.0),)
     )
 
     candidates = list(iter_candidates(domain))
