@@ -51,14 +51,10 @@ def normalize_posteriors(
         raise ValueError("at least one prior must be positive")
 
     log_weights = tuple(
-        None
-        if score.prior == 0.0
-        else log(score.prior) + score.log_likelihood
+        None if score.prior == 0.0 else log(score.prior) + score.log_likelihood
         for score in scores
     )
-    finite_log_weights = tuple(
-        value for value in log_weights if value is not None
-    )
+    finite_log_weights = tuple(value for value in log_weights if value is not None)
     maximum = max(finite_log_weights)
     normalizer = fsum(exp(value - maximum) for value in finite_log_weights)
     log_normalizer = maximum + log(normalizer)
@@ -66,9 +62,7 @@ def normalize_posteriors(
     return tuple(
         PosteriorProbability(
             trajectory_id=score.trajectory_id,
-            probability=(
-                0.0 if log_weight is None else exp(log_weight - log_normalizer)
-            ),
+            probability=0.0 if log_weight is None else exp(log_weight - log_normalizer),
         )
         for score, log_weight in zip(scores, log_weights, strict=True)
     )
