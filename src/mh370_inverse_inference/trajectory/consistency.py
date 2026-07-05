@@ -141,7 +141,7 @@ def evaluate_trajectory(
         raise ValueError("A trajectory requires at least two points")
 
     decisions: list[SegmentDecision] = []
-    for index, (first, second) in enumerate(zip(points, points[1:], strict=True)):
+    for index, (first, second) in enumerate(zip(points, points[1:])):
         metrics = _segment_metrics(first, second)
         endpoints_admissible: bool | None = None
         if limits.require_candidate_admissibility:
