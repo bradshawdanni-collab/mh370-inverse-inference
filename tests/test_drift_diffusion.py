@@ -116,9 +116,7 @@ def test_result_is_immutable() -> None:
         ({"lat": 90.0}, "poles"),
     ],
 )
-def test_invalid_inputs_fail_closed(
-    overrides: dict[str, float], message: str
-) -> None:
+def test_invalid_inputs_fail_closed(overrides: dict[str, float], message: str) -> None:
     arguments = {
         "lat": 0.0,
         "k_diffusion": 10.0,
