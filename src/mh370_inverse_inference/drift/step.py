@@ -63,9 +63,7 @@ def compute_deterministic_step(
     delta_latitude = degrees(v_effective * dt / EARTH_RADIUS_M)
     delta_longitude = 0.0
     if dt != 0.0:
-        delta_longitude = degrees(
-            u_effective * dt / (EARTH_RADIUS_M * latitude_scale)
-        )
+        delta_longitude = degrees(u_effective * dt / (EARTH_RADIUS_M * latitude_scale))
 
     new_longitude = (lon + delta_longitude + 180.0) % 360.0 - 180.0
 
