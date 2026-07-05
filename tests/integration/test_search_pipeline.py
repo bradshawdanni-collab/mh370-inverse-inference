@@ -9,7 +9,6 @@ from mh370_inverse_inference.search.domain import SearchDimension, SearchDomain
 from mh370_inverse_inference.search.engine import evaluate_candidates
 from mh370_inverse_inference.search.generator import iter_candidates
 from mh370_inverse_inference.search.results import aggregate_results
-import pytest
 
 FIXTURE_DIR = Path(__file__).parents[1] / "fixtures" / "search"
 
@@ -45,18 +44,17 @@ def test_frozen_deterministic_search_pipeline() -> None:
     first_results = evaluate_candidates(iter_candidates(domain), score)
     second_results = evaluate_candidates(iter_candidates(domain), score)
     summary = aggregate_results(first_results, limit=input_data["top_n"])
+    tolerance = metadata["numeric_tolerance"]
 
     assert metadata["fixture_id"] == input_data["fixture_id"]
     assert expected["fixture_id"] == input_data["fixture_id"]
     assert metadata["randomness"] == "none"
     assert first_results == second_results
     assert summary.total_count == expected["candidate_count"]
-    assert summary.best_score == pytest.approx(
-        expected["best_score"], abs=metadata["numeric_tolerance"]
-    )
-    assert summary.worst_score == pytest.approx(
-        expected["worst_score"], abs=metadata["numeric_tolerance"]
-    )
+    assert summary.best_score is not None
+    assert summary.worst_score is not None
+    assert abs(summary.best_score - expected["best_score"]) <= tolerance
+    assert abs(summary.worst_score - expected["worst_score"]) <= tolerance
     assert [
         {
             "candidate": result.as_dict(),
