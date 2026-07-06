@@ -29,7 +29,7 @@ def test_canonical_json_is_utf8_compact_and_preserves_unicode() -> None:
     payload = {"label": "café", "values": [1, 2, 3]}
 
     assert canonical_json_bytes(payload) == (
-        '{"label":"café","values":[1,2,3]}'.encode("utf-8")
+        '{"label":"café","values":[1,2,3]}'.encode()
     )
 
 
