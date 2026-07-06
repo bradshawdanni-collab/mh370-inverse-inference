@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from enum import StrEnum
 from math import isfinite
@@ -79,6 +79,15 @@ class ExecutionStage(StrEnum):
     NORMALIZATION = "normalization"
 
 
+CANONICAL_EXECUTION_ORDER = (
+    ExecutionStage.ADAPTER_NORMALIZATION,
+    ExecutionStage.LIKELIHOOD_EVALUATION,
+    ExecutionStage.FUSION,
+    ExecutionStage.CONSTRAINT_APPLICATION,
+    ExecutionStage.NORMALIZATION,
+)
+
+
 def _validate_semver(value: str, name: str) -> None:
     if not _SEMVER.fullmatch(value):
         raise ValueError(f"{name} must be semantic version MAJOR.MINOR.PATCH")
@@ -124,7 +133,7 @@ class ChannelRequest:
         _validate_sha256(self.schema_hash, "schema_hash")
         _validate_sha256(self.transform_hash, "transform_hash")
         if (self.payload_ref is None) == (self.inline_payload_json is None):
-            raise ValueError("exactly one of payload_ref or inline_payload_json is required")
+            raise ValueError("exactly one payload source is required")
         if self.payload_ref is not None:
             _validate_non_empty(self.payload_ref, "payload_ref")
         if self.inline_payload_json is not None:
@@ -187,14 +196,8 @@ class EngineRequest:
     channels: tuple[ChannelRequest, ...]
     fusion_config: FusionConfig
     constraint_config: ConstraintConfig
-    determinism_spec: DeterminismSpec = DeterminismSpec()
-    execution_order: tuple[ExecutionStage, ...] = (
-        ExecutionStage.ADAPTER_NORMALIZATION,
-        ExecutionStage.LIKELIHOOD_EVALUATION,
-        ExecutionStage.FUSION,
-        ExecutionStage.CONSTRAINT_APPLICATION,
-        ExecutionStage.NORMALIZATION,
-    )
+    determinism_spec: DeterminismSpec = field(default_factory=DeterminismSpec)
+    execution_order: tuple[ExecutionStage, ...] = CANONICAL_EXECUTION_ORDER
     execution_mode: ExecutionMode = ExecutionMode.DETERMINISTIC
     trace_level: TraceLevel = TraceLevel.STANDARD
 
@@ -202,7 +205,8 @@ class EngineRequest:
         _validate_semver(self.engine_version, "engine_version")
         _validate_non_empty(self.contract_version, "contract_version")
         UUID(self.request_id)
-        parsed_timestamp = datetime.fromisoformat(self.timestamp.replace("Z", "+00:00"))
+        timestamp = self.timestamp.replace("Z", "+00:00")
+        parsed_timestamp = datetime.fromisoformat(timestamp)
         if parsed_timestamp.tzinfo is None:
             raise ValueError("timestamp must include a timezone")
         if not self.channels:
@@ -210,13 +214,7 @@ class EngineRequest:
         channel_ids = tuple(channel.channel_id for channel in self.channels)
         if len(channel_ids) != len(set(channel_ids)):
             raise ValueError("channel_id values must be unique")
-        if self.execution_order != (
-            ExecutionStage.ADAPTER_NORMALIZATION,
-            ExecutionStage.LIKELIHOOD_EVALUATION,
-            ExecutionStage.FUSION,
-            ExecutionStage.CONSTRAINT_APPLICATION,
-            ExecutionStage.NORMALIZATION,
-        ):
+        if self.execution_order != CANONICAL_EXECUTION_ORDER:
             raise ValueError("execution_order must match the L10.1 canonical order")
 
 
@@ -297,7 +295,7 @@ class EngineResponse:
     replay_hash: str
     normalization_error: float
     pre_normalization_mass: float
-    constraint_effects: ConstraintEffects = ConstraintEffects()
+    constraint_effects: ConstraintEffects = field(default_factory=ConstraintEffects)
     error: EngineError | None = None
 
     def __post_init__(self) -> None:
