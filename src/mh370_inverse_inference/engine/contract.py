@@ -303,9 +303,15 @@ class EngineResponse:
         _validate_semver(self.engine_version, "engine_version")
         _validate_non_empty(self.contract_version, "contract_version")
         _validate_sha256(self.replay_hash, "replay_hash")
-        if not isfinite(self.normalization_error) or self.normalization_error < 0.0:
+        if (
+            not isfinite(self.normalization_error)
+            or self.normalization_error < 0.0
+        ):
             raise ValueError("normalization_error must be finite and non-negative")
-        if not isfinite(self.pre_normalization_mass) or self.pre_normalization_mass < 0.0:
+        if (
+            not isfinite(self.pre_normalization_mass)
+            or self.pre_normalization_mass < 0.0
+        ):
             raise ValueError("pre_normalization_mass must be finite and non-negative")
         if self.status is EngineStatus.FAILURE:
             if self.error is None:
@@ -321,10 +327,14 @@ class EngineResponse:
             if abs(total - 1.0) > self.normalization_error + 1e-15:
                 raise ValueError("normalization_error must bound posterior sum error")
             if self.argmax_hypothesis_id is None:
-                raise ValueError("successful posterior responses require argmax_hypothesis_id")
+                raise ValueError(
+                    "successful posterior responses require argmax_hypothesis_id"
+                )
             ids = {item.hypothesis_id for item in self.posterior_distribution}
             if self.argmax_hypothesis_id not in ids:
-                raise ValueError("argmax_hypothesis_id must reference a posterior entry")
+                raise ValueError(
+                    "argmax_hypothesis_id must reference a posterior entry"
+                )
         step_ids = tuple(step.step_id for step in self.trace)
         if len(step_ids) != len(set(step_ids)):
             raise ValueError("trace step identifiers must be unique")
