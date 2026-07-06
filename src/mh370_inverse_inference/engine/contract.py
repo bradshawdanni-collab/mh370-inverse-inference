@@ -46,6 +46,39 @@ class EngineErrorCode(StrEnum):
     CONSTRAINT_INFEASIBLE = "CONSTRAINT_INFEASIBLE"
 
 
+class FailureDeterminism(StrEnum):
+    DETERMINISTIC = "deterministic"
+    NON_DETERMINISTIC = "non_deterministic"
+
+
+class NegativeEvidenceModel(StrEnum):
+    HARD_EXCLUSION = "hard_exclusion"
+    LIKELIHOOD_PENALTY = "likelihood_penalty"
+
+
+class NumericPrecision(StrEnum):
+    FLOAT64 = "float64"
+    DECIMAL128 = "decimal128"
+
+
+class RoundingMode(StrEnum):
+    HALF_EVEN = "half_even"
+
+
+class CanonicalJsonPolicy(StrEnum):
+    SORTED_UTF8_NO_INSIGNIFICANT_WHITESPACE = (
+        "sorted_utf8_no_insignificant_whitespace"
+    )
+
+
+class ExecutionStage(StrEnum):
+    ADAPTER_NORMALIZATION = "adapter_normalization"
+    LIKELIHOOD_EVALUATION = "likelihood_evaluation"
+    FUSION = "fusion"
+    CONSTRAINT_APPLICATION = "constraint_application"
+    NORMALIZATION = "normalization"
+
+
 def _validate_semver(value: str, name: str) -> None:
     if not _SEMVER.fullmatch(value):
         raise ValueError(f"{name} must be semantic version MAJOR.MINOR.PATCH")
@@ -56,10 +89,31 @@ def _validate_non_empty(value: str, name: str) -> None:
         raise ValueError(f"{name} must be non-empty")
 
 
+def _validate_sha256(value: str, name: str) -> None:
+    if not _SHA256.fullmatch(value):
+        raise ValueError(f"{name} must be a lowercase SHA-256 hex digest")
+
+
+@dataclass(frozen=True, slots=True)
+class DeterminismSpec:
+    numeric_precision: NumericPrecision = NumericPrecision.FLOAT64
+    rounding_mode: RoundingMode = RoundingMode.HALF_EVEN
+    canonical_json: CanonicalJsonPolicy = (
+        CanonicalJsonPolicy.SORTED_UTF8_NO_INSIGNIFICANT_WHITESPACE
+    )
+    seed: int | None = None
+
+    def __post_init__(self) -> None:
+        if self.seed is not None and self.seed < 0:
+            raise ValueError("seed must be non-negative when supplied")
+
+
 @dataclass(frozen=True, slots=True)
 class ChannelRequest:
     channel_id: str
     adapter_version: str
+    schema_hash: str
+    transform_hash: str
     payload_ref: str | None = None
     inline_payload_json: str | None = None
     confidence_prior: float | None = None
@@ -67,6 +121,8 @@ class ChannelRequest:
     def __post_init__(self) -> None:
         _validate_non_empty(self.channel_id, "channel_id")
         _validate_semver(self.adapter_version, "adapter_version")
+        _validate_sha256(self.schema_hash, "schema_hash")
+        _validate_sha256(self.transform_hash, "transform_hash")
         if (self.payload_ref is None) == (self.inline_payload_json is None):
             raise ValueError("exactly one of payload_ref or inline_payload_json is required")
         if self.payload_ref is not None:
@@ -99,6 +155,9 @@ class FusionConfig:
 class ConstraintConfig:
     probability_ceiling: float
     likelihood_floor: float
+    negative_evidence_model: NegativeEvidenceModel = (
+        NegativeEvidenceModel.LIKELIHOOD_PENALTY
+    )
     spatial_bounds_ref: str | None = None
     temporal_bounds_ref: str | None = None
     admissibility_threshold: float | None = None
@@ -128,6 +187,14 @@ class EngineRequest:
     channels: tuple[ChannelRequest, ...]
     fusion_config: FusionConfig
     constraint_config: ConstraintConfig
+    determinism_spec: DeterminismSpec = DeterminismSpec()
+    execution_order: tuple[ExecutionStage, ...] = (
+        ExecutionStage.ADAPTER_NORMALIZATION,
+        ExecutionStage.LIKELIHOOD_EVALUATION,
+        ExecutionStage.FUSION,
+        ExecutionStage.CONSTRAINT_APPLICATION,
+        ExecutionStage.NORMALIZATION,
+    )
     execution_mode: ExecutionMode = ExecutionMode.DETERMINISTIC
     trace_level: TraceLevel = TraceLevel.STANDARD
 
@@ -143,6 +210,14 @@ class EngineRequest:
         channel_ids = tuple(channel.channel_id for channel in self.channels)
         if len(channel_ids) != len(set(channel_ids)):
             raise ValueError("channel_id values must be unique")
+        if self.execution_order != (
+            ExecutionStage.ADAPTER_NORMALIZATION,
+            ExecutionStage.LIKELIHOOD_EVALUATION,
+            ExecutionStage.FUSION,
+            ExecutionStage.CONSTRAINT_APPLICATION,
+            ExecutionStage.NORMALIZATION,
+        ):
+            raise ValueError("execution_order must match the L10.1 canonical order")
 
 
 @dataclass(frozen=True, slots=True)
@@ -151,6 +226,9 @@ class TraceStep:
     operation: TraceOperation
     inputs_ref: str
     outputs_ref: str
+    input_hash: str
+    output_hash: str
+    op_signature_hash: str
     duration_ms: float
     deterministic_seed: int | None = None
 
@@ -158,8 +236,13 @@ class TraceStep:
         _validate_non_empty(self.step_id, "step_id")
         _validate_non_empty(self.inputs_ref, "inputs_ref")
         _validate_non_empty(self.outputs_ref, "outputs_ref")
+        _validate_sha256(self.input_hash, "input_hash")
+        _validate_sha256(self.output_hash, "output_hash")
+        _validate_sha256(self.op_signature_hash, "op_signature_hash")
         if not isfinite(self.duration_ms) or self.duration_ms < 0.0:
             raise ValueError("duration_ms must be finite and non-negative")
+        if self.deterministic_seed is not None and self.deterministic_seed < 0:
+            raise ValueError("deterministic_seed must be non-negative when supplied")
 
 
 @dataclass(frozen=True, slots=True)
@@ -168,6 +251,7 @@ class EngineError:
     stage: str
     diagnostic_payload_json: str
     recoverable: bool
+    failure_determinism: FailureDeterminism
 
     def __post_init__(self) -> None:
         _validate_non_empty(self.stage, "stage")
@@ -188,6 +272,20 @@ class PosteriorResult:
 
 
 @dataclass(frozen=True, slots=True)
+class ConstraintEffects:
+    excluded_mass: float = 0.0
+    penalized_mass: float = 0.0
+
+    def __post_init__(self) -> None:
+        for name, value in (
+            ("excluded_mass", self.excluded_mass),
+            ("penalized_mass", self.penalized_mass),
+        ):
+            if not isfinite(value) or not 0.0 <= value <= 1.0:
+                raise ValueError(f"{name} must be finite and within [0, 1]")
+
+
+@dataclass(frozen=True, slots=True)
 class EngineResponse:
     request_id: str
     engine_version: str
@@ -197,14 +295,20 @@ class EngineResponse:
     argmax_hypothesis_id: str | None
     trace: tuple[TraceStep, ...]
     replay_hash: str
+    normalization_error: float
+    pre_normalization_mass: float
+    constraint_effects: ConstraintEffects = ConstraintEffects()
     error: EngineError | None = None
 
     def __post_init__(self) -> None:
         UUID(self.request_id)
         _validate_semver(self.engine_version, "engine_version")
         _validate_non_empty(self.contract_version, "contract_version")
-        if not _SHA256.fullmatch(self.replay_hash):
-            raise ValueError("replay_hash must be a lowercase SHA-256 hex digest")
+        _validate_sha256(self.replay_hash, "replay_hash")
+        if not isfinite(self.normalization_error) or self.normalization_error < 0.0:
+            raise ValueError("normalization_error must be finite and non-negative")
+        if not isfinite(self.pre_normalization_mass) or self.pre_normalization_mass < 0.0:
+            raise ValueError("pre_normalization_mass must be finite and non-negative")
         if self.status is EngineStatus.FAILURE:
             if self.error is None:
                 raise ValueError("failure responses require an error")
@@ -216,6 +320,8 @@ class EngineResponse:
             total = sum(item.probability for item in self.posterior_distribution)
             if abs(total - 1.0) > 1e-12:
                 raise ValueError("posterior probabilities must sum to one")
+            if abs(total - 1.0) > self.normalization_error + 1e-15:
+                raise ValueError("normalization_error must bound posterior sum error")
             if self.argmax_hypothesis_id is None:
                 raise ValueError("successful posterior responses require argmax_hypothesis_id")
             ids = {item.hypothesis_id for item in self.posterior_distribution}
