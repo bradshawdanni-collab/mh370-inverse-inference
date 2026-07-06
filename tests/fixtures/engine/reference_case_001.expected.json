@@ -1,0 +1,62 @@
+{
+  "argmax_hypothesis_id": "H-001",
+  "contract_version": "v1",
+  "engine_version": "10.5.0",
+  "normalization_error": 0.0,
+  "posterior_distribution": [
+    {
+      "hypothesis_id": "H-001",
+      "probability": 0.583598717878
+    },
+    {
+      "hypothesis_id": "H-002",
+      "probability": 0.416401282122
+    }
+  ],
+  "pre_normalization_mass": 1.0,
+  "replay_hash": "<sha256>",
+  "request_id": "12345678-1234-5678-1234-567812345678",
+  "status": "success",
+  "trace": [
+    {
+      "duration_ms": 0.0,
+      "input_hash": "<sha256>",
+      "op_signature_hash": "<sha256>",
+      "operation": "adapter_transform",
+      "output_hash": "<sha256>",
+      "step_id": "adapter_normalization"
+    },
+    {
+      "duration_ms": 0.0,
+      "input_hash": "<sha256>",
+      "op_signature_hash": "<sha256>",
+      "operation": "likelihood_eval",
+      "output_hash": "<sha256>",
+      "step_id": "likelihood_evaluation"
+    },
+    {
+      "duration_ms": 0.0,
+      "input_hash": "<sha256>",
+      "op_signature_hash": "<sha256>",
+      "operation": "fusion_step",
+      "output_hash": "<sha256>",
+      "step_id": "fusion"
+    },
+    {
+      "duration_ms": 0.0,
+      "input_hash": "<sha256>",
+      "op_signature_hash": "<sha256>",
+      "operation": "constraint_prune",
+      "output_hash": "<sha256>",
+      "step_id": "constraint_application"
+    },
+    {
+      "duration_ms": 0.0,
+      "input_hash": "<sha256>",
+      "op_signature_hash": "<sha256>",
+      "operation": "fusion_step",
+      "output_hash": "<sha256>",
+      "step_id": "normalization"
+    }
+  ]
+}
