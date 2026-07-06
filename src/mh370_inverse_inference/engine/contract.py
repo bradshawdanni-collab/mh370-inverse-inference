@@ -303,10 +303,7 @@ class EngineResponse:
         _validate_semver(self.engine_version, "engine_version")
         _validate_non_empty(self.contract_version, "contract_version")
         _validate_sha256(self.replay_hash, "replay_hash")
-        if (
-            not isfinite(self.normalization_error)
-            or self.normalization_error < 0.0
-        ):
+        if not isfinite(self.normalization_error) or self.normalization_error < 0.0:
             raise ValueError("normalization_error must be finite and non-negative")
         if (
             not isfinite(self.pre_normalization_mass)
