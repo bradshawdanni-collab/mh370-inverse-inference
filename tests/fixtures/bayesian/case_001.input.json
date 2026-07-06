@@ -13,7 +13,9 @@
   "parameters": {
     "sigma_bto": 20.0,
     "sigma_bfo": 4.3,
-    "sigma_residual": 1000.0
+    "sigma_residual": 1000.0,
+    "probability_ceiling": 0.9999,
+    "likelihood_floor": 1e-12
   },
   "observations": {
     "observed_bto": 12500.0,
@@ -31,6 +33,10 @@
     "trajectory_residuals": {
       "H-001": 250.0,
       "H-002": 800.0
+    },
+    "detection_probabilities": {
+      "H-001": 0.3,
+      "H-002": 0.0
     }
   }
 }
