@@ -57,7 +57,8 @@ def test_evidence_order_and_hashes_are_stable() -> None:
     artifact = BayesianReplayRunner(FIXTURE_DIR).run()
 
     evidence_types = [
-        component["evidence_type"] for component in artifact.evidence_components
+        component["evidence_type"]
+        for component in artifact.evidence_components
     ]
     assert evidence_types == [
         "bto",
