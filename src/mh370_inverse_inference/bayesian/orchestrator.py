@@ -4,6 +4,9 @@ from collections.abc import Mapping
 from dataclasses import dataclass
 
 from mh370_inverse_inference.bayesian.contract import EvidenceComponent
+from mh370_inverse_inference.bayesian.negative_search_adapter import (
+    NegativeSearchAdapter,
+)
 from mh370_inverse_inference.bayesian.satcom_adapter import SatcomLikelihoodAdapter
 from mh370_inverse_inference.bayesian.trajectory_adapter import (
     TrajectoryConsistencyAdapter,
@@ -16,6 +19,7 @@ class EvidenceOrchestrator:
 
     satcom_adapter: SatcomLikelihoodAdapter
     trajectory_adapter: TrajectoryConsistencyAdapter
+    negative_search_adapter: NegativeSearchAdapter | None = None
 
     def generate_evidence_stream(
         self,
@@ -25,8 +29,9 @@ class EvidenceOrchestrator:
         simulated_bto: Mapping[str, float],
         simulated_bfo: Mapping[str, float],
         trajectory_residuals: Mapping[str, float],
+        detection_probabilities: Mapping[str, float] | None = None,
     ) -> tuple[EvidenceComponent, ...]:
-        """Return ordered BTO, BFO, and trajectory-consistency evidence."""
+        """Return an ordered three- or four-channel evidence stream."""
         bto_component = self.satcom_adapter.evaluate_bto_component(
             source_id="ORCHESTRATED-SATCOM-BTO",
             observed_bto=observed_bto,
@@ -42,4 +47,18 @@ class EvidenceOrchestrator:
             hypothesis_residuals=trajectory_residuals,
         )
 
-        return (bto_component, bfo_component, trajectory_component)
+        components = [bto_component, bfo_component, trajectory_component]
+        if detection_probabilities is not None:
+            if self.negative_search_adapter is None:
+                raise ValueError(
+                    "cannot evaluate negative search metrics without an injected "
+                    "NegativeSearchAdapter"
+                )
+            components.append(
+                self.negative_search_adapter.evaluate_negative_search(
+                    source_id="ORCHESTRATED-NEGATIVE-SEARCH",
+                    detection_probabilities=detection_probabilities,
+                )
+            )
+
+        return tuple(components)
