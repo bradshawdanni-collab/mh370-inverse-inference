@@ -1,4 +1,4 @@
-"""Integration tests for the frozen Bayesian fixture."""
+"""Integration tests for the frozen four-channel Bayesian fixture."""
 
 import hashlib
 import json
@@ -10,6 +10,9 @@ import pytest
 from mh370_inverse_inference.bayesian.contract import (
     Hypothesis,
     fuse_evidence,
+)
+from mh370_inverse_inference.bayesian.negative_search_adapter import (
+    NegativeSearchAdapter,
 )
 from mh370_inverse_inference.bayesian.orchestrator import (
     EvidenceOrchestrator,
@@ -39,11 +42,12 @@ def test_fixture_structural_integrity() -> None:
     expected = load_fixture("case_001.expected.json")
 
     assert meta["case_id"] == inputs["case_id"] == expected["case_id"]
-    assert meta["schema_version"] == "L9.1-v1.0.0"
+    assert meta["schema_version"] == "L9.8-v1.0.0"
 
     input_ids = {item["hypothesis_id"] for item in inputs["hypotheses"]}
     expected_ids = {item["hypothesis_id"] for item in expected["posteriors"]}
-    assert input_ids == expected_ids
+    search_ids = set(inputs["simulations"]["detection_probabilities"])
+    assert input_ids == expected_ids == search_ids
 
     for filename, expected_hash in meta["fixture_hashes"].items():
         assert fixture_hash(filename) == expected_hash
@@ -72,6 +76,10 @@ def test_end_to_end_pipeline_matches_frozen_fixture() -> None:
         trajectory_adapter=TrajectoryConsistencyAdapter(
             sigma_residual=parameters["sigma_residual"]
         ),
+        negative_search_adapter=NegativeSearchAdapter(
+            probability_ceiling=parameters["probability_ceiling"],
+            likelihood_floor=parameters["likelihood_floor"],
+        ),
     )
     evidence = orchestrator.generate_evidence_stream(
         observed_bto=observations["observed_bto"],
@@ -79,9 +87,11 @@ def test_end_to_end_pipeline_matches_frozen_fixture() -> None:
         simulated_bto=simulations["simulated_bto"],
         simulated_bfo=simulations["simulated_bfo"],
         trajectory_residuals=simulations["trajectory_residuals"],
+        detection_probabilities=simulations["detection_probabilities"],
     )
-    results = fuse_evidence(hypotheses, evidence)
+    assert len(evidence) == 4
 
+    results = fuse_evidence(hypotheses, evidence)
     expected_map = {item["hypothesis_id"]: item for item in expected["posteriors"]}
     assert {entry.hypothesis_id for entry in results} == set(expected_map)
 
