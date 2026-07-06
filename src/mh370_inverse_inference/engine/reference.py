@@ -3,12 +3,19 @@
 from __future__ import annotations
 
 import json
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
-from mh370_inverse_inference.bayesian.contract import Hypothesis, fuse_evidence
-from mh370_inverse_inference.bayesian.negative_search_adapter import NegativeSearchAdapter
+from mh370_inverse_inference.bayesian.contract import (
+    EvidenceComponent,
+    Hypothesis,
+    PosteriorEntry,
+    fuse_evidence,
+)
+from mh370_inverse_inference.bayesian.negative_search_adapter import (
+    NegativeSearchAdapter,
+)
 from mh370_inverse_inference.bayesian.orchestrator import EvidenceOrchestrator
 from mh370_inverse_inference.bayesian.satcom_adapter import SatcomLikelihoodAdapter
 from mh370_inverse_inference.bayesian.trajectory_adapter import (
@@ -21,10 +28,7 @@ from mh370_inverse_inference.engine.contract import (
     TraceOperation,
     TraceStep,
 )
-from mh370_inverse_inference.engine.hashing import (
-    compose_replay_hash,
-    sha256_payload,
-)
+from mh370_inverse_inference.engine.hashing import compose_replay_hash, sha256_payload
 from mh370_inverse_inference.engine.trace import TraceMetricRecord
 from mh370_inverse_inference.engine.trace_builder import TraceBuilder
 
@@ -88,7 +92,9 @@ def _trace_step(
     return record, step
 
 
-def _component_payloads(components: object) -> tuple[dict[str, object], ...]:
+def _component_payloads(
+    components: Sequence[EvidenceComponent],
+) -> tuple[dict[str, object], ...]:
     return tuple(
         {
             "evidence_type": component.evidence_type.value,
@@ -105,7 +111,9 @@ def _component_payloads(components: object) -> tuple[dict[str, object], ...]:
     )
 
 
-def _posterior_payloads(results: object) -> tuple[dict[str, object], ...]:
+def _posterior_payloads(
+    results: Sequence[PosteriorEntry],
+) -> tuple[dict[str, object], ...]:
     return tuple(
         {
             "hypothesis_id": result.hypothesis_id,
@@ -161,13 +169,21 @@ def run_reference_engine(fixture_path: Path) -> EngineResponse:
     evidence_components = orchestrator.generate_evidence_stream(
         observed_bto=float(observations["observed_bto"]),
         observed_bfo=float(observations["observed_bfo"]),
-        simulated_bto=_float_mapping(simulations["simulated_bto"], "simulated_bto"),
-        simulated_bfo=_float_mapping(simulations["simulated_bfo"], "simulated_bfo"),
+        simulated_bto=_float_mapping(
+            simulations["simulated_bto"],
+            "simulated_bto",
+        ),
+        simulated_bfo=_float_mapping(
+            simulations["simulated_bfo"],
+            "simulated_bfo",
+        ),
         trajectory_residuals=_float_mapping(
-            simulations["trajectory_residuals"], "trajectory_residuals"
+            simulations["trajectory_residuals"],
+            "trajectory_residuals",
         ),
         detection_probabilities=_float_mapping(
-            simulations["detection_probabilities"], "detection_probabilities"
+            simulations["detection_probabilities"],
+            "detection_probabilities",
         ),
     )
     evidence_payloads = _component_payloads(evidence_components)
