@@ -65,9 +65,7 @@ def test_evidence_order_and_hashes_are_stable() -> None:
         "trajectory_consistency",
         "negative_search",
     ]
-    assert artifact.hashes["evidence"] == sha256_payload(
-        artifact.evidence_components
-    )
+    assert artifact.hashes["evidence"] == sha256_payload(artifact.evidence_components)
     assert artifact.hashes["posterior"] == sha256_payload(artifact.posteriors)
 
 
