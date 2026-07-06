@@ -67,7 +67,7 @@ class RoundingMode(StrEnum):
 
 class CanonicalJsonPolicy(StrEnum):
     SORTED_UTF8_NO_INSIGNIFICANT_WHITESPACE = (
-        "sorted_utf8_no_insignificant_whitespace"
+        "sorted_utf8_no_" "insignificant_whitespace"
     )
 
 
