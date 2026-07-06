@@ -56,7 +56,10 @@ def test_replay_artifact_matches_frozen_expected_output() -> None:
 def test_evidence_order_and_hashes_are_stable() -> None:
     artifact = BayesianReplayRunner(FIXTURE_DIR).run()
 
-    assert [component["evidence_type"] for component in artifact.evidence_components] == [
+    evidence_types = [
+        component["evidence_type"] for component in artifact.evidence_components
+    ]
+    assert evidence_types == [
         "bto",
         "bfo",
         "trajectory_consistency",
