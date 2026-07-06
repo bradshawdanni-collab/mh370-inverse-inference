@@ -30,7 +30,8 @@ def _validate_canonical_value(value: Any, path: str = "$") -> None:
         for index, item in enumerate(value):
             _validate_canonical_value(item, f"{path}[{index}]")
         return
-    raise TypeError(f"unsupported canonical JSON value at {path}: {type(value).__name__}")
+    value_type = type(value).__name__
+    raise TypeError(f"unsupported canonical JSON value at {path}: {value_type}")
 
 
 def canonical_json_bytes(payload: Any) -> bytes:
