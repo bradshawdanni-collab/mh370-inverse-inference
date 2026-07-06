@@ -166,7 +166,10 @@ def test_success_response_requires_normalized_posterior() -> None:
         replay_hash=HASH_D,
         normalization_error=0.0,
         pre_normalization_mass=1.0,
-        constraint_effects=ConstraintEffects(excluded_mass=0.0, penalized_mass=0.2),
+        constraint_effects=ConstraintEffects(
+            excluded_mass=0.0,
+            penalized_mass=0.2,
+        ),
     )
 
     assert response.posterior_distribution[0].probability == 0.75
