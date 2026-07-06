@@ -1,14 +1,15 @@
 {
   "case_id": "CASE-001",
-  "description": "Canonical multi-channel convergence baseline for SATCOM and trajectory consistency evidence.",
-  "schema_version": "L9.1-v1.0.0",
-  "generator_merge_commit": "dd7114f7e08efec3705b1f490c90c9232ca82122",
+  "description": "Canonical four-channel convergence baseline for SATCOM, trajectory consistency, and negative search evidence.",
+  "schema_version": "L9.8-v1.0.0",
+  "generator_merge_commit": "6f6436e83343d2ba4296336decdfd1bdf28446d8",
   "fixture_hashes": {
-    "case_001.input.json": "905754d9396f4fbff48b8913444e7cecb50b56883496c30d5cd52b21604683a5",
-    "case_001.expected.json": "ea8299f1a2c14ee82d231ea414b6907f24729339d9e445adb6d4ae95d9d6b88b"
+    "case_001.input.json": "2a93da17e2f22d94a4bed370e6c0b474fb42f4c20ff16758e1760b1bd310a59e",
+    "case_001.expected.json": "8680ac18d4fcbfd25f6a137bdc7c0054520b58ee9068cb444813d7c44f30437b"
   },
   "numerical_assumptions": {
-    "likelihood_model": "independent_gaussian_channels",
+    "likelihood_model": "independent_gaussian_channels_plus_negative_search",
+    "floor_behavior": "untriggered_nominal_scale",
     "hypothesis_ordering_enforced": false,
     "precision_limit_bits": 64
   }
