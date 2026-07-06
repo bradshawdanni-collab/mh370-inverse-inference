@@ -7,8 +7,8 @@ from pathlib import Path
 import pytest
 
 from mh370_inverse_inference.engine.contract import EngineStatus
-from mh370_inverse_inference.engine.reference import run_reference_engine
 from mh370_inverse_inference.engine.hashing import sha256_payload
+from mh370_inverse_inference.engine.reference import run_reference_engine
 
 FIXTURE_DIR = Path(__file__).parent / "fixtures" / "bayesian"
 FIXTURE_PATH = FIXTURE_DIR / "case_001.input.json"
