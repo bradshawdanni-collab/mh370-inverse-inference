@@ -83,10 +83,9 @@ def test_reference_engine_hashes_are_present_and_well_formed() -> None:
 def test_reference_engine_posterior_values_remain_frozen() -> None:
     """Assert the canonical L9 posterior baseline is still represented exactly."""
     response = run_reference_engine(INPUT_PATH)
-    posterior = {
-        item.hypothesis_id: item.probability
-        for item in response.posterior_distribution
-    }
+    posterior: dict[str, float] = {}
+    for item in response.posterior_distribution:
+        posterior[item.hypothesis_id] = item.probability
 
     assert posterior["H-001"] == pytest.approx(0.583598717878, abs=1e-12)
     assert posterior["H-002"] == pytest.approx(0.416401282122, abs=1e-12)
