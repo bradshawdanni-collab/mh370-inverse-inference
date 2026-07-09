@@ -6,11 +6,11 @@
   "posterior_distribution": [
     {
       "hypothesis_id": "H-001",
-      "probability": 0.583598717878
+      "probability": 0.5835928759344674
     },
     {
       "hypothesis_id": "H-002",
-      "probability": 0.416401282122
+      "probability": 0.4164071240655326
     }
   ],
   "pre_normalization_mass": 1.0,
