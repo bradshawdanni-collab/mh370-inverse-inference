@@ -7,7 +7,10 @@ from mh370_inverse_inference.aircraft.dynamics import (
     DynamicsRequest,
     DynamicsStepResult,
 )
-from mh370_inverse_inference.aircraft.serialization import canonical_hash, canonical_json
+from mh370_inverse_inference.aircraft.serialization import (
+    canonical_hash,
+    canonical_json,
+)
 from mh370_inverse_inference.aircraft.state import AircraftState
 
 
