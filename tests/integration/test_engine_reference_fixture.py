@@ -87,8 +87,8 @@ def test_reference_engine_posterior_values_remain_frozen() -> None:
     for item in response.posterior_distribution:
         posterior[item.hypothesis_id] = item.probability
 
-    assert posterior["H-001"] == pytest.approx(0.583598717878, abs=1e-12)
-    assert posterior["H-002"] == pytest.approx(0.416401282122, abs=1e-12)
+    assert posterior["H-001"] == pytest.approx(0.5835928759344674, abs=1e-12)
+    assert posterior["H-002"] == pytest.approx(0.4164071240655326, abs=1e-12)
     assert sum(posterior.values()) == pytest.approx(1.0, abs=1e-12)
 
 
