@@ -9,12 +9,14 @@ from mh370_inverse_inference.aircraft.state import AircraftState
 
 def test_reachability_fuel_exhaustion() -> None:
     initial_state = AircraftState(
-        latitude=0.0,
-        longitude=0.0,
-        altitude=10_000.0,
-        speed_tas=240.0,
-        heading=0.0,
-        mass=PerformanceEnvelope.OEW + 200.0,
+        timestamp_utc="2014-03-08T18:22:00Z",
+        latitude_deg=0.0,
+        longitude_deg=0.0,
+        altitude_m=10_000.0,
+        true_airspeed_mps=240.0,
+        heading_deg=0.0,
+        mass_kg=PerformanceEnvelope.OEW + 200.0,
+        model_version="L1.1-test",
     )
 
     final_state = ReachabilityEnvelope.compute_max_range_step(
