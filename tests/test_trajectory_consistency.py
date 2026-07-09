@@ -22,12 +22,14 @@ def _state(
     mass: float = 200_000.0,
 ) -> AircraftState:
     return AircraftState(
-        latitude=latitude,
-        longitude=longitude,
-        altitude=altitude,
-        speed_tas=speed_tas,
-        heading=heading,
-        mass=mass,
+        timestamp_utc="2014-03-08T18:22:00Z",
+        latitude_deg=math.degrees(latitude),
+        longitude_deg=math.degrees(longitude),
+        altitude_m=altitude,
+        true_airspeed_mps=speed_tas,
+        heading_deg=math.degrees(heading),
+        mass_kg=mass,
+        model_version="L1.1-test",
     )
 
 
