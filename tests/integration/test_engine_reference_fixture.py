@@ -14,6 +14,7 @@ INPUT_PATH = FIXTURE_DIR / "bayesian" / "case_001.input.json"
 EXPECTED_PATH = FIXTURE_DIR / "engine" / "reference_case_001.expected.json"
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 HASH_PLACEHOLDER = "<sha256>"
+FLOAT_ABS_TOL = 1e-12
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -64,9 +65,45 @@ def response_snapshot() -> dict[str, Any]:
     }
 
 
+def assert_snapshot_matches_fixture(
+    actual: dict[str, Any], expected: dict[str, Any]
+) -> None:
+    """Compare the response fixture while tolerating IEEE-754 roundoff only."""
+    assert actual.keys() == expected.keys()
+
+    for key in ("normalization_error", "pre_normalization_mass"):
+        assert actual[key] == pytest.approx(expected[key], abs=FLOAT_ABS_TOL)
+
+    actual_posterior = actual["posterior_distribution"]
+    expected_posterior = expected["posterior_distribution"]
+    assert isinstance(actual_posterior, list)
+    assert isinstance(expected_posterior, list)
+    assert len(actual_posterior) == len(expected_posterior)
+
+    for actual_item, expected_item in zip(actual_posterior, expected_posterior):
+        assert actual_item.keys() == expected_item.keys()
+        assert actual_item["hypothesis_id"] == expected_item["hypothesis_id"]
+        assert actual_item["probability"] == pytest.approx(
+            expected_item["probability"],
+            abs=FLOAT_ABS_TOL,
+        )
+
+    actual_without_float_fields = dict(actual)
+    expected_without_float_fields = dict(expected)
+    for key in (
+        "normalization_error",
+        "posterior_distribution",
+        "pre_normalization_mass",
+    ):
+        actual_without_float_fields.pop(key)
+        expected_without_float_fields.pop(key)
+
+    assert actual_without_float_fields == expected_without_float_fields
+
+
 def test_reference_engine_response_matches_release_fixture() -> None:
     """Assert the normalized reference response shape remains frozen."""
-    assert response_snapshot() == load_json(EXPECTED_PATH)
+    assert_snapshot_matches_fixture(response_snapshot(), load_json(EXPECTED_PATH))
 
 
 def test_reference_engine_hashes_are_present_and_well_formed() -> None:
