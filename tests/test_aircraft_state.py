@@ -10,12 +10,14 @@ from mh370_inverse_inference.aircraft.state import AircraftState
 
 def test_aircraft_state_normalization() -> None:
     state = AircraftState(
-        latitude=0.0,
-        longitude=math.pi + 0.1,
-        altitude=10_000.0,
-        speed_tas=240.0,
-        heading=2.5 * math.pi,
-        mass=200_000.0,
+        timestamp_utc="2014-03-08T18:22:00Z",
+        latitude_deg=0.0,
+        longitude_deg=math.degrees(math.pi + 0.1),
+        altitude_m=10_000.0,
+        true_airspeed_mps=240.0,
+        heading_deg=450.0,
+        mass_kg=200_000.0,
+        model_version="L1.1-test",
     )
 
     assert state.longitude < 0.0
@@ -23,14 +25,16 @@ def test_aircraft_state_normalization() -> None:
 
 
 def test_invalid_latitude() -> None:
-    with pytest.raises(ValueError, match="Latitude"):
+    with pytest.raises(ValueError, match="latitude_deg"):
         AircraftState(
-            latitude=2.0,
-            longitude=0.0,
-            altitude=10_000.0,
-            speed_tas=240.0,
-            heading=0.0,
-            mass=200_000.0,
+            timestamp_utc="2014-03-08T18:22:00Z",
+            latitude_deg=120.0,
+            longitude_deg=0.0,
+            altitude_m=10_000.0,
+            true_airspeed_mps=240.0,
+            heading_deg=0.0,
+            mass_kg=200_000.0,
+            model_version="L1.1-test",
         )
 
 
