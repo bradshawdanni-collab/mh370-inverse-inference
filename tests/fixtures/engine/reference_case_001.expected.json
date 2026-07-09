@@ -2,7 +2,7 @@
   "argmax_hypothesis_id": "H-001",
   "contract_version": "v1",
   "engine_version": "10.5.0",
-  "normalization_error": 0.0,
+  "normalization_error": 6.661338147750939e-16,
   "posterior_distribution": [
     {
       "hypothesis_id": "H-001",
@@ -13,7 +13,7 @@
       "probability": 0.4164071240655326
     }
   ],
-  "pre_normalization_mass": 1.0,
+  "pre_normalization_mass": 0.9999999999999993,
   "replay_hash": "<sha256>",
   "request_id": "12345678-1234-5678-1234-567812345678",
   "status": "success",
