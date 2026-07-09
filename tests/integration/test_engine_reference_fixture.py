@@ -80,7 +80,11 @@ def assert_snapshot_matches_fixture(
     assert isinstance(expected_posterior, list)
     assert len(actual_posterior) == len(expected_posterior)
 
-    for actual_item, expected_item in zip(actual_posterior, expected_posterior):
+    for actual_item, expected_item in zip(
+        actual_posterior,
+        expected_posterior,
+        strict=True,
+    ):
         assert actual_item.keys() == expected_item.keys()
         assert actual_item["hypothesis_id"] == expected_item["hypothesis_id"]
         assert actual_item["probability"] == pytest.approx(
