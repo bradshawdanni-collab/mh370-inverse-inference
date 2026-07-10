@@ -100,9 +100,7 @@ class DynamicsStepResult:
     op_signature_hash: str
     contract_version: str = CONTRACT_VERSION
     operation: str = OPERATION
-    metrics: Mapping[str, float | int | str | bool | None] = field(
-        default_factory=dict
-    )
+    metrics: Mapping[str, float | int | str | bool | None] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         dt_seconds = _finite(self.dt_seconds, "dt_seconds")
@@ -118,9 +116,7 @@ class DynamicsStepResult:
             raise ValueError(f"operation must be {OPERATION}")
         for name in ("input_hash", "output_hash", "op_signature_hash"):
             value = getattr(self, name)
-            invalid_character = any(
-                char not in "0123456789abcdef" for char in value
-            )
+            invalid_character = any(char not in "0123456789abcdef" for char in value)
             if len(value) != 64 or invalid_character:
                 raise ValueError(f"{name} must be a lowercase SHA-256 digest")
         ordered_metrics = dict(sorted(self.metrics.items()))
