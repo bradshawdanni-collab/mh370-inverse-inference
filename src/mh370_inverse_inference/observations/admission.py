@@ -44,10 +44,7 @@ def _valid_utc(value: str) -> bool:
         parsed = datetime.fromisoformat(value.removesuffix("Z") + "+00:00")
     except ValueError:
         return False
-    return (
-        parsed.utcoffset() is not None
-        and parsed.utcoffset().total_seconds() == 0.0
-    )
+    return parsed.utcoffset() is not None and parsed.utcoffset().total_seconds() == 0.0
 
 
 def _reasons(request: ObservationAdmissionRequest) -> tuple[AdmissionReason, ...]:
