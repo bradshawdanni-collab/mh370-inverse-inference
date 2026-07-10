@@ -67,7 +67,8 @@ def _non_empty(value: str, name: str) -> str:
 
 def _utc_timestamp(value: str, name: str) -> str:
     parsed = datetime.fromisoformat(value.removesuffix("Z") + "+00:00")
-    if parsed.utcoffset() is None or parsed.utcoffset().total_seconds() != 0.0:
+    offset = parsed.utcoffset()
+    if offset is None or offset.total_seconds() != 0.0:
         raise ValueError(f"{name} must be UTC")
     return value
 
