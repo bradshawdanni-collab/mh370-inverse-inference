@@ -54,6 +54,47 @@ The fixed-step baseline covers straight-level, climb, and turning motion.
 
 Approximate comparison validates physical quantities. Exact canonical bytes and hashes establish identity.
 
+## L1.3 Reachability envelope
+
+L1.3 applies bounded deterministic control sweeps to the L1.2 propagator and emits immutable reachable-state summaries, lineage indices, envelope metadata, and canonical identity hashes.
+
+The reachability layer computes state-space evidence. It does not interpret observations or assign probabilities.
+
+## L1.4 Reachability trace adapter
+
+L1.4 is a structural translation layer:
+
+```text
+ReachabilitySummary
+    → ReachabilityTraceAdapter
+    → TraceMetricRecord
+```
+
+The adapter preserves the L1.3 `input_hash`, `output_hash`, and `op_signature_hash` exactly. It uses `TraceMetricRecord.from_parts(...)` as the only trace-hash construction path.
+
+Required mappings are:
+
+```text
+stage_id = summary.operation
+stage_index = explicit adapter argument
+record_count = summary.reachable_state_count
+hypothesis_count = None
+normalization_error = None
+pre_normalization_mass = None
+status = ok
+```
+
+Reachability diagnostics are carried through canonical `metadata_json`, including contract version, model version, timestep, step count, control count, state count, constraint-violation count, and envelope metadata.
+
+`duration_ms` is optional execution metadata. Changing it does not alter the source identity hashes or the composed trace hash.
+
+The governing rule is:
+
+```text
+the adapter translates evidence;
+it does not recompute the model
+```
+
 ## Scope boundary
 
-This layer excludes route search, uncertainty sampling, satellite-observation evaluation, probabilistic weighting, drift analysis, and interpretive conclusions.
+This layer excludes new propagation or reachability algorithms, route search, uncertainty sampling, satellite-observation evaluation, probabilistic weighting, drift analysis, and interpretive conclusions.
