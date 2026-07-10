@@ -13,7 +13,9 @@ from mh370_inverse_inference.observations.models import (
     ObservationUncertainty,
     ProvenanceStatus,
 )
-from mh370_inverse_inference.observations.trace_adapter import admission_trace_record
+from mh370_inverse_inference.observations.trace_adapter import (
+    admission_trace_record,
+)
 
 VALID_HASH = "a" * 64
 
@@ -97,7 +99,7 @@ def test_unverified_provenance_is_quarantined() -> None:
     assert result.reason_codes == (AdmissionReason.UNVERIFIED_PROVENANCE,)
 
 
-def test_trace_mapping_preserves_identity_and_leaves_bayesian_fields_unset() -> None:
+def test_trace_mapping_preserves_identity() -> None:
     result = admit_observation(build_request())
     record = admission_trace_record(result, stage_index=4)
 
