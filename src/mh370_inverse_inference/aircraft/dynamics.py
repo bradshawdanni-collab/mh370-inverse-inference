@@ -3,9 +3,10 @@
 from __future__ import annotations
 
 import math
+from collections.abc import Mapping
 from dataclasses import dataclass, field
 from types import MappingProxyType
-from typing import Any, Mapping
+from typing import Any
 
 from mh370_inverse_inference.aircraft.state import AircraftState
 
@@ -117,7 +118,10 @@ class DynamicsStepResult:
             raise ValueError(f"operation must be {OPERATION}")
         for name in ("input_hash", "output_hash", "op_signature_hash"):
             value = getattr(self, name)
-            if len(value) != 64 or any(char not in "0123456789abcdef" for char in value):
+            invalid_character = any(
+                char not in "0123456789abcdef" for char in value
+            )
+            if len(value) != 64 or invalid_character:
                 raise ValueError(f"{name} must be a lowercase SHA-256 digest")
         ordered_metrics = dict(sorted(self.metrics.items()))
         for key, value in ordered_metrics.items():
