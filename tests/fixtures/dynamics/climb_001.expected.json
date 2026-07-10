@@ -1,0 +1,12 @@
+{
+  "next_state": {
+    "altitude_m": 10300.0,
+    "heading_deg": 0.0,
+    "latitude_deg": 0.10791859271024766,
+    "longitude_deg": 0.0,
+    "mass_kg": 200000.0,
+    "model_version": "aircraft-dynamics-1.0.0",
+    "timestamp_utc": "2014-03-08T18:23:00Z",
+    "true_airspeed_mps": 200.0
+  }
+}

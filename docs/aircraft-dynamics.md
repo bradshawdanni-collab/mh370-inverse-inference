@@ -1,108 +1,59 @@
-# L1.1 Aircraft Dynamics State and Identity Contract
+# Aircraft Dynamics Contracts
 
-L1.1 defines the aircraft-dynamics state and step records used by later deterministic propagation work. It is a state-and-identity contract layer, not a physics solver.
+## L1.1 State and identity
 
-## Architectural rule
+L1.1 defines immutable aircraft state, control, request, and result records. Canonical JSON and SHA-256 establish stable identity.
 
-```text
-simulation computes state
-hashing canonically fingerprints inputs and outputs
-tracing records the evidence
-replay compares the evidence
-```
+## L1.2 Deterministic propagator
 
-## Layer separation
+L1.2 implements one pure fixed-step transition:
 
 ```text
-AircraftState
-    ↓
-DynamicsStep / deterministic propagation
-    ↓
-DynamicsStepResult
-    ↓
-TraceMetricRecord adapter
+validated request
+    → deterministic state transition
+    → immutable step result
+    → canonical hashes
 ```
 
-The physics state remains testable without tracing. Tracing observes execution; it does not perform the simulation.
+The operation order is fixed:
 
-## Immutable records
+1. resolve true airspeed;
+2. apply altitude change;
+3. apply heading change;
+4. calculate great-circle angular distance;
+5. calculate latitude;
+6. calculate longitude;
+7. construct the normalized immutable state;
+8. compute metrics and canonical hashes.
 
-L1.1 defines these immutable value objects:
+Heading and longitude are normalized exactly once when the next state is constructed. Intermediate values are not rounded.
 
-- `AircraftState`
-- `DynamicsControlInput`
-- `DynamicsRequest`
-- `DynamicsStepResult`
+### Floating-point policy
 
-`AircraftState` contains timestamped aircraft identity data:
+- Public numeric inputs reject `NaN` and infinity.
+- `dt_seconds` is finite and strictly positive.
+- Python binary64 values are preserved in canonical JSON.
+- Tolerances are used only for scientific assertions.
+- Canonical bytes and hashes are exact identity artifacts.
+- Cross-platform bitwise identity requires a controlled runtime.
 
-```text
-timestamp_utc
-latitude_deg
-longitude_deg
-altitude_m
-true_airspeed_mps
-heading_deg
-mass_kg
-model_version
+```python
+ABS_TOL = 1e-12
+REL_TOL = 1e-12
 ```
 
-`DynamicsRequest` contains the full deterministic input contract for a future propagation step:
+### Audit identity
 
-```text
-initial_state
-control_input
-dt_seconds
-model_version
-```
+Each `DynamicsStepResult` contains the contract and model versions, stage index, operation, timestep, prior state, control, next state, metrics, and three SHA-256 identity hashes.
 
-`DynamicsStepResult` records one transition:
+Execution duration may be recorded by an external trace adapter, but it does not participate in state identity or replay hashes.
 
-```text
-previous_state
-next_state
-control_input
-dt_seconds
-model_version
-metrics
-```
+### Regression fixtures
 
-## Canonical serialization
+The fixed-step baseline covers straight-level, climb, and turning motion.
 
-Records serialize to canonical JSON using:
-
-- stable key ordering;
-- deterministic separators;
-- JSON-compatible primitive values;
-- explicit `model_version` in the hashed payload.
-
-The implementation hashes canonical payloads using the existing L10 engine hashing utilities. Python object identity and memory layout are never hashed.
-
-## Trace compatibility
-
-Aircraft-dynamics records are designed to be consumed by a later trace adapter. The future adapter should emit the common trace core:
-
-```text
-stage_index
-operation
-input_hash
-output_hash
-op_signature_hash
-duration_ms
-record_count
-```
-
-Stage-specific values remain in `metrics`, for example:
-
-```text
-fuel_mass_kg
-energy_error
-constraint_violation
-normalization_error
-```
-
-Bayesian-specific fields are not forced into the aircraft-dynamics state contract.
+Approximate comparison validates physical quantities. Exact canonical bytes and hashes establish identity.
 
 ## Scope boundary
 
-L1.1 does not implement aircraft propagation, fuel modelling, BFO inversion, Bayesian inference, debris drift, or endpoint-location conclusions. Those layers may depend on this contract later, but they do not belong inside it.
+This layer excludes route search, uncertainty sampling, satellite-observation evaluation, probabilistic weighting, drift analysis, and interpretive conclusions.

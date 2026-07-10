@@ -5,8 +5,8 @@ from dataclasses import is_dataclass
 from mh370_inverse_inference.aircraft.dynamics import (
     DynamicsControlInput,
     DynamicsRequest,
-    DynamicsStepResult,
 )
+from mh370_inverse_inference.aircraft.propagator import propagate
 from mh370_inverse_inference.aircraft.serialization import (
     canonical_hash,
     canonical_json,
@@ -23,79 +23,56 @@ def state_at(timestamp_utc: str, latitude_deg: float) -> AircraftState:
         true_airspeed_mps=236.0,
         heading_deg=255.0,
         mass_kg=220000.0,
-        model_version="L1.1-test",
+        model_version="aircraft-dynamics-1.0.0",
+    )
+
+
+def request_at(timestamp_utc: str = "2014-03-08T18:22:00Z") -> DynamicsRequest:
+    return DynamicsRequest(
+        initial_state=state_at(timestamp_utc, 6.5),
+        control_input=DynamicsControlInput(),
+        dt_seconds=60.0,
+        model_version="aircraft-dynamics-1.0.0",
     )
 
 
 def test_dynamics_records_are_frozen_dataclasses() -> None:
-    control = DynamicsControlInput()
-    request = DynamicsRequest(
-        initial_state=state_at("2014-03-08T18:22:00Z", 6.5),
-        control_input=control,
-        dt_seconds=60.0,
-        model_version="L1.1-test",
-    )
-    result = DynamicsStepResult(
-        previous_state=request.initial_state,
-        next_state=state_at("2014-03-08T18:23:00Z", 6.45),
-        control_input=control,
-        dt_seconds=request.dt_seconds,
-        model_version=request.model_version,
-        metrics={"fuel_mass_kg": 85000.0},
-    )
+    request = request_at()
+    result = propagate(request)
 
-    assert is_dataclass(control)
+    assert is_dataclass(request.control_input)
     assert is_dataclass(request)
     assert is_dataclass(result)
-    assert control.__dataclass_params__.frozen is True
+    assert request.control_input.__dataclass_params__.frozen is True
     assert request.__dataclass_params__.frozen is True
     assert result.__dataclass_params__.frozen is True
 
 
 def test_dynamics_request_serialization_and_hash_are_stable() -> None:
-    request = DynamicsRequest(
-        initial_state=state_at("2014-03-08T18:22:00Z", 6.5),
-        control_input=DynamicsControlInput(climb_rate_mps=0.0, turn_rate_degps=0.0),
-        dt_seconds=60.0,
-        model_version="L1.1-test",
-    )
+    request = request_at()
 
     assert canonical_json(request) == canonical_json(request)
     assert canonical_hash(request) == canonical_hash(request)
 
 
 def test_dynamics_step_result_hash_changes_with_model_version() -> None:
-    previous = state_at("2014-03-08T18:22:00Z", 6.5)
-    next_state = state_at("2014-03-08T18:23:00Z", 6.45)
-    control = DynamicsControlInput()
-    first = DynamicsStepResult(
-        previous_state=previous,
-        next_state=next_state,
-        control_input=control,
+    first = propagate(request_at())
+    altered = DynamicsRequest(
+        initial_state=request_at().initial_state,
+        control_input=DynamicsControlInput(),
         dt_seconds=60.0,
-        model_version="L1.1-test",
-        metrics={"constraint_violation": 0.0},
+        model_version="aircraft-dynamics-1.0.1",
     )
-    second = DynamicsStepResult(
-        previous_state=previous,
-        next_state=next_state,
-        control_input=control,
-        dt_seconds=60.0,
-        model_version="L1.1-test-alt",
-        metrics={"constraint_violation": 0.0},
-    )
+    second = propagate(altered)
 
-    assert canonical_hash(first) != canonical_hash(second)
+    assert first.input_hash != second.input_hash
+    assert first.op_signature_hash != second.op_signature_hash
 
 
 def test_dynamics_metrics_are_sorted_for_payload_stability() -> None:
-    result = DynamicsStepResult(
-        previous_state=state_at("2014-03-08T18:22:00Z", 6.5),
-        next_state=state_at("2014-03-08T18:23:00Z", 6.45),
-        control_input=DynamicsControlInput(),
-        dt_seconds=60.0,
-        model_version="L1.1-test",
-        metrics={"fuel_mass_kg": 85000.0, "constraint_violation": 0.0},
-    )
+    result = propagate(request_at())
 
-    assert list(result.metrics) == ["constraint_violation", "fuel_mass_kg"]
+    assert list(result.metrics) == [
+        "constraint_violation",
+        "fuel_consumed_kg",
+    ]
