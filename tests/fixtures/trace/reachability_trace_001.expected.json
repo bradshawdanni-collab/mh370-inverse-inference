@@ -1,0 +1,16 @@
+{
+  "duration_ms": null,
+  "failure_kind": null,
+  "hypothesis_count": null,
+  "input_hash": "<sha256>",
+  "metadata_json": "{\"constraint_violation_count\":0,\"contract_version\":\"L1.3\",\"control_count\":1,\"dt_seconds\":60.0,\"envelope_metadata\":{\"constraint_violation_count\":0,\"control_count\":1,\"max_altitude_m\":10000.0,\"max_latitude_deg\":6.608104049287633e-18,\"max_longitude_deg\":0.1079185927102344,\"max_mass_kg\":200000.0,\"max_true_airspeed_mps\":200.0,\"min_altitude_m\":10000.0,\"min_latitude_deg\":6.608104049287633e-18,\"min_longitude_deg\":0.1079185927102344,\"min_mass_kg\":200000.0,\"min_true_airspeed_mps\":200.0,\"state_count\":1},\"model_version\":\"aircraft-dynamics-1.0.0\",\"state_count\":1,\"step_count\":1}",
+  "normalization_error": null,
+  "op_signature_hash": "<sha256>",
+  "output_hash": "<sha256>",
+  "pre_normalization_mass": null,
+  "record_count": 1,
+  "stage_id": "aircraft_reachability_envelope",
+  "stage_index": 3,
+  "status": "ok",
+  "trace_hash": "<sha256>"
+}
