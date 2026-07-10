@@ -1,6 +1,7 @@
 """Great-circle aircraft state propagation for L1."""
 
 import math
+from datetime import datetime, timedelta
 
 from mh370_inverse_inference.aircraft.performance import PerformanceEnvelope
 from mh370_inverse_inference.aircraft.state import AircraftState
@@ -55,12 +56,17 @@ class KinematicPropagator:
             math.cos(angular_distance)
             - math.sin(state.latitude) * math.sin(latitude_2),
         )
+        timestamp = datetime.fromisoformat(
+            state.timestamp_utc.removesuffix("Z") + "+00:00"
+        ) + timedelta(seconds=dt)
 
         return AircraftState(
-            latitude=latitude_2,
-            longitude=longitude_2,
-            altitude=new_altitude,
-            speed_tas=new_speed,
-            heading=new_heading,
-            mass=new_mass,
+            timestamp_utc=timestamp.isoformat().replace("+00:00", "Z"),
+            latitude_deg=math.degrees(latitude_2),
+            longitude_deg=math.degrees(longitude_2),
+            altitude_m=new_altitude,
+            true_airspeed_mps=new_speed,
+            heading_deg=math.degrees(new_heading),
+            mass_kg=new_mass,
+            model_version=state.model_version,
         )

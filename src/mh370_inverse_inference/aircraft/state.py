@@ -1,41 +1,107 @@
-"""Immutable aircraft state representation for L1 dynamics."""
+"""Immutable aircraft state records for L1 dynamics."""
+
+from __future__ import annotations
 
 import math
 from dataclasses import dataclass
+from datetime import UTC, datetime
+from typing import Any
 
 
-@dataclass(frozen=True)
+def _validate_timestamp(value: str) -> None:
+    if not value.endswith("Z"):
+        raise ValueError("timestamp_utc must end with Z")
+    parsed = datetime.fromisoformat(value.removesuffix("Z") + "+00:00")
+    if parsed.tzinfo != UTC:
+        raise ValueError("timestamp_utc must be UTC")
+
+
+def _finite(value: float, name: str) -> float:
+    resolved = float(value)
+    if not math.isfinite(resolved):
+        raise ValueError(f"{name} must be finite")
+    return resolved
+
+
+@dataclass(frozen=True, slots=True)
 class AircraftState:
-    """Kinematic and physical state of the aircraft in SI units."""
+    """Immutable canonical aircraft state value object."""
 
-    latitude: float
-    longitude: float
-    altitude: float
-    speed_tas: float
-    heading: float
-    mass: float
+    timestamp_utc: str
+    latitude_deg: float
+    longitude_deg: float
+    altitude_m: float
+    true_airspeed_mps: float
+    heading_deg: float
+    mass_kg: float
+    model_version: str
 
     def __post_init__(self) -> None:
-        values = (
-            self.latitude,
-            self.longitude,
-            self.altitude,
-            self.speed_tas,
-            self.heading,
-            self.mass,
-        )
-        if not all(math.isfinite(value) for value in values):
-            raise ValueError("Aircraft state values must be finite")
-        if not (-math.pi / 2 <= self.latitude <= math.pi / 2):
-            raise ValueError("Latitude must be between -pi/2 and pi/2")
-        if self.altitude < 0.0:
-            raise ValueError("Altitude must be non-negative")
-        if self.speed_tas < 0.0:
-            raise ValueError("True airspeed must be non-negative")
-        if self.mass <= 0.0:
-            raise ValueError("Mass must be positive")
+        _validate_timestamp(self.timestamp_utc)
+        latitude = _finite(self.latitude_deg, "latitude_deg")
+        longitude = _finite(self.longitude_deg, "longitude_deg")
+        altitude = _finite(self.altitude_m, "altitude_m")
+        speed = _finite(self.true_airspeed_mps, "true_airspeed_mps")
+        heading = _finite(self.heading_deg, "heading_deg")
+        mass = _finite(self.mass_kg, "mass_kg")
 
-        normalized_longitude = (self.longitude + math.pi) % (2 * math.pi) - math.pi
-        normalized_heading = self.heading % (2 * math.pi)
-        object.__setattr__(self, "longitude", normalized_longitude)
-        object.__setattr__(self, "heading", normalized_heading)
+        if not -90.0 <= latitude <= 90.0:
+            raise ValueError("latitude_deg must be between -90 and 90")
+        if altitude < 0.0:
+            raise ValueError("altitude_m cannot be negative")
+        if speed < 0.0:
+            raise ValueError("true_airspeed_mps cannot be negative")
+        if mass <= 0.0:
+            raise ValueError("mass_kg must be positive")
+        if not self.model_version.strip():
+            raise ValueError("model_version cannot be blank")
+
+        object.__setattr__(self, "latitude_deg", latitude)
+        object.__setattr__(self, "longitude_deg", ((longitude + 180.0) % 360.0) - 180.0)
+        object.__setattr__(self, "altitude_m", altitude)
+        object.__setattr__(self, "true_airspeed_mps", speed)
+        object.__setattr__(self, "heading_deg", heading % 360.0)
+        object.__setattr__(self, "mass_kg", mass)
+
+    @property
+    def latitude(self) -> float:
+        """Latitude in radians."""
+        return math.radians(self.latitude_deg)
+
+    @property
+    def longitude(self) -> float:
+        """Longitude in radians."""
+        return math.radians(self.longitude_deg)
+
+    @property
+    def altitude(self) -> float:
+        """Altitude in metres."""
+        return self.altitude_m
+
+    @property
+    def speed_tas(self) -> float:
+        """True airspeed in m/s."""
+        return self.true_airspeed_mps
+
+    @property
+    def heading(self) -> float:
+        """Heading in radians."""
+        return math.radians(self.heading_deg)
+
+    @property
+    def mass(self) -> float:
+        """Mass in kg."""
+        return self.mass_kg
+
+    def to_payload(self) -> dict[str, Any]:
+        """Return a canonical JSON-compatible state payload."""
+        return {
+            "altitude_m": self.altitude_m,
+            "heading_deg": self.heading_deg,
+            "latitude_deg": self.latitude_deg,
+            "longitude_deg": self.longitude_deg,
+            "mass_kg": self.mass_kg,
+            "model_version": self.model_version,
+            "timestamp_utc": self.timestamp_utc,
+            "true_airspeed_mps": self.true_airspeed_mps,
+        }
