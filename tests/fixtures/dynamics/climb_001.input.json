@@ -1,0 +1,19 @@
+{
+  "control_input": {
+    "climb_rate_mps": 5.0,
+    "target_true_airspeed_mps": null,
+    "turn_rate_degps": 0.0
+  },
+  "dt_seconds": 60.0,
+  "initial_state": {
+    "altitude_m": 10000.0,
+    "heading_deg": 0.0,
+    "latitude_deg": 0.0,
+    "longitude_deg": 0.0,
+    "mass_kg": 200000.0,
+    "model_version": "aircraft-dynamics-1.0.0",
+    "timestamp_utc": "2014-03-08T18:22:00Z",
+    "true_airspeed_mps": 200.0
+  },
+  "model_version": "aircraft-dynamics-1.0.0"
+}
