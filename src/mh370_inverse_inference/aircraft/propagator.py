@@ -48,16 +48,11 @@ def propagate(request: DynamicsRequest, *, stage_index: int = 0) -> DynamicsStep
 
     latitude_2 = math.asin(
         math.sin(latitude_1) * math.cos(angular_distance)
-        + math.cos(latitude_1)
-        * math.sin(angular_distance)
-        * math.cos(heading)
+        + math.cos(latitude_1) * math.sin(angular_distance) * math.cos(heading)
     )
     longitude_2 = longitude_1 + math.atan2(
-        math.sin(heading)
-        * math.sin(angular_distance)
-        * math.cos(latitude_1),
-        math.cos(angular_distance)
-        - math.sin(latitude_1) * math.sin(latitude_2),
+        math.sin(heading) * math.sin(angular_distance) * math.cos(latitude_1),
+        math.cos(angular_distance) - math.sin(latitude_1) * math.sin(latitude_2),
     )
 
     next_state = AircraftState(
