@@ -10,11 +10,13 @@ import pytest
 from mh370_inverse_inference.aircraft.envelope import (
     ControlBounds,
     ReachabilityRequest,
+    ReachabilitySummary,
     evaluate_reachability,
 )
 from mh370_inverse_inference.aircraft.state import AircraftState
 from mh370_inverse_inference.aircraft.trace_adapter import ReachabilityTraceAdapter
 from mh370_inverse_inference.engine.hashing import compose_step_hash
+from mh370_inverse_inference.engine.trace import TraceMetricRecord
 
 FIXTURE_PATH = (
     Path(__file__).parent
@@ -25,7 +27,7 @@ FIXTURE_PATH = (
 SHA256_PLACEHOLDER = "<sha256>"
 
 
-def build_summary():
+def build_summary() -> ReachabilitySummary:
     request = ReachabilityRequest(
         initial_state=AircraftState(
             timestamp_utc="2014-03-08T18:22:00Z",
@@ -60,7 +62,7 @@ def load_fixture() -> dict[str, Any]:
     return loaded
 
 
-def snapshot(record) -> dict[str, Any]:
+def snapshot(record: TraceMetricRecord) -> dict[str, Any]:
     return {
         "duration_ms": record.duration_ms,
         "failure_kind": record.failure_kind,
