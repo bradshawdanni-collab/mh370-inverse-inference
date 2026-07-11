@@ -181,8 +181,7 @@ def test_inconsistent_validation_proof_fails_closed() -> None:
 
     assert result.status is EvidenceRegistrationStatus.REJECTED
     assert (
-        EvidenceRegistrationReason.VALIDATION_RESULT_INCONSISTENT
-        in result.reason_codes
+        EvidenceRegistrationReason.VALIDATION_RESULT_INCONSISTENT in result.reason_codes
     )
 
 
