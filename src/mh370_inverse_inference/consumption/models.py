@@ -7,10 +7,7 @@ from dataclasses import dataclass
 from enum import StrEnum
 from typing import Any
 
-from mh370_inverse_inference.evidence.registration_models import (
-    RegisteredEvidenceRecord,
-    CONTRACT_VERSION as REGISTRATION_CONTRACT_VERSION,
-)
+from mh370_inverse_inference.evidence import registration_models
 
 CONTRACT_VERSION = "L3.0"
 OPERATION = "registered_evidence_consumption"
@@ -60,10 +57,10 @@ class RegisteredEvidenceProjection:
     @classmethod
     def from_registered_record(
         cls,
-        record: RegisteredEvidenceRecord,
+        record: registration_models.RegisteredEvidenceRecord,
     ) -> RegisteredEvidenceProjection:
         """Reduce one authoritative registry record into a downstream projection."""
-        if not isinstance(record, RegisteredEvidenceRecord):
+        if not isinstance(record, registration_models.RegisteredEvidenceRecord):
             raise TypeError("record must be RegisteredEvidenceRecord")
         projection = object.__new__(cls)
         object.__setattr__(
@@ -237,4 +234,7 @@ def projection_is_well_formed(projection: RegisteredEvidenceProjection) -> bool:
         _sha256(projection.validation_hash, "validation_hash")
     except (AttributeError, TypeError, ValueError):
         return False
-    return projection.registration_contract_version == REGISTRATION_CONTRACT_VERSION
+    return (
+        projection.registration_contract_version
+        == registration_models.CONTRACT_VERSION
+    )
