@@ -7,6 +7,7 @@ from mh370_inverse_inference.engine.trace import TraceStatus
 from mh370_inverse_inference.evidence.assembly import assemble_evidence
 from mh370_inverse_inference.evidence.models import (
     EvidenceAssemblyRequest,
+    EvidenceAssemblyResult,
     EvidenceProvenanceLink,
 )
 from mh370_inverse_inference.evidence.validation import validate_evidence
@@ -34,7 +35,7 @@ HASH_B = "b" * 64
 HASH_C = "c" * 64
 
 
-def _assembled_result():
+def _assembled_result() -> EvidenceAssemblyResult:
     observation = ObservationRecord(
         observation_id="obs-001",
         observation_type=ObservationType.BTO,
@@ -89,7 +90,9 @@ def _assembled_result():
     return assemble_evidence(request)
 
 
-def _validation_request(assembly=None) -> EvidenceValidationRequest:
+def _validation_request(
+    assembly: EvidenceAssemblyResult | None = None,
+) -> EvidenceValidationRequest:
     result = _assembled_result() if assembly is None else assembly
     assert result.evidence_record is not None
     return EvidenceValidationRequest(
