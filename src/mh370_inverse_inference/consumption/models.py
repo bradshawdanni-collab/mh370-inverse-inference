@@ -236,4 +236,5 @@ def projection_is_well_formed(projection: RegisteredEvidenceProjection) -> bool:
         _sha256(projection.validation_hash, "validation_hash")
     except (AttributeError, TypeError, ValueError):
         return False
-    return projection.registration_contract_version == registration_models.CONTRACT_VERSION
+    expected_version = registration_models.CONTRACT_VERSION
+    return projection.registration_contract_version == expected_version
