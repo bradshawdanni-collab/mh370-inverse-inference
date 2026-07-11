@@ -196,15 +196,11 @@ class EvidenceConsumptionResult:
         _non_empty(self.consumption_policy_version, "consumption_policy_version")
         if self.operation != OPERATION:
             raise ValueError(f"operation must be {OPERATION}")
-        if (
-            self.status is ConsumptionStatus.ACCEPTED
-            and self.accepted_projection is None
-        ):
+        is_accepted = self.status is ConsumptionStatus.ACCEPTED
+        is_rejected = self.status is ConsumptionStatus.REJECTED
+        if is_accepted and self.accepted_projection is None:
             raise ValueError("accepted result requires accepted_projection")
-        if (
-            self.status is ConsumptionStatus.REJECTED
-            and self.accepted_projection is not None
-        ):
+        if is_rejected and self.accepted_projection is not None:
             raise ValueError("rejected result cannot include accepted_projection")
 
     def to_payload(self) -> dict[str, Any]:
