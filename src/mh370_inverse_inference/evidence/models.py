@@ -120,9 +120,7 @@ class EvidenceRecord:
             "observation_hash": self.observation_hash,
             "observation_id": self.observation_id,
             "observation_type": self.observation_type.value,
-            "provenance_chain": [
-                link.to_payload() for link in self.provenance_chain
-            ],
+            "provenance_chain": [link.to_payload() for link in self.provenance_chain],
             "source_hash": self.source_hash,
             "source_id": self.source_id,
         }
@@ -153,9 +151,7 @@ class EvidenceAssemblyRequest:
             "evidence_id": self.evidence_id,
             "expected_contract_version": self.expected_contract_version,
             "expected_model_version": self.expected_model_version,
-            "provenance_chain": [
-                link.to_payload() for link in self.provenance_chain
-            ],
+            "provenance_chain": [link.to_payload() for link in self.provenance_chain],
         }
 
 
@@ -182,10 +178,7 @@ class EvidenceAssemblyResult:
         _sha256(self.op_signature_hash, "op_signature_hash")
         if self.operation != OPERATION:
             raise ValueError(f"operation must be {OPERATION}")
-        if (
-            self.status is EvidenceAssemblyStatus.ASSEMBLED
-            and self.evidence_record is None
-        ):
+        if self.status is EvidenceAssemblyStatus.ASSEMBLED and self.evidence_record is None:
             raise ValueError("assembled result requires evidence_record")
         if (
             self.status is EvidenceAssemblyStatus.REJECTED
