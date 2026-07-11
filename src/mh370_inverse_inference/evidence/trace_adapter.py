@@ -23,9 +23,7 @@ def evidence_trace_record(
     metadata = {
         "assembly_policy_version": result.assembly_policy_version,
         "assembly_status": result.status.value,
-        "contract_version": (
-            record.contract_version if record is not None else None
-        ),
+        "contract_version": (record.contract_version if record is not None else None),
         "evidence_id": record.evidence_id if record is not None else None,
         "model_version": record.model_version if record is not None else None,
         "observation_id": observation.observation_id,
