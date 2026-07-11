@@ -122,7 +122,10 @@ def test_consumption_preserves_identity_without_reconstructing_authority() -> No
     result = consume_registered_evidence(request)
 
     assert result.accepted_projection is not None
-    assert result.accepted_projection.registry_evidence_id == record.registry_evidence_id
+    assert (
+        result.accepted_projection.registry_evidence_id
+        == record.registry_evidence_id
+    )
     assert result.accepted_projection.evidence_hash == record.evidence_hash
     assert result.accepted_projection.validation_hash == record.validation_hash
     assert not isinstance(result.accepted_projection, RegisteredEvidenceRecord)
