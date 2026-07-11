@@ -112,8 +112,7 @@ def test_l20_identities_are_preserved_without_recomputation() -> None:
 
     assert result.evidence_record is not None
     assert (
-        result.evidence_record.observation_hash
-        == request.admission_result.output_hash
+        result.evidence_record.observation_hash == request.admission_result.output_hash
     )
     assert result.evidence_record.source_hash == HASH_A
 
