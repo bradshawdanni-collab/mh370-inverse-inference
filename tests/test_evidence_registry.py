@@ -6,8 +6,14 @@ import pytest
 
 from mh370_inverse_inference.engine.hashing import sha256_payload
 from mh370_inverse_inference.engine.trace import TraceStatus
-from mh370_inverse_inference.evidence.registration_models import RegisteredEvidenceRecord
-from mh370_inverse_inference.evidence.registry import contains, list_by_observation, lookup
+from mh370_inverse_inference.evidence.registration_models import (
+    RegisteredEvidenceRecord,
+)
+from mh370_inverse_inference.evidence.registry import (
+    contains,
+    list_by_observation,
+    lookup,
+)
 from mh370_inverse_inference.evidence.registry_models import (
     EvidenceRegistryReason,
     EvidenceRegistryRequest,
