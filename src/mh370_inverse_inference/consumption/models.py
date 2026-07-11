@@ -113,7 +113,9 @@ class AcceptedEvidenceProjection:
         _sha256(self.evidence_hash, "evidence_hash")
         _sha256(self.validation_hash, "validation_hash")
         if self.consumption_contract_version != CONTRACT_VERSION:
-            raise ValueError(f"consumption_contract_version must be {CONTRACT_VERSION}")
+            raise ValueError(
+                f"consumption_contract_version must be {CONTRACT_VERSION}"
+            )
 
     @classmethod
     def from_projection(
@@ -234,7 +236,4 @@ def projection_is_well_formed(projection: RegisteredEvidenceProjection) -> bool:
         _sha256(projection.validation_hash, "validation_hash")
     except (AttributeError, TypeError, ValueError):
         return False
-    return (
-        projection.registration_contract_version
-        == registration_models.CONTRACT_VERSION
-    )
+    return projection.registration_contract_version == registration_models.CONTRACT_VERSION
