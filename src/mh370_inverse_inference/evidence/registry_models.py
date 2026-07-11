@@ -8,7 +8,9 @@ from enum import StrEnum
 from typing import Any
 
 from mh370_inverse_inference.engine.hashing import sha256_payload
-from mh370_inverse_inference.evidence.registration_models import RegisteredEvidenceRecord
+from mh370_inverse_inference.evidence.registration_models import (
+    RegisteredEvidenceRecord,
+)
 
 CONTRACT_VERSION = "L2.4"
 OPERATION = "evidence_registry_lookup"
