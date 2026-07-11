@@ -73,6 +73,14 @@ def _utc_timestamp(value: str, name: str) -> str:
     return value
 
 
+def _canonical_float(value: float | None) -> float | str | None:
+    if value is None or math.isfinite(value):
+        return value
+    if math.isnan(value):
+        return "<nan>"
+    return "<positive-infinity>" if value > 0.0 else "<negative-infinity>"
+
+
 @dataclass(frozen=True, slots=True)
 class ObservationUncertainty:
     """Explicit uncertainty attached to an observation."""
@@ -88,8 +96,8 @@ class ObservationUncertainty:
 
     def to_payload(self) -> dict[str, Any]:
         return {
-            "confidence_level": self.confidence_level,
-            "standard_uncertainty": self.standard_uncertainty,
+            "confidence_level": _canonical_float(self.confidence_level),
+            "standard_uncertainty": _canonical_float(self.standard_uncertainty),
             "uncertainty_model": self.uncertainty_model,
             "units": self.units,
         }
@@ -157,7 +165,7 @@ class ObservationRecord:
     def to_payload(self) -> dict[str, Any]:
         return {
             "contract_version": self.contract_version,
-            "measured_value": self.measured_value,
+            "measured_value": _canonical_float(self.measured_value),
             "model_version": self.model_version,
             "observation_id": self.observation_id,
             "observation_type": self.observation_type.value,
