@@ -37,7 +37,7 @@ def _provenance_reasons(request: EvidenceValidationRequest) -> list[EvidenceVali
     ):
         reasons.append(EvidenceValidationReason.PROVENANCE_HASH_DISCONTINUITY)
 
-    for previous, current in zip(chain, chain[1:], strict=True):
+    for previous, current in zip(chain, chain[1:]):
         if (
             previous.object_id != current.subject_id
             or previous.object_hash != current.subject_hash
