@@ -98,15 +98,11 @@ def test_registry_identity_mismatch_fails_closed() -> None:
 
 
 def test_unsupported_contract_version_fails_closed() -> None:
-    result = consume_registered_evidence(
-        _request(expected_contract_version="L3.1")
-    )
+    result = consume_registered_evidence(_request(expected_contract_version="L3.1"))
 
     assert result.status is ConsumptionStatus.REJECTED
     assert result.accepted_projection is None
-    assert result.reason_codes == (
-        ConsumptionReason.UNSUPPORTED_CONTRACT_VERSION,
-    )
+    assert result.reason_codes == (ConsumptionReason.UNSUPPORTED_CONTRACT_VERSION,)
 
 
 def test_consumption_preserves_identity_without_reconstructing_authority() -> None:
@@ -123,8 +119,7 @@ def test_consumption_preserves_identity_without_reconstructing_authority() -> No
 
     assert result.accepted_projection is not None
     assert (
-        result.accepted_projection.registry_evidence_id
-        == record.registry_evidence_id
+        result.accepted_projection.registry_evidence_id == record.registry_evidence_id
     )
     assert result.accepted_projection.evidence_hash == record.evidence_hash
     assert result.accepted_projection.validation_hash == record.validation_hash
