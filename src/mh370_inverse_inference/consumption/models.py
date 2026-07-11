@@ -116,9 +116,7 @@ class AcceptedEvidenceProjection:
         _sha256(self.evidence_hash, "evidence_hash")
         _sha256(self.validation_hash, "validation_hash")
         if self.consumption_contract_version != CONTRACT_VERSION:
-            raise ValueError(
-                f"consumption_contract_version must be {CONTRACT_VERSION}"
-            )
+            raise ValueError(f"consumption_contract_version must be {CONTRACT_VERSION}")
 
     @classmethod
     def from_projection(
@@ -199,7 +197,10 @@ class EvidenceConsumptionResult:
         _non_empty(self.consumption_policy_version, "consumption_policy_version")
         if self.operation != OPERATION:
             raise ValueError(f"operation must be {OPERATION}")
-        if self.status is ConsumptionStatus.ACCEPTED and self.accepted_projection is None:
+        if (
+            self.status is ConsumptionStatus.ACCEPTED
+            and self.accepted_projection is None
+        ):
             raise ValueError("accepted result requires accepted_projection")
         if (
             self.status is ConsumptionStatus.REJECTED
