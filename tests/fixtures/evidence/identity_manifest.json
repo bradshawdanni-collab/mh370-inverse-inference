@@ -1,32 +1,32 @@
 {
   "bfo_evidence_001": {
-    "input_hash": "9465bb2b9659ea3505d2cd5b674826fc664220a87dd9be4d2f17dd6eb2084ad4",
-    "output_hash": "82645aa266d5c1f10961a1fde69e613aeaa63b1e750954c3055b6521889b806f",
+    "input_hash": "4b4ec4fc70f03bbaabd02b1234b05315704eac9db7ef3260153e7fced1586d38",
+    "output_hash": "f32e6accc914af1b81bc866d0bb79ccb1ce29f8805a10210e1d0849c76a4e8ae",
     "status": "ASSEMBLED",
-    "trace_hash": "ba331524fd9fea6a067c401d8a90a35cd02ab261270af123c32592288edb1ae3"
+    "trace_hash": "2735685a7b8fb2ad90299026b1c5162a92c0e8681f9950ef22eed2a8d3ac1ad2"
   },
   "bto_evidence_001": {
-    "input_hash": "ebd7cb4ef25bfaee09032fd9f96318cf54033753854fea6e0867314439a03f81",
-    "output_hash": "d2beca74ffabb33492daee1b0e53a45bbf2e66045f7b3a6fa8af4801d77cdea7",
+    "input_hash": "3f655fad7d83c7ea87a08decb1923bf9756678fa07762abcf6848ce2efb95fcb",
+    "output_hash": "587c77b760f6a541dedd4db7119f6c2e738821f3b990a27755b88b2481c59fb2",
     "status": "ASSEMBLED",
-    "trace_hash": "13b2576919e0913046e170917d80e47335da92a558caaaf65668fed138397126"
+    "trace_hash": "c9117a75ba23249282b2bcb65fbe671f430d9aca65d916cb1904ad604f6941cb"
   },
   "invalid_provenance_001": {
-    "input_hash": "f240d3e83ca78c1b14155fd7702d45f8a211a54f9a502c75527c8f329672f6ca",
+    "input_hash": "579d615fe020de177a1d83f75c97a45e83288abf411a523601efdce650e97268",
     "output_hash": "d850430f9f758470c90481fb4c76f9b442d62a8ed7093c52ebf950d89c5f0f7d",
     "status": "REJECTED",
-    "trace_hash": "01439f93c2aa66ca2cab4c3048c58d091cc50cb63e073ac5b5827431094f527a"
+    "trace_hash": "70304ac9d359319f3de273a31ea283f172ee93e1d90e11125498a6f8e8b49ca6"
   },
   "quarantined_source_001": {
-    "input_hash": "2c25194aac00230f07ef8a16b24d37132f9000ce2b6b19fff17912c0a317087f",
+    "input_hash": "2611fd86cc2256db66b559555fac75cf1a2e2a41baa95a35225c1511de6c735a",
     "output_hash": "86d06268c70b7ef5679165472f488f2586e47a218382b6fbcec87506675fec57",
     "status": "REJECTED",
-    "trace_hash": "5c4580ad7f22c4570f20a5a3a21fa42b719ff4c8951673a453450e8e453a9071"
+    "trace_hash": "7043db86eb9136cbeba6e6b87289fc63e8d56ac0e0d9b8d2893bfb4c63600daa"
   },
   "rejected_source_001": {
-    "input_hash": "c608033d7c955cc821d826619b4fafbb34964a58f74c174bfb78a2b8960eea1c",
+    "input_hash": "c4e3e6eae4a5e97bef468d946271bf32212d1d8e12913b4c82fd05fe7720bc04",
     "output_hash": "86d06268c70b7ef5679165472f488f2586e47a218382b6fbcec87506675fec57",
     "status": "REJECTED",
-    "trace_hash": "f1ceea167090185e43ca7e4556617891e178293ff0d75e7a5b6b87d93f8b78a0"
+    "trace_hash": "3081dd452cec087f7b2a8830ba54d847ccf9996e8a3b892e6f3f52b79c8f78ab"
   }
 }
