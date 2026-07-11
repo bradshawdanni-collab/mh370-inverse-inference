@@ -178,7 +178,10 @@ class EvidenceAssemblyResult:
         _sha256(self.op_signature_hash, "op_signature_hash")
         if self.operation != OPERATION:
             raise ValueError(f"operation must be {OPERATION}")
-        if self.status is EvidenceAssemblyStatus.ASSEMBLED and self.evidence_record is None:
+        if (
+            self.status is EvidenceAssemblyStatus.ASSEMBLED
+            and self.evidence_record is None
+        ):
             raise ValueError("assembled result requires evidence_record")
         if (
             self.status is EvidenceAssemblyStatus.REJECTED
