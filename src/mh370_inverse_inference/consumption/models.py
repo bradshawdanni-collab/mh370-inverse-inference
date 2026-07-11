@@ -8,8 +8,8 @@ from enum import StrEnum
 from typing import Any
 
 from mh370_inverse_inference.evidence.registration_models import (
-    CONTRACT_VERSION as REGISTRATION_CONTRACT_VERSION,
     RegisteredEvidenceRecord,
+    CONTRACT_VERSION as REGISTRATION_CONTRACT_VERSION,
 )
 
 CONTRACT_VERSION = "L3.0"
