@@ -130,18 +130,14 @@ def test_provenance_indices_must_be_exact_and_ordered() -> None:
     result = assemble_evidence(_request(provenance_chain=(_link(1),)))
 
     assert result.status is EvidenceAssemblyStatus.REJECTED
-    assert result.reason_codes == (
-        EvidenceAssemblyReason.INVALID_PROVENANCE_CHAIN,
-    )
+    assert result.reason_codes == (EvidenceAssemblyReason.INVALID_PROVENANCE_CHAIN,)
 
 
 def test_missing_provenance_is_rejected() -> None:
     result = assemble_evidence(_request(provenance_chain=()))
 
     assert result.status is EvidenceAssemblyStatus.REJECTED
-    assert result.reason_codes == (
-        EvidenceAssemblyReason.MISSING_PROVENANCE_LINK,
-    )
+    assert result.reason_codes == (EvidenceAssemblyReason.MISSING_PROVENANCE_LINK,)
 
 
 def test_input_objects_remain_unchanged() -> None:
