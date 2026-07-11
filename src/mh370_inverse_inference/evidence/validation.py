@@ -14,7 +14,9 @@ from mh370_inverse_inference.evidence.validation_models import (
 )
 
 
-def _provenance_reasons(request: EvidenceValidationRequest) -> list[EvidenceValidationReason]:
+def _provenance_reasons(
+    request: EvidenceValidationRequest,
+) -> list[EvidenceValidationReason]:
     record = request.assembly_result.evidence_record
     if record is None:
         return []
@@ -37,7 +39,7 @@ def _provenance_reasons(request: EvidenceValidationRequest) -> list[EvidenceVali
     ):
         reasons.append(EvidenceValidationReason.PROVENANCE_HASH_DISCONTINUITY)
 
-    for previous, current in zip(chain, chain[1:]):
+    for previous, current in zip(chain, chain[1:], strict=False):
         if (
             previous.object_id != current.subject_id
             or previous.object_hash != current.subject_hash
