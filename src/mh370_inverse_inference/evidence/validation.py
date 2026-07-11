@@ -97,9 +97,7 @@ def validate_evidence(
     reason_codes = _reason_codes(request)
     valid = reason_codes == (EvidenceValidationReason.OK,)
     status = (
-        EvidenceValidationStatus.VALID
-        if valid
-        else EvidenceValidationStatus.REJECTED
+        EvidenceValidationStatus.VALID if valid else EvidenceValidationStatus.REJECTED
     )
 
     input_hash = sha256_payload(request.to_payload())
