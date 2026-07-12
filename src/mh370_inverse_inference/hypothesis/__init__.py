@@ -21,10 +21,12 @@ from mh370_inverse_inference.hypothesis.result import (
     HypothesisEvaluationStatus,
     build_hypothesis_evaluation_result,
 )
+# fmt: off
 from mh370_inverse_inference.hypothesis.trace import (
     HypothesisEvaluationTrace,
     build_hypothesis_evaluation_trace,
 )
+# fmt: on
 
 __all__ = [
     "EvidenceHypothesisRelationRecord",
