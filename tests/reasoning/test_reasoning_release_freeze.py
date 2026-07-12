@@ -25,15 +25,9 @@ def test_l4_contract_versions_are_frozen() -> None:
         "rule_application_record": "L4.2",
         "neutral_reasoning_trace": "L4.3",
     }
-    assert models.CONTRACT_VERSION == CONTRACT_VERSIONS[
-        "constrained_reasoning_request"
-    ]
-    assert result.CONTRACT_VERSION == CONTRACT_VERSIONS[
-        "constrained_reasoning_result"
-    ]
-    assert application.CONTRACT_VERSION == CONTRACT_VERSIONS[
-        "rule_application_record"
-    ]
+    assert models.CONTRACT_VERSION == CONTRACT_VERSIONS["constrained_reasoning_request"]
+    assert result.CONTRACT_VERSION == CONTRACT_VERSIONS["constrained_reasoning_result"]
+    assert application.CONTRACT_VERSION == CONTRACT_VERSIONS["rule_application_record"]
     assert trace.CONTRACT_VERSION == CONTRACT_VERSIONS["neutral_reasoning_trace"]
 
 
