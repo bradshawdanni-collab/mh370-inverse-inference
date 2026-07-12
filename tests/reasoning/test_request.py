@@ -134,10 +134,7 @@ def test_policy_version_participates_in_request_identity() -> None:
 
 def test_reasoning_module_excludes_authority_and_inference_dependencies() -> None:
     package_root = (
-        Path(__file__).parents[2]
-        / "src"
-        / "mh370_inverse_inference"
-        / "reasoning"
+        Path(__file__).parents[2] / "src" / "mh370_inverse_inference" / "reasoning"
     )
     source = "\n".join(
         path.read_text(encoding="utf-8") for path in sorted(package_root.glob("*.py"))
