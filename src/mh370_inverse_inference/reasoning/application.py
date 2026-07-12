@@ -73,7 +73,9 @@ class RuleApplicationRecord:
             if claim_hash not in permitted_claim_hashes
         )
         if missing:
-            raise ValueError("input_claim_hashes contain values outside permitted lineage")
+            raise ValueError(
+                "input_claim_hashes contain values outside permitted lineage"
+            )
 
         canonical_payload: dict[str, Any] = {
             "input_claim_hashes": list(input_claim_hashes),
