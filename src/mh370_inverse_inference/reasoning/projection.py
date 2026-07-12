@@ -1,4 +1,4 @@
-"""One-way projection from L3 interpretation results into L4 requests."""
+"""One-way projection from an L3 interpretation result into an L4 input."""
 
 from __future__ import annotations
 
