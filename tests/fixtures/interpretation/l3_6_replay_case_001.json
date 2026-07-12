@@ -1,0 +1,14 @@
+{
+  "interpretation_policy_version": "interpretation-1.0.0",
+  "projection": {
+    "evidence_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "evidence_id": "evidence-001",
+    "observation_id": "obs-001",
+    "registry_evidence_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "source_id": "src-001",
+    "validation_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+  },
+  "rule_id": "EVIDENCE_CONSUMED",
+  "stage_id": "L3.6-neutral-interpretation-execution",
+  "stage_index": 6
+}
