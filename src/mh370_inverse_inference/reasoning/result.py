@@ -92,9 +92,7 @@ class ConstrainedReasoningResult:
     def _validate(self) -> None:
         _sha256(self.request_hash, "request_hash")
         if self.reasoning_contract_version != CONTRACT_VERSION:
-            raise ValueError(
-                f"reasoning_contract_version must be {CONTRACT_VERSION}"
-            )
+            raise ValueError(f"reasoning_contract_version must be {CONTRACT_VERSION}")
         _non_empty(self.reasoning_policy_version, "reasoning_policy_version")
         if type(self.status) is not ReasoningStatus:
             raise TypeError("status must be ReasoningStatus")
