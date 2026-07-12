@@ -144,11 +144,10 @@ class HypothesisEvaluationResult:
 
     def canonical_payload(self) -> dict[str, Any]:
         """Return the exact payload from which result_hash is derived."""
+        contract_version = self.evaluation_result_contract_version
         return {
             "evaluation_policy_version": self.evaluation_policy_version,
-            "evaluation_result_contract_version": (
-                self.evaluation_result_contract_version
-            ),
+            "evaluation_result_contract_version": contract_version,
             "ordered_hypothesis_ids": list(self.ordered_hypothesis_ids),
             "ordered_outcomes": [outcome.value for outcome in self.ordered_outcomes],
             "ordered_relation_record_hashes": list(
