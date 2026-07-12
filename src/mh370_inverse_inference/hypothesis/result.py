@@ -150,9 +150,7 @@ class HypothesisEvaluationResult:
             "evaluation_result_contract_version": contract_version,
             "ordered_hypothesis_ids": list(self.ordered_hypothesis_ids),
             "ordered_outcomes": [outcome.value for outcome in self.ordered_outcomes],
-            "ordered_relation_record_hashes": list(
-                self.ordered_relation_record_hashes
-            ),
+            "ordered_relation_record_hashes": list(self.ordered_relation_record_hashes),
             "reason_codes": [reason.value for reason in self.reason_codes],
             "request_hash": self.request_hash,
             "status": self.status.value,
