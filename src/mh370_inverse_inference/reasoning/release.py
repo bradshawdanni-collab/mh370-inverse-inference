@@ -15,9 +15,7 @@ CONTRACT_VERSIONS: Final[dict[str, str]] = {
     "neutral_reasoning_trace": "L4.3",
 }
 
-CANONICAL_REPLAY_FIXTURE: Final = (
-    "tests/fixtures/reasoning/l4_4_release_case_001.json"
-)
+CANONICAL_REPLAY_FIXTURE: Final = "tests/fixtures/reasoning/l4_4_release_case_001.json"
 CANONICAL_REPLAY_FIXTURE_SHA256: Final = (
     "e3db1b6465491cf1dd99fca2454a219920b77078808af1ef8790305195a559b1"
 )
