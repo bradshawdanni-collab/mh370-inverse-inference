@@ -117,9 +117,7 @@ def _result(
         HypothesisEvaluationOutcome.REJECTED,
     ),
     status: HypothesisEvaluationStatus = HypothesisEvaluationStatus.COMPLETED,
-    reasons: tuple[HypothesisEvaluationReason, ...] = (
-        HypothesisEvaluationReason.OK,
-    ),
+    reasons: tuple[HypothesisEvaluationReason, ...] = (HypothesisEvaluationReason.OK,),
 ) -> HypothesisEvaluationResult:
     request, relations = _request_and_relations()
     return build_hypothesis_evaluation_result(
