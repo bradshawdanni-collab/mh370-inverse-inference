@@ -16,10 +16,15 @@ from mh370_inverse_inference.reasoning.result import (
     ReasoningStatus,
     build_constrained_reasoning_result,
 )
+from mh370_inverse_inference.reasoning.trace import (
+    NeutralReasoningTrace,
+    build_neutral_reasoning_trace,
+)
 
 __all__ = [
     "ConstrainedReasoningRequest",
     "ConstrainedReasoningResult",
+    "NeutralReasoningTrace",
     "ReasoningReason",
     "ReasoningStatus",
     "RuleApplicationOutcome",
@@ -27,5 +32,6 @@ __all__ = [
     "RuleApplicationRecord",
     "build_constrained_reasoning_request",
     "build_constrained_reasoning_result",
+    "build_neutral_reasoning_trace",
     "build_rule_application_record",
 ]
