@@ -1,5 +1,11 @@
-"""Deterministic interpretation input and result boundaries."""
+"""Deterministic interpretation contracts."""
 
+from mh370_inverse_inference.interpretation.claim import (
+    ClaimStatus,
+    NeutralClaimType,
+    NeutralDerivedClaim,
+    build_neutral_derived_claim,
+)
 from mh370_inverse_inference.interpretation.models import InterpretationRequest
 from mh370_inverse_inference.interpretation.projection import (
     build_interpretation_request,
@@ -12,10 +18,14 @@ from mh370_inverse_inference.interpretation.result import (
 )
 
 __all__ = [
+    "ClaimStatus",
     "InterpretationReason",
     "InterpretationRequest",
     "InterpretationResult",
     "InterpretationStatus",
+    "NeutralClaimType",
+    "NeutralDerivedClaim",
     "build_interpretation_request",
     "build_interpretation_result",
+    "build_neutral_derived_claim",
 ]
