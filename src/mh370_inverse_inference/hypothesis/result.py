@@ -173,8 +173,7 @@ def build_hypothesis_evaluation_result(
     if type(request) is not HypothesisEvaluationRequest:
         raise TypeError("request must be HypothesisEvaluationRequest")
     if any(
-        type(record) is not EvidenceHypothesisRelationRecord
-        for record in relations
+        type(record) is not EvidenceHypothesisRelationRecord for record in relations
     ):
         raise TypeError(
             "relations must contain EvidenceHypothesisRelationRecord values"
@@ -201,17 +200,14 @@ def build_hypothesis_evaluation_result(
     if len(ordered_outcomes) != len(request.ordered_hypothesis_ids):
         raise ValueError("ordered_outcomes must align with ordered_hypothesis_ids")
     if any(
-        type(outcome) is not HypothesisEvaluationOutcome
-        for outcome in ordered_outcomes
+        type(outcome) is not HypothesisEvaluationOutcome for outcome in ordered_outcomes
     ):
         raise TypeError(
             "ordered_outcomes must contain HypothesisEvaluationOutcome values"
         )
     if type(status) is not HypothesisEvaluationStatus:
         raise TypeError("status must be HypothesisEvaluationStatus")
-    if any(
-        type(reason) is not HypothesisEvaluationReason for reason in reason_codes
-    ):
+    if any(type(reason) is not HypothesisEvaluationReason for reason in reason_codes):
         raise TypeError("reason_codes must contain HypothesisEvaluationReason values")
     return HypothesisEvaluationResult._from_request(
         request,
