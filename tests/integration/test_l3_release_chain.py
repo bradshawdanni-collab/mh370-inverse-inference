@@ -7,7 +7,9 @@ from mh370_inverse_inference.consumption.models import (
     EvidenceConsumptionRequest,
     RegisteredEvidenceProjection,
 )
-from mh370_inverse_inference.evidence.registration_models import RegisteredEvidenceRecord
+from mh370_inverse_inference.evidence.registration_models import (
+    RegisteredEvidenceRecord,
+)
 from mh370_inverse_inference.interpretation import (
     NeutralRuleId,
     build_interpretation_request,
