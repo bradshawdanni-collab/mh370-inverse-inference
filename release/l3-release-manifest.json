@@ -1,0 +1,28 @@
+{
+  "canonical_replay_fixture": {
+    "path": "tests/fixtures/interpretation/l3_6_replay_case_001.json",
+    "sha256": "870720bfe668309a0ef8448e64fb6dff1bd2683716257c597faea27c0d2738df"
+  },
+  "contract_versions": {
+    "interpretation_request": "L3.1",
+    "interpretation_result": "L3.4",
+    "neutral_derived_claim": "L3.3",
+    "neutral_rule_execution": "L3.5",
+    "registered_evidence_consumption": "L3.0",
+    "shared_trace_replay": "L3.6"
+  },
+  "governing_chain": [
+    "RegisteredEvidenceRecord",
+    "RegisteredEvidenceProjection",
+    "AcceptedEvidenceProjection",
+    "InterpretationRequest",
+    "NeutralRuleExecution",
+    "InterpretationResult",
+    "TraceMetricRecord"
+  ],
+  "interpretation_rule_version": "1.0.0",
+  "release_status": "FROZEN",
+  "release_tag": "l3-v1.0.0",
+  "release_version": "1.0.0",
+  "stage_id": "L3.6-neutral-interpretation-execution"
+}
