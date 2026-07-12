@@ -58,9 +58,7 @@ class HypothesisEvaluationTrace:
         if len(set(self.ordered_relation_record_hashes)) != len(
             self.ordered_relation_record_hashes
         ):
-            raise ValueError(
-                "ordered_relation_record_hashes cannot contain duplicates"
-            )
+            raise ValueError("ordered_relation_record_hashes cannot contain duplicates")
         if self.trace_contract_version != CONTRACT_VERSION:
             raise ValueError("trace_contract_version is invalid")
         _sha256(self.trace_hash, "trace_hash")
@@ -71,9 +69,7 @@ class HypothesisEvaluationTrace:
         """Return the exact payload from which trace_hash is derived."""
         return {
             "evaluation_result_hash": self.evaluation_result_hash,
-            "ordered_relation_record_hashes": list(
-                self.ordered_relation_record_hashes
-            ),
+            "ordered_relation_record_hashes": list(self.ordered_relation_record_hashes),
             "trace_contract_version": self.trace_contract_version,
         }
 
@@ -91,9 +87,7 @@ def build_hypothesis_evaluation_trace(
     if type(result) is not HypothesisEvaluationResult:
         raise TypeError("result must be HypothesisEvaluationResult")
     if any(type(record) is not EvidenceHypothesisRelationRecord for record in records):
-        raise TypeError(
-            "records must contain EvidenceHypothesisRelationRecord values"
-        )
+        raise TypeError("records must contain EvidenceHypothesisRelationRecord values")
     result_hashes = set(result.ordered_relation_record_hashes)
     if any(record.record_hash not in result_hashes for record in records):
         raise ValueError("records must be included in the supplied evaluation result")
