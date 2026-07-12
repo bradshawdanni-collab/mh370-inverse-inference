@@ -10,6 +10,7 @@ from mh370_inverse_inference.consumption.models import AcceptedEvidenceProjectio
 from mh370_inverse_inference.engine.hashing import sha256_payload
 from mh370_inverse_inference.interpretation import (
     InterpretationReason,
+    InterpretationRequest,
     InterpretationResult,
     InterpretationStatus,
     build_interpretation_request,
@@ -21,7 +22,7 @@ HASH_B = "b" * 64
 HASH_C = "c" * 64
 
 
-def _request():
+def _request() -> InterpretationRequest:
     projection = AcceptedEvidenceProjection(
         registry_evidence_id=HASH_A,
         evidence_id="evidence-001",
