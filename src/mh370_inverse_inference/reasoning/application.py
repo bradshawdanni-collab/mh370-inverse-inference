@@ -114,10 +114,9 @@ class RuleApplicationRecord:
             type(reason) is not RuleApplicationReason for reason in self.reason_codes
         ):
             raise TypeError("reason_codes must contain RuleApplicationReason values")
-        if self.rule_application_contract_version != CONTRACT_VERSION:
-            raise ValueError(
-                "rule_application_contract_version must be " f"{CONTRACT_VERSION}"
-            )
+        expected_version = CONTRACT_VERSION
+        if self.rule_application_contract_version != expected_version:
+            raise ValueError("rule_application_contract_version is invalid")
         _sha256(self.record_hash, "record_hash")
         if self.record_hash != sha256_payload(self.canonical_payload()):
             raise ValueError("record_hash must match the canonical payload")
@@ -129,9 +128,7 @@ class RuleApplicationRecord:
             "outcome": self.outcome.value,
             "reason_codes": [reason.value for reason in self.reason_codes],
             "reasoning_result_hash": self.reasoning_result_hash,
-            "rule_application_contract_version": (
-                self.rule_application_contract_version
-            ),
+            "rule_application_contract_version": self.rule_application_contract_version,
             "rule_id": self.rule_id,
             "rule_version": self.rule_version,
         }
