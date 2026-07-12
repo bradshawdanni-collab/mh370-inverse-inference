@@ -112,9 +112,7 @@ class NeutralDerivedClaim:
             raise ValueError("supporting_evidence_ids cannot be empty")
         for evidence_id in self.supporting_evidence_ids:
             _sha256(evidence_id, "supporting_evidence_ids item")
-        if len(set(self.supporting_evidence_ids)) != len(
-            self.supporting_evidence_ids
-        ):
+        if len(set(self.supporting_evidence_ids)) != len(self.supporting_evidence_ids):
             raise ValueError("supporting_evidence_ids cannot contain duplicates")
         if self.claim_contract_version != CONTRACT_VERSION:
             raise ValueError(f"claim_contract_version must be {CONTRACT_VERSION}")
