@@ -113,9 +113,7 @@ class AcceptedEvidenceProjection:
         _sha256(self.evidence_hash, "evidence_hash")
         _sha256(self.validation_hash, "validation_hash")
         if self.consumption_contract_version != CONTRACT_VERSION:
-            raise ValueError(
-                f"consumption_contract_version must be {CONTRACT_VERSION}"
-            )
+            raise ValueError(f"consumption_contract_version must be {CONTRACT_VERSION}")
 
     @classmethod
     def from_projection(
