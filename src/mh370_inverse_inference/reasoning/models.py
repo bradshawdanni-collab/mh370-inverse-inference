@@ -43,9 +43,7 @@ class ConstrainedReasoningRequest:
         reasoning_policy_version: str,
     ) -> ConstrainedReasoningRequest:
         canonical_payload: dict[str, Any] = {
-            "interpretation_contract_version": (
-                result.interpretation_contract_version
-            ),
+            "interpretation_contract_version": (result.interpretation_contract_version),
             "interpretation_input_hash": result.input_hash,
             "interpretation_result_hash": result.result_hash,
             "ordered_claim_hashes": [
@@ -100,9 +98,7 @@ class ConstrainedReasoningRequest:
             _sha256(claim_hash, "ordered_claim_hashes item")
         _non_empty(self.reasoning_policy_version, "reasoning_policy_version")
         if self.reasoning_contract_version != CONTRACT_VERSION:
-            raise ValueError(
-                f"reasoning_contract_version must be {CONTRACT_VERSION}"
-            )
+            raise ValueError(f"reasoning_contract_version must be {CONTRACT_VERSION}")
         _sha256(self.request_hash, "request_hash")
         if self.request_hash != sha256_payload(self.canonical_payload()):
             raise ValueError("request_hash must match the canonical payload")
