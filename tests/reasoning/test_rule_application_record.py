@@ -63,9 +63,7 @@ def _record(
     *,
     input_claim_hashes: tuple[str, ...] = (HASH_A, HASH_B),
     outcome: RuleApplicationOutcome = RuleApplicationOutcome.APPLIED,
-    reason_codes: tuple[RuleApplicationReason, ...] = (
-        RuleApplicationReason.OK,
-    ),
+    reason_codes: tuple[RuleApplicationReason, ...] = (RuleApplicationReason.OK,),
 ) -> RuleApplicationRecord:
     return build_rule_application_record(
         _reasoning_result(),
