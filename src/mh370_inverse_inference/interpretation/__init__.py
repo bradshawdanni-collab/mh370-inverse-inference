@@ -21,6 +21,13 @@ from mh370_inverse_inference.interpretation.result import (
     InterpretationStatus,
     build_interpretation_result,
 )
+from mh370_inverse_inference.interpretation.trace_adapter import (
+    STAGE_ID,
+    build_nonaccepted_interpretation_trace,
+    interpretation_result_to_trace,
+    neutral_rule_execution_to_trace,
+    verify_interpretation_trace,
+)
 
 __all__ = [
     "ClaimStatus",
@@ -32,8 +39,13 @@ __all__ = [
     "NeutralDerivedClaim",
     "NeutralRuleExecution",
     "NeutralRuleId",
+    "STAGE_ID",
     "build_interpretation_request",
     "build_interpretation_result",
     "build_neutral_derived_claim",
+    "build_nonaccepted_interpretation_trace",
     "execute_neutral_rule",
+    "interpretation_result_to_trace",
+    "neutral_rule_execution_to_trace",
+    "verify_interpretation_trace",
 ]
