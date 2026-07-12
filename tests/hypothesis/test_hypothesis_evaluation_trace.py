@@ -109,7 +109,10 @@ def test_trace_is_deterministic_and_content_addressed() -> None:
     assert first == second
     assert first.trace_hash == sha256_payload(first.canonical_payload())
     assert first.evaluation_result_hash == result.result_hash
-    assert first.ordered_relation_record_hashes == result.ordered_relation_record_hashes
+    assert (
+        first.ordered_relation_record_hashes
+        == result.ordered_relation_record_hashes
+    )
     assert first.trace_contract_version == "L5.4"
 
 
