@@ -60,7 +60,9 @@ class NeutralReasoningTrace:
         if len(set(self.ordered_rule_application_hashes)) != len(
             self.ordered_rule_application_hashes
         ):
-            raise ValueError("ordered_rule_application_hashes cannot contain duplicates")
+            raise ValueError(
+                "ordered_rule_application_hashes cannot contain duplicates"
+            )
         if self.trace_contract_version != CONTRACT_VERSION:
             raise ValueError("trace_contract_version is invalid")
         _sha256(self.trace_hash, "trace_hash")
