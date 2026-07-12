@@ -175,8 +175,13 @@ def build_hypothesis_evaluation_result(
     """Evaluate one exact L5.0 request into a structural L5.3 result."""
     if type(request) is not HypothesisEvaluationRequest:
         raise TypeError("request must be HypothesisEvaluationRequest")
-    if any(type(record) is not EvidenceHypothesisRelationRecord for record in relations):
-        raise TypeError("relations must contain EvidenceHypothesisRelationRecord values")
+    if any(
+        type(record) is not EvidenceHypothesisRelationRecord
+        for record in relations
+    ):
+        raise TypeError(
+            "relations must contain EvidenceHypothesisRelationRecord values"
+        )
     record_hashes = tuple(record.record_hash for record in relations)
     if len(set(record_hashes)) != len(record_hashes):
         raise ValueError("relations cannot contain duplicate record hashes")
