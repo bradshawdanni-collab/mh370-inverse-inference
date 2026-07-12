@@ -21,6 +21,10 @@ from mh370_inverse_inference.hypothesis.result import (
     HypothesisEvaluationStatus,
     build_hypothesis_evaluation_result,
 )
+from mh370_inverse_inference.hypothesis.trace import (
+    HypothesisEvaluationTrace,
+    build_hypothesis_evaluation_trace,
+)
 
 __all__ = [
     "EvidenceHypothesisRelationRecord",
@@ -31,9 +35,11 @@ __all__ = [
     "HypothesisEvaluationRequest",
     "HypothesisEvaluationResult",
     "HypothesisEvaluationStatus",
+    "HypothesisEvaluationTrace",
     "HypothesisType",
     "build_evidence_hypothesis_relation_record",
     "build_hypothesis_definition",
     "build_hypothesis_evaluation_request",
     "build_hypothesis_evaluation_result",
+    "build_hypothesis_evaluation_trace",
 ]
