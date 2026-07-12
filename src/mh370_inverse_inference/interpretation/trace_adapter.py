@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from mh370_inverse_inference.engine.hashing import compose_step_hash
 from mh370_inverse_inference.engine.trace import TraceMetricRecord, TraceStatus
 from mh370_inverse_inference.interpretation.executor import NeutralRuleExecution
 from mh370_inverse_inference.interpretation.result import (
@@ -99,3 +100,17 @@ def build_nonaccepted_interpretation_trace(
         rule_version=rule_version,
         stage_index=stage_index,
     )
+
+
+def verify_interpretation_trace(trace: TraceMetricRecord) -> bool:
+    """Return whether an L3.6 trace retains its deterministic step identity."""
+    if type(trace) is not TraceMetricRecord:
+        raise TypeError("trace must be TraceMetricRecord")
+    if trace.stage_id != STAGE_ID:
+        return False
+    expected = compose_step_hash(
+        input_hash=trace.input_hash,
+        output_hash=trace.output_hash,
+        op_signature_hash=trace.op_signature_hash,
+    )
+    return trace.trace_hash == expected
