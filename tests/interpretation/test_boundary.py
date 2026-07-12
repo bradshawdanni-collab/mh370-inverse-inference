@@ -63,10 +63,7 @@ def test_prohibited_inputs_are_rejected(prohibited_input: object) -> None:
 
 def test_interpretation_module_has_no_registry_or_nondeterministic_imports() -> None:
     package_root = (
-        Path(__file__).parents[2]
-        / "src"
-        / "mh370_inverse_inference"
-        / "interpretation"
+        Path(__file__).parents[2] / "src" / "mh370_inverse_inference" / "interpretation"
     )
     source = "\n".join(
         path.read_text(encoding="utf-8") for path in sorted(package_root.glob("*.py"))
