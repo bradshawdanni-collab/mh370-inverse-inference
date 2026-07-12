@@ -12,7 +12,6 @@ from mh370_inverse_inference.hypothesis import (
     EvidenceHypothesisRelationType,
     HypothesisEvaluationOutcome,
     HypothesisEvaluationReason,
-    HypothesisEvaluationRequest,
     HypothesisEvaluationResult,
     HypothesisEvaluationStatus,
     HypothesisType,
