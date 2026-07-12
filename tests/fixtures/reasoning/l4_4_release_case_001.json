@@ -1,0 +1,75 @@
+{
+  "fixture_id": "l4_4_release_case_001",
+  "request": {
+    "canonical_payload": {
+      "interpretation_contract_version": "L3.4",
+      "interpretation_input_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "interpretation_result_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "ordered_claim_hashes": [
+        "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+      ],
+      "reasoning_contract_version": "L4.0",
+      "reasoning_policy_version": "reasoning-1.0.0"
+    },
+    "request_hash": "02740bef90b6a0e245110212e3a0021ca2bdb74d5b9cbb6ebeff9774632b720c"
+  },
+  "result": {
+    "canonical_payload": {
+      "reason_codes": [
+        "OK"
+      ],
+      "reasoning_contract_version": "L4.1",
+      "reasoning_outputs": [],
+      "reasoning_policy_version": "reasoning-1.0.0",
+      "request_hash": "02740bef90b6a0e245110212e3a0021ca2bdb74d5b9cbb6ebeff9774632b720c",
+      "status": "ACCEPTED"
+    },
+    "result_hash": "549482acff341d0ee5a416e075e1f08b0b7b4de63af7d07df191aaa84c43877d"
+  },
+  "rule_application_records": [
+    {
+      "canonical_payload": {
+        "input_claim_hashes": [
+          "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+        ],
+        "outcome": "APPLIED",
+        "reason_codes": [
+          "OK"
+        ],
+        "reasoning_result_hash": "549482acff341d0ee5a416e075e1f08b0b7b4de63af7d07df191aaa84c43877d",
+        "rule_application_contract_version": "L4.2",
+        "rule_id": "RULE-001",
+        "rule_version": "1.0.0"
+      },
+      "record_hash": "ac68312d815f57b0c4d4a55a85958a091157c891564cd346dec4b6c17f21b689"
+    },
+    {
+      "canonical_payload": {
+        "input_claim_hashes": [
+          "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        ],
+        "outcome": "NOT_APPLIED",
+        "reason_codes": [
+          "RULE_NOT_SATISFIED"
+        ],
+        "reasoning_result_hash": "549482acff341d0ee5a416e075e1f08b0b7b4de63af7d07df191aaa84c43877d",
+        "rule_application_contract_version": "L4.2",
+        "rule_id": "RULE-002",
+        "rule_version": "1.0.0"
+      },
+      "record_hash": "45d23efdca83db34cde245af800bcdbcb7c90fe168c58ac3ad771ca86c98daa7"
+    }
+  ],
+  "trace": {
+    "canonical_payload": {
+      "ordered_rule_application_hashes": [
+        "ac68312d815f57b0c4d4a55a85958a091157c891564cd346dec4b6c17f21b689",
+        "45d23efdca83db34cde245af800bcdbcb7c90fe168c58ac3ad771ca86c98daa7"
+      ],
+      "reasoning_result_hash": "549482acff341d0ee5a416e075e1f08b0b7b4de63af7d07df191aaa84c43877d",
+      "trace_contract_version": "L4.3"
+    },
+    "trace_hash": "88f40e29678c80ae05c53ba95d4fd5550e33c80e8829dd6eadee51b9ee644ea7"
+  }
+}

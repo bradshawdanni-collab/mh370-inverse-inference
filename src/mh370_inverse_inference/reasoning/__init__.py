@@ -10,6 +10,14 @@ from mh370_inverse_inference.reasoning.models import ConstrainedReasoningRequest
 from mh370_inverse_inference.reasoning.projection import (
     build_constrained_reasoning_request,
 )
+from mh370_inverse_inference.reasoning.release import (
+    CANONICAL_REPLAY_FIXTURE,
+    CANONICAL_REPLAY_FIXTURE_SHA256,
+    CONTRACT_VERSIONS,
+    L4_RELEASE_STATUS,
+    L4_RELEASE_TAG,
+    L4_RELEASE_VERSION,
+)
 from mh370_inverse_inference.reasoning.result import (
     ConstrainedReasoningResult,
     ReasoningReason,
@@ -22,8 +30,14 @@ from mh370_inverse_inference.reasoning.trace import (
 )
 
 __all__ = [
+    "CANONICAL_REPLAY_FIXTURE",
+    "CANONICAL_REPLAY_FIXTURE_SHA256",
+    "CONTRACT_VERSIONS",
     "ConstrainedReasoningRequest",
     "ConstrainedReasoningResult",
+    "L4_RELEASE_STATUS",
+    "L4_RELEASE_TAG",
+    "L4_RELEASE_VERSION",
     "NeutralReasoningTrace",
     "ReasoningReason",
     "ReasoningStatus",

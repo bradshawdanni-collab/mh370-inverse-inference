@@ -1,0 +1,15 @@
+{
+  "canonical_replay_fixture": {
+    "path": "tests/fixtures/reasoning/l4_4_release_case_001.json",
+    "sha256": "e3db1b6465491cf1dd99fca2454a219920b77078808af1ef8790305195a559b1"
+  },
+  "contract_versions": {
+    "constrained_reasoning_request": "L4.0",
+    "constrained_reasoning_result": "L4.1",
+    "neutral_reasoning_trace": "L4.3",
+    "rule_application_record": "L4.2"
+  },
+  "release_status": "FROZEN",
+  "release_tag": "l4-v1.0.0",
+  "release_version": "1.0.0"
+}
