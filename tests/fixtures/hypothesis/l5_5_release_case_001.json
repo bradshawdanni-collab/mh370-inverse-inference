@@ -1,0 +1,65 @@
+{
+  "fixture_id": "l5_5_release_case_001",
+  "request": {
+    "canonical_payload": {
+      "evaluation_contract_version": "L5.0",
+      "evaluation_policy_version": "evaluation-1.0.0",
+      "hypothesis_schema_version": "1.0.0",
+      "ordered_contradicting_claim_hashes": [],
+      "ordered_hypothesis_ids": [
+        "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+      ],
+      "ordered_supporting_claim_hashes": [
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      ],
+      "reasoning_result_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "reasoning_trace_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    },
+    "request_hash": "c90d3ce3975fdceb996785b83c85922fc04a54295160f743036b7930be4d5c36"
+  },
+  "relation_records": [
+    {
+      "canonical_payload": {
+        "claim_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "hypothesis_definition_hash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "hypothesis_id": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "relation_contract_version": "L5.2",
+        "relation_rule_id": "RELATION-001",
+        "relation_rule_version": "1.0.0",
+        "relation_type": "SUPPORTS"
+      },
+      "record_hash": "a1f6a572bdc139ece79b9e9ece2de3cfbfc85c06aa42720c96df060f752f6025"
+    }
+  ],
+  "result": {
+    "canonical_payload": {
+      "evaluation_policy_version": "evaluation-1.0.0",
+      "evaluation_result_contract_version": "L5.3",
+      "ordered_hypothesis_ids": [
+        "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+      ],
+      "ordered_outcomes": [
+        "RETAINED"
+      ],
+      "ordered_relation_record_hashes": [
+        "a1f6a572bdc139ece79b9e9ece2de3cfbfc85c06aa42720c96df060f752f6025"
+      ],
+      "reason_codes": [
+        "OK"
+      ],
+      "request_hash": "c90d3ce3975fdceb996785b83c85922fc04a54295160f743036b7930be4d5c36",
+      "status": "COMPLETED"
+    },
+    "result_hash": "5d34ba84db938a76f71b374262ccab3b24a275aa190cbaa36ab7dc127bf90643"
+  },
+  "trace": {
+    "canonical_payload": {
+      "evaluation_result_hash": "5d34ba84db938a76f71b374262ccab3b24a275aa190cbaa36ab7dc127bf90643",
+      "ordered_relation_record_hashes": [
+        "a1f6a572bdc139ece79b9e9ece2de3cfbfc85c06aa42720c96df060f752f6025"
+      ],
+      "trace_contract_version": "L5.4"
+    },
+    "trace_hash": "f612f4308041d23b1629e30e3f706d8077022e2fd7ff6cdbda7cf1b755232259"
+  }
+}
