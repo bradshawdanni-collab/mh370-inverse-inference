@@ -4,6 +4,11 @@ from mh370_inverse_inference.satcom.bto import (
     SPEED_OF_LIGHT_M_S,
     timing_error_to_range_m,
 )
+from mh370_inverse_inference.satcom.locus import (
+    SurfaceLocusPoint,
+    SurfaceLocusResult,
+    generate_surface_locus,
+)
 from mh370_inverse_inference.satcom.satellite import SatellitePosition
 from mh370_inverse_inference.satcom.slant_range import slant_range_m
 from mh370_inverse_inference.satcom.wgs84 import (
@@ -25,6 +30,8 @@ __all__ = [
     "GeodeticPoint",
     "SPEED_OF_LIGHT_M_S",
     "SatellitePosition",
+    "SurfaceLocusPoint",
+    "SurfaceLocusResult",
     "WGS84_A_M",
     "WGS84_B_M",
     "WGS84_E2",
@@ -32,6 +39,7 @@ __all__ = [
     "WGS84_F",
     "ecef_distance_m",
     "ecef_to_geodetic",
+    "generate_surface_locus",
     "geodetic_to_ecef",
     "normalize_longitude_deg",
     "slant_range_m",
