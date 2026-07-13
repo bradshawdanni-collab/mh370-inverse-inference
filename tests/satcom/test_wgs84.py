@@ -76,10 +76,6 @@ def test_invalid_values_fail_closed() -> None:
 
 def test_wrong_types_are_rejected() -> None:
     with pytest.raises(TypeError, match="GeodeticPoint"):
-        wgs84.geodetic_to_ecef(
-            wgs84.ECEFPoint(1.0, 2.0, 3.0)  # type: ignore[arg-type]
-        )
+        wgs84.geodetic_to_ecef(wgs84.ECEFPoint(1.0, 2.0, 3.0))  # type: ignore[arg-type]
     with pytest.raises(TypeError, match="ECEFPoint"):
-        wgs84.ecef_to_geodetic(
-            wgs84.GeodeticPoint(0.0, 0.0)  # type: ignore[arg-type]
-        )
+        wgs84.ecef_to_geodetic(wgs84.GeodeticPoint(0.0, 0.0))  # type: ignore[arg-type]
