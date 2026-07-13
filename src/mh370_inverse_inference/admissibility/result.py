@@ -137,8 +137,7 @@ def build_admissibility_decision_result(
     if any(type(record) is not AdmissibilityDecisionRecord for record in records):
         raise TypeError("records must contain AdmissibilityDecisionRecord values")
     if any(
-        record.admissibility_request_hash != request.request_hash
-        for record in records
+        record.admissibility_request_hash != request.request_hash for record in records
     ):
         raise ValueError("records must reference the supplied admissibility request")
     record_hashes = tuple(record.record_hash for record in records)
@@ -148,9 +147,7 @@ def build_admissibility_decision_result(
         raise TypeError("status must be AdmissibilityDecisionStatus")
     if not reason_codes:
         raise ValueError("reason_codes cannot be empty")
-    if any(
-        type(reason) is not AdmissibilityDecisionReason for reason in reason_codes
-    ):
+    if any(type(reason) is not AdmissibilityDecisionReason for reason in reason_codes):
         raise TypeError("reason_codes must contain AdmissibilityDecisionReason values")
     return AdmissibilityDecisionResult._from_request(
         request,
