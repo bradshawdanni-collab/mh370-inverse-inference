@@ -5,12 +5,11 @@ from __future__ import annotations
 import math
 
 import pytest
-
 from mh370_inverse_inference.satcom.wgs84 import (
-    ECEFPoint,
-    GeodeticPoint,
     WGS84_A_M,
     WGS84_B_M,
+    ECEFPoint,
+    GeodeticPoint,
     ecef_distance_m,
     ecef_to_geodetic,
     geodetic_to_ecef,
