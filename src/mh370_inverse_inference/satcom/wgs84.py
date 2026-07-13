@@ -69,19 +69,15 @@ def geodetic_to_ecef(point: GeodeticPoint) -> ECEFPoint:
     longitude = math.radians(point.longitude_deg)
     sin_latitude = math.sin(latitude)
     cos_latitude = math.cos(latitude)
-    prime_vertical_radius = WGS84_A_M / math.sqrt(
-        1.0 - WGS84_E2 * sin_latitude**2
-    )
+    prime_vertical_radius = WGS84_A_M / math.sqrt(1.0 - WGS84_E2 * sin_latitude**2)
 
     x_m = (
-        prime_vertical_radius + point.altitude_m
-    ) * cos_latitude * math.cos(longitude)
+        (prime_vertical_radius + point.altitude_m) * cos_latitude * math.cos(longitude)
+    )
     y_m = (
-        prime_vertical_radius + point.altitude_m
-    ) * cos_latitude * math.sin(longitude)
-    z_m = (
-        prime_vertical_radius * (1.0 - WGS84_E2) + point.altitude_m
-    ) * sin_latitude
+        (prime_vertical_radius + point.altitude_m) * cos_latitude * math.sin(longitude)
+    )
+    z_m = (prime_vertical_radius * (1.0 - WGS84_E2) + point.altitude_m) * sin_latitude
     return ECEFPoint(x_m=x_m, y_m=y_m, z_m=z_m)
 
 
@@ -114,9 +110,7 @@ def ecef_to_geodetic(point: ECEFPoint) -> GeodeticPoint:
     )
 
     sin_latitude = math.sin(latitude)
-    prime_vertical_radius = WGS84_A_M / math.sqrt(
-        1.0 - WGS84_E2 * sin_latitude**2
-    )
+    prime_vertical_radius = WGS84_A_M / math.sqrt(1.0 - WGS84_E2 * sin_latitude**2)
     altitude_m = horizontal / math.cos(latitude) - prime_vertical_radius
 
     return GeodeticPoint(
