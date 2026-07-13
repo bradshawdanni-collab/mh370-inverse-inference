@@ -1,0 +1,16 @@
+{
+  "canonical_replay_fixture": {
+    "path": "tests/fixtures/hypothesis/l5_5_release_case_001.json",
+    "sha256": "92b8cce6ee078b636f91b2556a160fbdcbde45cb6d86ff29814923b7aab3ef8d"
+  },
+  "contract_versions": {
+    "evidence_hypothesis_relation_record": "L5.2",
+    "hypothesis_definition": "L5.1",
+    "hypothesis_evaluation_request": "L5.0",
+    "hypothesis_evaluation_result": "L5.3",
+    "hypothesis_evaluation_trace": "L5.4"
+  },
+  "release_status": "FROZEN",
+  "release_tag": "l5-v1.0.0",
+  "release_version": "1.0.0"
+}
