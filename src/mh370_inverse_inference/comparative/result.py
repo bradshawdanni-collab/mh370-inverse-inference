@@ -132,7 +132,10 @@ def build_comparative_assessment_result(
         raise TypeError("request must be ComparativeAssessmentRequest")
     if any(type(record) is not ComparativeAssessmentRecord for record in records):
         raise TypeError("records must contain ComparativeAssessmentRecord values")
-    if any(record.comparative_request_hash != request.request_hash for record in records):
+    if any(
+        record.comparative_request_hash != request.request_hash
+        for record in records
+    ):
         raise ValueError("records must reference the supplied comparative request")
     record_hashes = tuple(record.record_hash for record in records)
     if len(set(record_hashes)) != len(record_hashes):
