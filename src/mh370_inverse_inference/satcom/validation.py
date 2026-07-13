@@ -2,12 +2,23 @@
 
 from __future__ import annotations
 
+import csv
+import hashlib
+import io
 import math
 from dataclasses import dataclass
 from statistics import fmean
 
 from mh370_inverse_inference.satcom.geometry import geodesic_distance_m
 from mh370_inverse_inference.satcom.wgs84 import GeodeticPoint
+
+_BENCHMARK_CSV_COLUMNS = (
+    "point_id",
+    "sequence_index",
+    "longitude_deg",
+    "latitude_deg",
+    "altitude_m",
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -142,6 +153,54 @@ class ValidationMetrics:
     maximum_deviation_m: float
 
 
+def load_published_bto_benchmark_csv(
+    fixture_bytes: bytes,
+    *,
+    benchmark_id: str,
+    expected_sha256: str,
+) -> PublishedBTOBenchmark:
+    """Load one checksum-verified canonical benchmark fixture from CSV bytes."""
+    if type(fixture_bytes) is not bytes:
+        raise TypeError("fixture_bytes must be bytes")
+    _require_non_empty_string(benchmark_id, "benchmark_id")
+    _require_sha256(expected_sha256)
+
+    actual_sha256 = hashlib.sha256(fixture_bytes).hexdigest()
+    if actual_sha256 != expected_sha256:
+        raise ValueError("fixture SHA-256 does not match expected_sha256")
+
+    try:
+        text = fixture_bytes.decode("utf-8")
+    except UnicodeDecodeError as error:
+        raise ValueError("fixture must be valid UTF-8") from error
+
+    lines = text.splitlines()
+    if not lines:
+        raise ValueError("fixture must not be empty")
+    if any(not line.strip() for line in lines):
+        raise ValueError("fixture must not contain blank rows")
+
+    try:
+        reader = csv.DictReader(io.StringIO(text, newline=""), strict=True)
+        if reader.fieldnames != list(_BENCHMARK_CSV_COLUMNS):
+            raise ValueError(
+                "fixture columns must exactly match canonical benchmark columns"
+            )
+
+        points = tuple(
+            _benchmark_point_from_csv_row(row, row_number)
+            for row_number, row in enumerate(reader, start=2)
+        )
+    except csv.Error as error:
+        raise ValueError("fixture must be valid CSV") from error
+
+    return PublishedBTOBenchmark(
+        benchmark_id=benchmark_id,
+        fixture_sha256=actual_sha256,
+        points=points,
+    )
+
+
 def nearest_reference_distance_m(
     point: GeodeticPoint,
     reference_points: tuple[GeodeticPoint, ...],
@@ -176,6 +235,72 @@ def compare_loci(
         mean_deviation_m=fmean(deviations),
         maximum_deviation_m=max(deviations),
     )
+
+
+def _benchmark_point_from_csv_row(
+    row: dict[str | None, str | list[str] | None],
+    row_number: int,
+) -> PublishedBTOBenchmarkPoint:
+    if set(row) != set(_BENCHMARK_CSV_COLUMNS):
+        raise ValueError(f"fixture row {row_number} has missing or additional columns")
+
+    values: dict[str, str] = {}
+    for column in _BENCHMARK_CSV_COLUMNS:
+        value = row[column]
+        if type(value) is not str or not value:
+            raise ValueError(f"fixture row {row_number} contains a missing value")
+        if value != value.strip():
+            raise ValueError(
+                f"fixture row {row_number} contains surrounding whitespace"
+            )
+        values[column] = value
+
+    sequence_text = values["sequence_index"]
+    if not sequence_text.isascii() or not sequence_text.isdecimal():
+        raise ValueError(f"fixture row {row_number} has invalid sequence_index")
+    sequence_index = int(sequence_text)
+    if sequence_text != str(sequence_index):
+        raise ValueError(f"fixture row {row_number} has non-canonical sequence_index")
+
+    longitude_deg = _parse_finite_float(
+        values["longitude_deg"],
+        "longitude_deg",
+        row_number,
+    )
+    if not -180.0 <= longitude_deg < 180.0:
+        raise ValueError(
+            f"fixture row {row_number} longitude_deg must be within [-180, 180)"
+        )
+    latitude_deg = _parse_finite_float(
+        values["latitude_deg"],
+        "latitude_deg",
+        row_number,
+    )
+    altitude_m = _parse_finite_float(
+        values["altitude_m"],
+        "altitude_m",
+        row_number,
+    )
+
+    return PublishedBTOBenchmarkPoint(
+        point_id=values["point_id"],
+        sequence_index=sequence_index,
+        geodetic=GeodeticPoint(
+            latitude_deg=latitude_deg,
+            longitude_deg=longitude_deg,
+            altitude_m=altitude_m,
+        ),
+    )
+
+
+def _parse_finite_float(value: str, name: str, row_number: int) -> float:
+    try:
+        parsed = float(value)
+    except ValueError as error:
+        raise ValueError(f"fixture row {row_number} has invalid {name}") from error
+    if not math.isfinite(parsed):
+        raise ValueError(f"fixture row {row_number} {name} must be finite")
+    return parsed
 
 
 def _require_non_empty_string(value: str, name: str) -> None:
