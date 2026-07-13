@@ -143,9 +143,7 @@ def build_comparative_assessment_result(
         raise TypeError("status must be ComparativeAssessmentStatus")
     if not reason_codes:
         raise ValueError("reason_codes cannot be empty")
-    if any(
-        type(reason) is not ComparativeAssessmentReason for reason in reason_codes
-    ):
+    if any(type(reason) is not ComparativeAssessmentReason for reason in reason_codes):
         raise TypeError("reason_codes must contain ComparativeAssessmentReason values")
     return ComparativeAssessmentResult._from_request(
         request,
