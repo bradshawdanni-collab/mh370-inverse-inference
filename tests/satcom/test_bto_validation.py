@@ -1,5 +1,6 @@
 """Tests for deterministic published BTO validation contracts."""
 
+import hashlib
 import math
 from dataclasses import FrozenInstanceError
 
@@ -10,10 +11,12 @@ from mh370_inverse_inference.satcom.validation import (
     BTOValidationSample,
     PublishedBTOBenchmark,
     PublishedBTOBenchmarkPoint,
+    load_published_bto_benchmark_csv,
 )
 from mh370_inverse_inference.satcom.wgs84 import GeodeticPoint
 
 _FIXTURE_SHA256 = "a" * 64
+_CSV_HEADER = "point_id,sequence_index,longitude_deg,latitude_deg,altitude_m\n"
 
 
 def _point(
@@ -69,6 +72,18 @@ def _result() -> BTOValidationResult:
         maximum_deviation_m=20.0,
         mean_deviation_m=15.0,
         sample_count=2,
+    )
+
+
+def _csv_fixture(*rows: str, header: str = _CSV_HEADER) -> bytes:
+    return (header + "".join(f"{row}\n" for row in rows)).encode("utf-8")
+
+
+def _load_fixture(fixture_bytes: bytes) -> PublishedBTOBenchmark:
+    return load_published_bto_benchmark_csv(
+        fixture_bytes,
+        benchmark_id="published-bto-example-v1",
+        expected_sha256=hashlib.sha256(fixture_bytes).hexdigest(),
     )
 
 
@@ -196,3 +211,92 @@ def test_validation_contracts_are_immutable() -> None:
         benchmark.benchmark_id = "changed"  # type: ignore[misc]
     with pytest.raises(FrozenInstanceError):
         result.sample_count = 0  # type: ignore[misc]
+
+
+def test_csv_loader_returns_checksum_verified_canonical_benchmark() -> None:
+    fixture_bytes = _csv_fixture(
+        "point-000,0,80.0,-20.0,0.0",
+        "point-001,1,81.0,-19.0,0.0",
+    )
+
+    benchmark = _load_fixture(fixture_bytes)
+
+    assert benchmark.fixture_sha256 == hashlib.sha256(fixture_bytes).hexdigest()
+    assert tuple(point.point_id for point in benchmark.points) == (
+        "point-000",
+        "point-001",
+    )
+    assert tuple(point.sequence_index for point in benchmark.points) == (0, 1)
+    assert benchmark.points[0].geodetic == GeodeticPoint(-20.0, 80.0, 0.0)
+
+
+def test_csv_loader_rejects_changed_fixture_checksum() -> None:
+    fixture_bytes = _csv_fixture("point-000,0,80.0,-20.0,0.0")
+
+    with pytest.raises(ValueError, match="SHA-256"):
+        load_published_bto_benchmark_csv(
+            fixture_bytes,
+            benchmark_id="published-bto-example-v1",
+            expected_sha256="0" * 64,
+        )
+
+
+@pytest.mark.parametrize(
+    "header",
+    [
+        "point_id,sequence_index,longitude_deg,latitude_deg\n",
+        ("point_id,sequence_index,longitude_deg,latitude_deg,altitude_m," "extra\n"),
+        "sequence_index,point_id,longitude_deg,latitude_deg,altitude_m\n",
+    ],
+)
+def test_csv_loader_rejects_non_canonical_columns(header: str) -> None:
+    fixture_bytes = _csv_fixture(
+        "point-000,0,80.0,-20.0,0.0",
+        header=header,
+    )
+
+    with pytest.raises(ValueError, match="columns"):
+        _load_fixture(fixture_bytes)
+
+
+def test_csv_loader_rejects_duplicate_ids_and_unordered_sequence() -> None:
+    duplicate_fixture = _csv_fixture(
+        "point-000,0,80.0,-20.0,0.0",
+        "point-000,1,81.0,-19.0,0.0",
+    )
+    unordered_fixture = _csv_fixture(
+        "point-000,1,80.0,-20.0,0.0",
+        "point-001,0,81.0,-19.0,0.0",
+    )
+
+    with pytest.raises(ValueError, match="point_id values must be unique"):
+        _load_fixture(duplicate_fixture)
+    with pytest.raises(ValueError, match="contiguous canonical ordering"):
+        _load_fixture(unordered_fixture)
+
+
+@pytest.mark.parametrize(
+    "row",
+    [
+        "point-000,0,nan,-20.0,0.0",
+        "point-000,0,inf,-20.0,0.0",
+        "point-000,0,80.0,-inf,0.0",
+        "point-000,0,not-a-number,-20.0,0.0",
+        "point-000,0,180.0,-20.0,0.0",
+        "point-000,0,80.0,91.0,0.0",
+        "point-000,0,80.0,-20.0,1.0",
+    ],
+)
+def test_csv_loader_rejects_malformed_coordinates(row: str) -> None:
+    with pytest.raises(ValueError):
+        _load_fixture(_csv_fixture(row))
+
+
+def test_csv_loader_rejects_blank_rows_and_missing_values() -> None:
+    blank_row_fixture = (_CSV_HEADER + "point-000,0,80.0,-20.0,0.0\n\n").encode("utf-8")
+    missing_value_fixture = _csv_fixture("point-000,0,80.0,,0.0")
+
+    with pytest.raises(ValueError, match="blank rows"):
+        _load_fixture(blank_row_fixture)
+    with pytest.raises(ValueError, match="missing value"):
+        _load_fixture(missing_value_fixture)
