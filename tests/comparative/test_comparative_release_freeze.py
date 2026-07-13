@@ -25,18 +25,12 @@ def test_l6_contract_versions_are_frozen() -> None:
         "comparative_assessment_result": "L6.2",
         "comparative_assessment_trace": "L6.3",
     }
-    assert request.CONTRACT_VERSION == CONTRACT_VERSIONS[
-        "comparative_assessment_request"
-    ]
-    assert record.CONTRACT_VERSION == CONTRACT_VERSIONS[
-        "comparative_assessment_record"
-    ]
-    assert result.CONTRACT_VERSION == CONTRACT_VERSIONS[
-        "comparative_assessment_result"
-    ]
-    assert trace.CONTRACT_VERSION == CONTRACT_VERSIONS[
-        "comparative_assessment_trace"
-    ]
+    assert (
+        request.CONTRACT_VERSION == CONTRACT_VERSIONS["comparative_assessment_request"]
+    )
+    assert record.CONTRACT_VERSION == CONTRACT_VERSIONS["comparative_assessment_record"]
+    assert result.CONTRACT_VERSION == CONTRACT_VERSIONS["comparative_assessment_result"]
+    assert trace.CONTRACT_VERSION == CONTRACT_VERSIONS["comparative_assessment_trace"]
 
 
 def test_l6_release_manifest_matches_frozen_surface() -> None:
