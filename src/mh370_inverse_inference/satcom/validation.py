@@ -1,7 +1,8 @@
-"""Deterministic validation metrics for generated and reference BTO loci."""
+"""Deterministic contracts and metrics for published BTO arc validation."""
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
 from statistics import fmean
 
@@ -10,8 +11,129 @@ from mh370_inverse_inference.satcom.wgs84 import GeodeticPoint
 
 
 @dataclass(frozen=True, slots=True)
+class PublishedBTOBenchmarkPoint:
+    """One ordered zero-altitude point in a fixed benchmark fixture."""
+
+    point_id: str
+    sequence_index: int
+    geodetic: GeodeticPoint
+
+    def __post_init__(self) -> None:
+        _require_non_empty_string(self.point_id, "point_id")
+        if type(self.sequence_index) is not int:
+            raise TypeError("sequence_index must be int")
+        if self.sequence_index < 0:
+            raise ValueError("sequence_index must be non-negative")
+        if type(self.geodetic) is not GeodeticPoint:
+            raise TypeError("geodetic must be GeodeticPoint")
+        if self.geodetic.altitude_m != 0.0:
+            raise ValueError("benchmark points must have zero altitude")
+
+
+@dataclass(frozen=True, slots=True)
+class PublishedBTOBenchmark:
+    """Immutable ordered repository-local published BTO benchmark."""
+
+    benchmark_id: str
+    fixture_sha256: str
+    points: tuple[PublishedBTOBenchmarkPoint, ...]
+
+    def __post_init__(self) -> None:
+        _require_non_empty_string(self.benchmark_id, "benchmark_id")
+        _require_sha256(self.fixture_sha256)
+        if type(self.points) is not tuple:
+            raise TypeError("points must be tuple")
+        if not self.points:
+            raise ValueError("points must not be empty")
+        if any(type(point) is not PublishedBTOBenchmarkPoint for point in self.points):
+            raise TypeError("points must contain PublishedBTOBenchmarkPoint values")
+
+        point_ids = tuple(point.point_id for point in self.points)
+        if len(set(point_ids)) != len(point_ids):
+            raise ValueError("benchmark point_id values must be unique")
+
+        sequence = tuple(point.sequence_index for point in self.points)
+        if sequence != tuple(range(len(self.points))):
+            raise ValueError("benchmark points must use contiguous canonical ordering")
+
+
+@dataclass(frozen=True, slots=True)
+class BTOValidationSample:
+    """One deterministic benchmark-to-generated-point deviation record."""
+
+    point_id: str
+    sequence_index: int
+    benchmark_point: GeodeticPoint
+    generated_point: GeodeticPoint
+    deviation_m: float
+
+    def __post_init__(self) -> None:
+        _require_non_empty_string(self.point_id, "point_id")
+        if type(self.sequence_index) is not int:
+            raise TypeError("sequence_index must be int")
+        if self.sequence_index < 0:
+            raise ValueError("sequence_index must be non-negative")
+        if type(self.benchmark_point) is not GeodeticPoint:
+            raise TypeError("benchmark_point must be GeodeticPoint")
+        if type(self.generated_point) is not GeodeticPoint:
+            raise TypeError("generated_point must be GeodeticPoint")
+        if self.benchmark_point.altitude_m != 0.0:
+            raise ValueError("benchmark_point must have zero altitude")
+        if self.generated_point.altitude_m != 0.0:
+            raise ValueError("generated_point must have zero altitude")
+        _require_non_negative_finite(self.deviation_m, "deviation_m")
+
+
+@dataclass(frozen=True, slots=True)
+class BTOValidationResult:
+    """Canonical deterministic summary of one benchmark validation."""
+
+    benchmark_id: str
+    fixture_sha256: str
+    model_version: str
+    configuration_id: str
+    samples: tuple[BTOValidationSample, ...]
+    maximum_deviation_m: float
+    mean_deviation_m: float
+    sample_count: int
+
+    def __post_init__(self) -> None:
+        _require_non_empty_string(self.benchmark_id, "benchmark_id")
+        _require_sha256(self.fixture_sha256)
+        _require_non_empty_string(self.model_version, "model_version")
+        _require_non_empty_string(self.configuration_id, "configuration_id")
+        if type(self.samples) is not tuple:
+            raise TypeError("samples must be tuple")
+        if not self.samples:
+            raise ValueError("samples must not be empty")
+        if any(type(sample) is not BTOValidationSample for sample in self.samples):
+            raise TypeError("samples must contain BTOValidationSample values")
+
+        sequence = tuple(sample.sequence_index for sample in self.samples)
+        if sequence != tuple(range(len(self.samples))):
+            raise ValueError("samples must use contiguous canonical ordering")
+
+        if type(self.sample_count) is not int:
+            raise TypeError("sample_count must be int")
+        if self.sample_count != len(self.samples):
+            raise ValueError("sample_count must equal the number of samples")
+
+        _require_non_negative_finite(
+            self.maximum_deviation_m,
+            "maximum_deviation_m",
+        )
+        _require_non_negative_finite(self.mean_deviation_m, "mean_deviation_m")
+
+        deviations = tuple(sample.deviation_m for sample in self.samples)
+        if self.maximum_deviation_m != max(deviations):
+            raise ValueError("maximum_deviation_m must match samples")
+        if self.mean_deviation_m != math.fsum(deviations) / len(deviations):
+            raise ValueError("mean_deviation_m must match samples")
+
+
+@dataclass(frozen=True, slots=True)
 class ValidationMetrics:
-    """Summary statistics for generated-to-reference locus deviation."""
+    """Backward-compatible summary statistics for locus deviation."""
 
     benchmark_id: str
     model_version: str
@@ -54,3 +176,30 @@ def compare_loci(
         mean_deviation_m=fmean(deviations),
         maximum_deviation_m=max(deviations),
     )
+
+
+def _require_non_empty_string(value: str, name: str) -> None:
+    if type(value) is not str:
+        raise TypeError(f"{name} must be str")
+    if not value.strip():
+        raise ValueError(f"{name} must not be empty")
+
+
+def _require_sha256(value: str) -> None:
+    if type(value) is not str:
+        raise TypeError("fixture_sha256 must be str")
+    if len(value) != 64 or any(
+        character not in "0123456789abcdef" for character in value
+    ):
+        raise ValueError(
+            "fixture_sha256 must be a lowercase hexadecimal SHA-256 digest"
+        )
+
+
+def _require_non_negative_finite(value: float, name: str) -> None:
+    if not isinstance(value, (int, float)) or isinstance(value, bool):
+        raise TypeError(f"{name} must be a real number")
+    if not math.isfinite(float(value)):
+        raise ValueError(f"{name} must be finite")
+    if value < 0.0:
+        raise ValueError(f"{name} must be non-negative")
