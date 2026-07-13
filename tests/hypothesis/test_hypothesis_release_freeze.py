@@ -5,7 +5,13 @@ import json
 from pathlib import Path
 
 from mh370_inverse_inference.engine.hashing import sha256_payload
-from mh370_inverse_inference.hypothesis import definition, relation, request, result, trace
+from mh370_inverse_inference.hypothesis import (
+    definition,
+    relation,
+    request,
+    result,
+    trace,
+)
 from mh370_inverse_inference.hypothesis.release import (
     CANONICAL_REPLAY_FIXTURE,
     CANONICAL_REPLAY_FIXTURE_SHA256,
@@ -26,7 +32,9 @@ def test_l5_contract_versions_are_frozen() -> None:
         "hypothesis_evaluation_result": "L5.3",
         "hypothesis_evaluation_trace": "L5.4",
     }
-    assert request.CONTRACT_VERSION == CONTRACT_VERSIONS["hypothesis_evaluation_request"]
+    assert request.CONTRACT_VERSION == CONTRACT_VERSIONS[
+        "hypothesis_evaluation_request"
+    ]
     assert definition.CONTRACT_VERSION == CONTRACT_VERSIONS["hypothesis_definition"]
     assert relation.CONTRACT_VERSION == CONTRACT_VERSIONS[
         "evidence_hypothesis_relation_record"
