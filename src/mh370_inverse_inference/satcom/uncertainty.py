@@ -92,8 +92,7 @@ class SlantRangeUncertaintyBands:
         if tuple(band.identity for band in self.bands) != _BAND_ORDER:
             raise ValueError("bands must be ordered lower, nominal, upper")
         expected_ranges = tuple(
-            target_range_m
-            for _, target_range_m in self.uncertainty.ordered_ranges()
+            target_range_m for _, target_range_m in self.uncertainty.ordered_ranges()
         )
         actual_ranges = tuple(band.target_range_m for band in self.bands)
         if actual_ranges != expected_ranges:
