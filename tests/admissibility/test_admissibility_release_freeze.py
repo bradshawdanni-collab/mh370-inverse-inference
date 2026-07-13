@@ -26,21 +26,11 @@ def test_l7_contract_versions_are_frozen() -> None:
         "admissibility_decision_trace": "L7.3",
     }
     assert (
-        request.CONTRACT_VERSION
-        == CONTRACT_VERSIONS["admissibility_decision_request"]
+        request.CONTRACT_VERSION == CONTRACT_VERSIONS["admissibility_decision_request"]
     )
-    assert (
-        record.CONTRACT_VERSION
-        == CONTRACT_VERSIONS["admissibility_decision_record"]
-    )
-    assert (
-        result.CONTRACT_VERSION
-        == CONTRACT_VERSIONS["admissibility_decision_result"]
-    )
-    assert (
-        trace.CONTRACT_VERSION
-        == CONTRACT_VERSIONS["admissibility_decision_trace"]
-    )
+    assert record.CONTRACT_VERSION == CONTRACT_VERSIONS["admissibility_decision_record"]
+    assert result.CONTRACT_VERSION == CONTRACT_VERSIONS["admissibility_decision_result"]
+    assert trace.CONTRACT_VERSION == CONTRACT_VERSIONS["admissibility_decision_trace"]
 
 
 def test_l7_release_manifest_matches_frozen_surface() -> None:
