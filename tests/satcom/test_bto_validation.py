@@ -6,14 +6,21 @@ from dataclasses import FrozenInstanceError
 
 import pytest
 
+from mh370_inverse_inference.satcom.geometry import geodesic_distance_m
+from mh370_inverse_inference.satcom.locus import SurfaceLocusPoint
 from mh370_inverse_inference.satcom.validation import (
+    BTO_POINT_MATCHING_CONFIGURATION_ID,
     BTOValidationResult,
     BTOValidationSample,
     PublishedBTOBenchmark,
     PublishedBTOBenchmarkPoint,
+    compare_published_bto_benchmark,
     load_published_bto_benchmark_csv,
 )
-from mh370_inverse_inference.satcom.wgs84 import GeodeticPoint
+from mh370_inverse_inference.satcom.wgs84 import (
+    GeodeticPoint,
+    geodetic_to_ecef,
+)
 
 _FIXTURE_SHA256 = "a" * 64
 _CSV_HEADER = "point_id,sequence_index,longitude_deg,latitude_deg,altitude_m\n"
@@ -84,6 +91,17 @@ def _load_fixture(fixture_bytes: bytes) -> PublishedBTOBenchmark:
         fixture_bytes,
         benchmark_id="published-bto-example-v1",
         expected_sha256=hashlib.sha256(fixture_bytes).hexdigest(),
+    )
+
+
+def _surface_point(
+    latitude_deg: float,
+    longitude_deg: float,
+) -> SurfaceLocusPoint:
+    geodetic = GeodeticPoint(latitude_deg, longitude_deg, 0.0)
+    return SurfaceLocusPoint(
+        geodetic=geodetic,
+        ecef=geodetic_to_ecef(geodetic),
     )
 
 
@@ -245,7 +263,10 @@ def test_csv_loader_rejects_changed_fixture_checksum() -> None:
     "header",
     [
         "point_id,sequence_index,longitude_deg,latitude_deg\n",
-        ("point_id,sequence_index,longitude_deg,latitude_deg,altitude_m," "extra\n"),
+        (
+            "point_id,sequence_index,longitude_deg,latitude_deg,altitude_m,"
+            "extra\n"
+        ),
         "sequence_index,point_id,longitude_deg,latitude_deg,altitude_m\n",
     ],
 )
@@ -293,10 +314,119 @@ def test_csv_loader_rejects_malformed_coordinates(row: str) -> None:
 
 
 def test_csv_loader_rejects_blank_rows_and_missing_values() -> None:
-    blank_row_fixture = (_CSV_HEADER + "point-000,0,80.0,-20.0,0.0\n\n").encode("utf-8")
+    blank_row_fixture = (
+        _CSV_HEADER + "point-000,0,80.0,-20.0,0.0\n\n"
+    ).encode("utf-8")
     missing_value_fixture = _csv_fixture("point-000,0,80.0,,0.0")
 
     with pytest.raises(ValueError, match="blank rows"):
         _load_fixture(blank_row_fixture)
     with pytest.raises(ValueError, match="missing value"):
         _load_fixture(missing_value_fixture)
+
+
+def test_benchmark_comparison_uses_sequence_index_alignment() -> None:
+    benchmark = _benchmark()
+    generated_points = (
+        _surface_point(-20.0, 80.0),
+        _surface_point(-19.0, 80.1),
+    )
+
+    result = compare_published_bto_benchmark(
+        benchmark,
+        generated_points,
+        model_version="l0.4-test",
+    )
+
+    expected_second_deviation = geodesic_distance_m(
+        benchmark.points[1].geodetic,
+        generated_points[1].geodetic,
+    )
+    assert tuple(sample.point_id for sample in result.samples) == (
+        "point-000",
+        "point-001",
+    )
+    assert tuple(sample.sequence_index for sample in result.samples) == (0, 1)
+    assert result.samples[0].generated_point == generated_points[0].geodetic
+    assert result.samples[1].generated_point == generated_points[1].geodetic
+    assert result.maximum_deviation_m == expected_second_deviation
+    assert result.mean_deviation_m == expected_second_deviation / 2.0
+    assert result.sample_count == 2
+    assert result.benchmark_id == benchmark.benchmark_id
+    assert result.fixture_sha256 == benchmark.fixture_sha256
+    assert result.model_version == "l0.4-test"
+    assert result.configuration_id == BTO_POINT_MATCHING_CONFIGURATION_ID
+
+
+def test_benchmark_comparison_is_deterministic() -> None:
+    benchmark = _benchmark()
+    generated_points = (
+        _surface_point(-20.0, 80.0),
+        _surface_point(-19.0, 80.1),
+    )
+
+    first = compare_published_bto_benchmark(
+        benchmark,
+        generated_points,
+        model_version="l0.4-test",
+    )
+    second = compare_published_bto_benchmark(
+        benchmark,
+        generated_points,
+        model_version="l0.4-test",
+    )
+
+    assert first == second
+
+
+def test_benchmark_comparison_rejects_count_mismatch() -> None:
+    with pytest.raises(ValueError, match="count must match"):
+        compare_published_bto_benchmark(
+            _benchmark(),
+            (_surface_point(-20.0, 80.0),),
+            model_version="l0.4-test",
+        )
+
+
+def test_benchmark_comparison_rejects_non_locus_points() -> None:
+    with pytest.raises(TypeError, match="SurfaceLocusPoint"):
+        compare_published_bto_benchmark(
+            _benchmark(),
+            (GeodeticPoint(-20.0, 80.0, 0.0),),  # type: ignore[arg-type]
+            model_version="l0.4-test",
+        )
+
+
+def test_benchmark_comparison_rejects_non_canonical_generated_order() -> None:
+    generated_points = (
+        _surface_point(-19.0, 81.0),
+        _surface_point(-20.0, 80.0),
+    )
+
+    with pytest.raises(ValueError, match="canonical longitude-latitude ordering"):
+        compare_published_bto_benchmark(
+            _benchmark(),
+            generated_points,
+            model_version="l0.4-test",
+        )
+
+
+def test_benchmark_comparison_rejects_metadata_mismatch() -> None:
+    generated_points = (
+        _surface_point(-20.0, 80.0),
+        _surface_point(-19.0, 80.1),
+    )
+
+    with pytest.raises(ValueError, match="model_version"):
+        compare_published_bto_benchmark(
+            _benchmark(),
+            generated_points,
+            model_version=" ",
+        )
+    with pytest.raises(ValueError, match="configuration_id"):
+        compare_published_bto_benchmark(
+            _benchmark(),
+            generated_points,
+            model_version="l0.4-test",
+            configuration_id="nearest-point-v1",
+        )
