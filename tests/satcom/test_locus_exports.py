@@ -48,9 +48,7 @@ def _bands() -> SlantRangeUncertaintyBands:
 def test_csv_export_is_deterministic() -> None:
     bands = _bands()
 
-    assert export_uncertainty_bands_csv(bands) == export_uncertainty_bands_csv(
-        bands
-    )
+    assert export_uncertainty_bands_csv(bands) == export_uncertainty_bands_csv(bands)
 
 
 def test_csv_export_uses_canonical_columns_and_order() -> None:
@@ -81,9 +79,7 @@ def test_csv_export_uses_canonical_columns_and_order() -> None:
 
 
 def test_csv_export_contains_explicit_metadata_and_zero_altitude() -> None:
-    rows = list(
-        csv.DictReader(io.StringIO(export_uncertainty_bands_csv(_bands())))
-    )
+    rows = list(csv.DictReader(io.StringIO(export_uncertainty_bands_csv(_bands()))))
 
     assert all(row["schema"] == EXPORT_SCHEMA for row in rows)
     assert all(row["schema_version"] == EXPORT_SCHEMA_VERSION for row in rows)
