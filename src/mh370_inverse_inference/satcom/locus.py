@@ -82,7 +82,9 @@ def _validate_bounds(
         if not math.isfinite(float(value)):
             raise ValueError(f"{name} must be finite")
     if not -180.0 <= minimum_longitude_deg < maximum_longitude_deg <= 180.0:
-        raise ValueError("longitude bounds must satisfy -180 <= minimum < maximum <= 180")
+        raise ValueError(
+            "longitude bounds must satisfy -180 <= minimum < maximum <= 180"
+        )
     if not -90.0 <= minimum_latitude_deg < maximum_latitude_deg <= 90.0:
         raise ValueError("latitude bounds must satisfy -90 <= minimum < maximum <= 90")
 
@@ -231,7 +233,12 @@ def generate_surface_locus(
             seen.add(key)
             points.append(SurfaceLocusPoint(geodetic=geodetic, ecef=ecef))
 
-    points.sort(key=lambda point: (point.geodetic.longitude_deg, point.geodetic.latitude_deg))
+    points.sort(
+        key=lambda point: (
+            point.geodetic.longitude_deg,
+            point.geodetic.latitude_deg,
+        )
+    )
     return SurfaceLocusResult(
         satellite=satellite,
         target_range_m=float(target_range_m),
