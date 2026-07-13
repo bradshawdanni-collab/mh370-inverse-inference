@@ -1,7 +1,7 @@
 """Tests for deterministic SATCOM slant-range uncertainty bands."""
 
-from dataclasses import FrozenInstanceError
 import math
+from dataclasses import FrozenInstanceError
 
 import pytest
 
