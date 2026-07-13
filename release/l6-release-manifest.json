@@ -1,0 +1,15 @@
+{
+  "canonical_replay_fixture": {
+    "path": "tests/fixtures/comparative/l6_4_release_case_001.json",
+    "sha256": "8227573931afe760cdd394a531b21d17608384a82518f8026a624f3f56b00e52"
+  },
+  "contract_versions": {
+    "comparative_assessment_record": "L6.1",
+    "comparative_assessment_request": "L6.0",
+    "comparative_assessment_result": "L6.2",
+    "comparative_assessment_trace": "L6.3"
+  },
+  "release_status": "FROZEN",
+  "release_tag": "l6-v1.0.0",
+  "release_version": "1.0.0"
+}
