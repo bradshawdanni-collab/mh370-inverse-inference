@@ -32,13 +32,14 @@ def test_l5_contract_versions_are_frozen() -> None:
         "hypothesis_evaluation_result": "L5.3",
         "hypothesis_evaluation_trace": "L5.4",
     }
-    assert request.CONTRACT_VERSION == CONTRACT_VERSIONS[
-        "hypothesis_evaluation_request"
-    ]
+    assert (
+        request.CONTRACT_VERSION == CONTRACT_VERSIONS["hypothesis_evaluation_request"]
+    )
     assert definition.CONTRACT_VERSION == CONTRACT_VERSIONS["hypothesis_definition"]
-    assert relation.CONTRACT_VERSION == CONTRACT_VERSIONS[
-        "evidence_hypothesis_relation_record"
-    ]
+    assert (
+        relation.CONTRACT_VERSION
+        == CONTRACT_VERSIONS["evidence_hypothesis_relation_record"]
+    )
     assert result.CONTRACT_VERSION == CONTRACT_VERSIONS["hypothesis_evaluation_result"]
     assert trace.CONTRACT_VERSION == CONTRACT_VERSIONS["hypothesis_evaluation_trace"]
 
