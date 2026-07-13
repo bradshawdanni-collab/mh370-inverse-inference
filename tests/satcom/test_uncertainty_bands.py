@@ -108,8 +108,7 @@ def test_generated_bands_share_satellite_and_match_declared_ranges() -> None:
     )
     assert all(band.locus.satellite == _satellite() for band in result.bands)
     assert all(
-        band.locus.target_range_m == band.target_range_m
-        for band in result.bands
+        band.locus.target_range_m == band.target_range_m for band in result.bands
     )
     assert tuple(band.target_range_m for band in result.bands) == (
         35_990_000.0,
