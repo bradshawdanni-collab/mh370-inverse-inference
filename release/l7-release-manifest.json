@@ -1,0 +1,15 @@
+{
+  "canonical_replay_fixture": {
+    "path": "tests/fixtures/admissibility/l7_4_release_case_001.json",
+    "sha256": "386b6df436923005da7ddee39f1cac8b58279f483eff101ed05f5ac1a9f676f8"
+  },
+  "contract_versions": {
+    "admissibility_decision_record": "L7.1",
+    "admissibility_decision_request": "L7.0",
+    "admissibility_decision_result": "L7.2",
+    "admissibility_decision_trace": "L7.3"
+  },
+  "release_status": "FROZEN",
+  "release_tag": "l7-v1.0.0",
+  "release_version": "1.0.0"
+}
