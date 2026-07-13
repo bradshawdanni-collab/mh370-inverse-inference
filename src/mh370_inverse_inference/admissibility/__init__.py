@@ -15,6 +15,10 @@ from mh370_inverse_inference.admissibility.result import (
     AdmissibilityDecisionStatus,
     build_admissibility_decision_result,
 )
+from mh370_inverse_inference.admissibility.trace import (
+    AdmissibilityDecisionTrace,
+    build_admissibility_decision_trace,
+)
 
 __all__ = [
     "AdmissibilityDecisionReason",
@@ -22,8 +26,10 @@ __all__ = [
     "AdmissibilityDecisionRequest",
     "AdmissibilityDecisionResult",
     "AdmissibilityDecisionStatus",
+    "AdmissibilityDecisionTrace",
     "AdmissibilityOutcome",
     "build_admissibility_decision_record",
     "build_admissibility_decision_request",
     "build_admissibility_decision_result",
+    "build_admissibility_decision_trace",
 ]
