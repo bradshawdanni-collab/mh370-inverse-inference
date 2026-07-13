@@ -151,9 +151,7 @@ def build_admissibility_decision_result(
     if any(
         type(reason) is not AdmissibilityDecisionReason for reason in reason_codes
     ):
-        raise TypeError(
-            "reason_codes must contain AdmissibilityDecisionReason values"
-        )
+        raise TypeError("reason_codes must contain AdmissibilityDecisionReason values")
     return AdmissibilityDecisionResult._from_request(
         request,
         records=records,
