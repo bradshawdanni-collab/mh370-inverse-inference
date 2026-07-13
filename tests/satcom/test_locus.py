@@ -55,9 +55,7 @@ def test_surface_result_is_deterministic_and_valid() -> None:
     for point in first.points:
         assert point.geodetic.altitude_m == 0.0
         assert point.ecef == wgs84.geodetic_to_ecef(point.geodetic)
-        assert (
-            abs(slant_range.slant_range_m(point.ecef, position) - target) <= 1.0
-        )
+        assert abs(slant_range.slant_range_m(point.ecef, position) - target) <= 1.0
 
 
 def test_tangent_sample_is_emitted() -> None:
