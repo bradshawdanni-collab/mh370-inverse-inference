@@ -60,9 +60,7 @@ def export_uncertainty_bands_csv(bands: SlantRangeUncertaintyBands) -> str:
                     "schema_version": EXPORT_SCHEMA_VERSION,
                     "band": band.identity,
                     "point_index": str(point_index),
-                    "longitude_deg": _format_float(
-                        point.geodetic.longitude_deg
-                    ),
+                    "longitude_deg": _format_float(point.geodetic.longitude_deg),
                     "latitude_deg": _format_float(point.geodetic.latitude_deg),
                     "altitude_m": _format_float(point.geodetic.altitude_m),
                     "target_range_m": _format_float(band.target_range_m),
