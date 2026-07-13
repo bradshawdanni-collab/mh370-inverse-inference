@@ -76,8 +76,7 @@ def test_tangent_sample_is_emitted() -> None:
     )
 
     assert any(
-        point.geodetic.latitude_deg == 0.0
-        and point.geodetic.longitude_deg == 0.0
+        point.geodetic.latitude_deg == 0.0 and point.geodetic.longitude_deg == 0.0
         for point in result.points
     )
 
