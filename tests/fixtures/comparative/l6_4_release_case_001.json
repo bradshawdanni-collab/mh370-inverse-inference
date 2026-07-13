@@ -1,0 +1,70 @@
+{
+  "records": [
+    {
+      "canonical_payload": {
+        "comparative_record_contract_version": "L6.1",
+        "comparative_request_hash": "89c1ed2877c4ef5e6ac59406fab659167b481b34a5584c8a07dd3e8fd9ab38c8",
+        "comparison_rule_id": "structural-disposition",
+        "comparison_rule_version": "1.0.0",
+        "left_hypothesis_id": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "relation": "DIFFERENT_DISPOSITION",
+        "right_hypothesis_id": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+      },
+      "record_hash": "47e32ae145fc4988b4a3d61a76a4c68ef6f8da867ac777ee99aedc829db61b55"
+    },
+    {
+      "canonical_payload": {
+        "comparative_record_contract_version": "L6.1",
+        "comparative_request_hash": "89c1ed2877c4ef5e6ac59406fab659167b481b34a5584c8a07dd3e8fd9ab38c8",
+        "comparison_rule_id": "structural-disposition",
+        "comparison_rule_version": "1.0.0",
+        "left_hypothesis_id": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "relation": "INDETERMINATE",
+        "right_hypothesis_id": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+      },
+      "record_hash": "95eebb4a2a8d7bf3e99254b6ca0c867c2553bb608277ddc00d2ad133343d0996"
+    }
+  ],
+  "request": {
+    "canonical_payload": {
+      "comparative_contract_version": "L6.0",
+      "comparison_policy_version": "1.0.0",
+      "ordered_evaluation_result_hashes": [
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      ],
+      "ordered_evaluation_trace_hashes": [
+        "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+      ]
+    },
+    "request_hash": "89c1ed2877c4ef5e6ac59406fab659167b481b34a5584c8a07dd3e8fd9ab38c8"
+  },
+  "result": {
+    "canonical_payload": {
+      "comparative_request_hash": "89c1ed2877c4ef5e6ac59406fab659167b481b34a5584c8a07dd3e8fd9ab38c8",
+      "comparative_result_contract_version": "L6.2",
+      "ordered_record_hashes": [
+        "47e32ae145fc4988b4a3d61a76a4c68ef6f8da867ac777ee99aedc829db61b55",
+        "95eebb4a2a8d7bf3e99254b6ca0c867c2553bb608277ddc00d2ad133343d0996"
+      ],
+      "reason_codes": [
+        "OK"
+      ],
+      "status": "COMPLETED"
+    },
+    "result_hash": "326388e8b816471c3dad9cb307139ff310ea7a93af8e55dafed14733a41df03f"
+  },
+  "trace": {
+    "canonical_payload": {
+      "comparative_request_hash": "89c1ed2877c4ef5e6ac59406fab659167b481b34a5584c8a07dd3e8fd9ab38c8",
+      "comparative_result_hash": "326388e8b816471c3dad9cb307139ff310ea7a93af8e55dafed14733a41df03f",
+      "comparative_trace_contract_version": "L6.3",
+      "ordered_record_hashes": [
+        "47e32ae145fc4988b4a3d61a76a4c68ef6f8da867ac777ee99aedc829db61b55",
+        "95eebb4a2a8d7bf3e99254b6ca0c867c2553bb608277ddc00d2ad133343d0996"
+      ]
+    },
+    "trace_hash": "1ffc0a7af3657979c345216246ef3a5647e800b8366018cfd1ea2ac6961d05cb"
+  }
+}
