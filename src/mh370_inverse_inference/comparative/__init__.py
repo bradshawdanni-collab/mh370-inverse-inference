@@ -15,6 +15,10 @@ from mh370_inverse_inference.comparative.result import (
     ComparativeAssessmentStatus,
     build_comparative_assessment_result,
 )
+from mh370_inverse_inference.comparative.trace import (
+    ComparativeAssessmentTrace,
+    build_comparative_assessment_trace,
+)
 
 __all__ = [
     "ComparativeAssessmentReason",
@@ -23,7 +27,9 @@ __all__ = [
     "ComparativeAssessmentRequest",
     "ComparativeAssessmentResult",
     "ComparativeAssessmentStatus",
+    "ComparativeAssessmentTrace",
     "build_comparative_assessment_record",
     "build_comparative_assessment_request",
     "build_comparative_assessment_result",
+    "build_comparative_assessment_trace",
 ]
