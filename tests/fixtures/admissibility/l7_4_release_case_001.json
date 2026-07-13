@@ -1,0 +1,68 @@
+{
+  "records": [
+    {
+      "canonical_payload": {
+        "admissibility_record_contract_version": "L7.1",
+        "admissibility_request_hash": "79d3e59401f31dcb04c8fe6e3dc347c21081325a966226a0e333106f830d1d25",
+        "comparative_result_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "decision_rule_id": "structural-admissibility",
+        "decision_rule_version": "1.0.0",
+        "outcome": "ADMISSIBLE"
+      },
+      "record_hash": "6ce3d0e5dfb01d98d8eb4c31340c459c21fff326dba1f772cae8fc10d2d4759b"
+    },
+    {
+      "canonical_payload": {
+        "admissibility_record_contract_version": "L7.1",
+        "admissibility_request_hash": "79d3e59401f31dcb04c8fe6e3dc347c21081325a966226a0e333106f830d1d25",
+        "comparative_result_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "decision_rule_id": "structural-admissibility",
+        "decision_rule_version": "1.0.0",
+        "outcome": "INDETERMINATE"
+      },
+      "record_hash": "bd3645995969cd348f64aa9ef99dfa48b9c1b47304d32ea3d4332c9ca3399dcf"
+    }
+  ],
+  "request": {
+    "canonical_payload": {
+      "admissibility_policy_version": "1.0.0",
+      "admissibility_request_contract_version": "L7.0",
+      "ordered_comparative_result_hashes": [
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      ],
+      "ordered_comparative_trace_hashes": [
+        "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+      ]
+    },
+    "request_hash": "79d3e59401f31dcb04c8fe6e3dc347c21081325a966226a0e333106f830d1d25"
+  },
+  "result": {
+    "canonical_payload": {
+      "admissibility_request_hash": "79d3e59401f31dcb04c8fe6e3dc347c21081325a966226a0e333106f830d1d25",
+      "admissibility_result_contract_version": "L7.2",
+      "ordered_record_hashes": [
+        "6ce3d0e5dfb01d98d8eb4c31340c459c21fff326dba1f772cae8fc10d2d4759b",
+        "bd3645995969cd348f64aa9ef99dfa48b9c1b47304d32ea3d4332c9ca3399dcf"
+      ],
+      "reason_codes": [
+        "OK"
+      ],
+      "status": "COMPLETED"
+    },
+    "result_hash": "f614edaa7610862a8ecd08cb4ffdab06eadd0659ed5402d56525dcae591d5833"
+  },
+  "trace": {
+    "canonical_payload": {
+      "admissibility_request_hash": "79d3e59401f31dcb04c8fe6e3dc347c21081325a966226a0e333106f830d1d25",
+      "admissibility_result_hash": "f614edaa7610862a8ecd08cb4ffdab06eadd0659ed5402d56525dcae591d5833",
+      "admissibility_trace_contract_version": "L7.3",
+      "ordered_record_hashes": [
+        "6ce3d0e5dfb01d98d8eb4c31340c459c21fff326dba1f772cae8fc10d2d4759b",
+        "bd3645995969cd348f64aa9ef99dfa48b9c1b47304d32ea3d4332c9ca3399dcf"
+      ]
+    },
+    "trace_hash": "eb4aa32bf63b174d4221713dd203ac8acfe4aa051ff33de0079598471d0c18af"
+  }
+}
