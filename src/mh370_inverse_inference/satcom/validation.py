@@ -10,6 +10,7 @@ from dataclasses import dataclass
 from statistics import fmean
 
 from mh370_inverse_inference.satcom.geometry import geodesic_distance_m
+from mh370_inverse_inference.satcom.locus import SurfaceLocusPoint
 from mh370_inverse_inference.satcom.wgs84 import GeodeticPoint
 
 _BENCHMARK_CSV_COLUMNS = (
@@ -19,6 +20,8 @@ _BENCHMARK_CSV_COLUMNS = (
     "latitude_deg",
     "altitude_m",
 )
+
+BTO_POINT_MATCHING_CONFIGURATION_ID = "sequence-index-aligned-geodesic-v1"
 
 
 @dataclass(frozen=True, slots=True)
@@ -56,7 +59,9 @@ class PublishedBTOBenchmark:
             raise TypeError("points must be tuple")
         if not self.points:
             raise ValueError("points must not be empty")
-        if any(type(point) is not PublishedBTOBenchmarkPoint for point in self.points):
+        if any(
+            type(point) is not PublishedBTOBenchmarkPoint for point in self.points
+        ):
             raise TypeError("points must contain PublishedBTOBenchmarkPoint values")
 
         point_ids = tuple(point.point_id for point in self.points)
@@ -198,6 +203,74 @@ def load_published_bto_benchmark_csv(
         benchmark_id=benchmark_id,
         fixture_sha256=actual_sha256,
         points=points,
+    )
+
+
+def compare_published_bto_benchmark(
+    benchmark: PublishedBTOBenchmark,
+    generated_points: tuple[SurfaceLocusPoint, ...],
+    *,
+    model_version: str,
+    configuration_id: str = BTO_POINT_MATCHING_CONFIGURATION_ID,
+) -> BTOValidationResult:
+    """Compare canonical points using exact sequence-index alignment.
+
+    Benchmark point ``i`` is matched only with generated locus point ``i``.
+    Deviations are WGS84 ellipsoidal surface distances in metres.
+    """
+    if type(benchmark) is not PublishedBTOBenchmark:
+        raise TypeError("benchmark must be PublishedBTOBenchmark")
+    if type(generated_points) is not tuple:
+        raise TypeError("generated_points must be tuple")
+    if any(type(point) is not SurfaceLocusPoint for point in generated_points):
+        raise TypeError("generated_points must contain SurfaceLocusPoint values")
+    if len(generated_points) != len(benchmark.points):
+        raise ValueError("generated_points count must match benchmark points")
+
+    _require_non_empty_string(model_version, "model_version")
+    _require_non_empty_string(configuration_id, "configuration_id")
+    if configuration_id != BTO_POINT_MATCHING_CONFIGURATION_ID:
+        raise ValueError(
+            "configuration_id must match the sequence-index alignment contract"
+        )
+
+    generated_order = tuple(
+        (point.geodetic.longitude_deg, point.geodetic.latitude_deg)
+        for point in generated_points
+    )
+    if generated_order != tuple(sorted(generated_order)):
+        raise ValueError(
+            "generated_points must use canonical longitude-latitude ordering"
+        )
+
+    samples = tuple(
+        BTOValidationSample(
+            point_id=benchmark_point.point_id,
+            sequence_index=benchmark_point.sequence_index,
+            benchmark_point=benchmark_point.geodetic,
+            generated_point=generated_point.geodetic,
+            deviation_m=geodesic_distance_m(
+                benchmark_point.geodetic,
+                generated_point.geodetic,
+            ),
+        )
+        for benchmark_point, generated_point in zip(
+            benchmark.points,
+            generated_points,
+            strict=True,
+        )
+    )
+    deviations = tuple(sample.deviation_m for sample in samples)
+
+    return BTOValidationResult(
+        benchmark_id=benchmark.benchmark_id,
+        fixture_sha256=benchmark.fixture_sha256,
+        model_version=model_version,
+        configuration_id=configuration_id,
+        samples=samples,
+        maximum_deviation_m=max(deviations),
+        mean_deviation_m=math.fsum(deviations) / len(deviations),
+        sample_count=len(samples),
     )
 
 
