@@ -1,0 +1,160 @@
+schema_version: 1
+issue: 172
+record_id: seventh-arc-geometry-transformation-v1
+record_status: PROPOSED
+benchmark_fixture_generation: BLOCKED
+
+source_artifacts:
+  methodology_and_uncertainty: atsb-bto-characteristics-2014
+  raw_satcom_logs: atsb-signalling-unit-logs-2017
+  range_geometry_and_ephemeris: inmarsat-search-for-mh370-2014
+
+scope_boundary:
+  purpose: >
+    Define a reproducible candidate transformation from the corrected seventh-arc
+    BTO event and admitted geometry inputs to a satellite-to-aircraft slant range.
+  exclusions:
+    - This record does not admit benchmark coordinates.
+    - This record does not create benchmark_fixture.csv.
+    - This record does not select a flight path, endpoint, search area, or crash location.
+    - This record does not validate the proposed interpolation method as authoritative.
+
+event_metadata:
+  event_id: seventh_arc_logon_request
+  exact_event_time_utc: "2014-03-08T00:19:29.416Z"
+  signal_channel: R600
+  raw_bto_microseconds: 23000
+  channel_correction_microseconds: -4600
+  corrected_bto_microseconds: 18400
+  excluded_following_record:
+    event_time_utc: "2014-03-08T00:19:37.443Z"
+    channel: R1200
+    bto_microseconds: 49660
+    reason: Excluded from the refined Inmarsat BTO analysis.
+
+calibration_constants:
+  fixed_processing_bias_microseconds: -495679
+  speed_of_light_km_s: 299792.458
+  range_equation: >
+    satellite_aircraft_range_km =
+    speed_of_light_km_s *
+    (corrected_bto_microseconds - fixed_processing_bias_microseconds) /
+    2000000 - satellite_ges_range_km
+
+ground_station_geometry:
+  station_id: Perth_GES
+  coordinate_frame: ECEF
+  source_table: Inmarsat paper Table 2
+  ecef_position_km:
+    x: -2368.8
+    y: 4881.1
+    z: -3342.0
+  antenna_phase_centre_correction: UNRESOLVED
+  ellipsoidal_height_m: UNRESOLVED
+
+ephemeris_interpolation_contract:
+  source_table: Inmarsat paper Table 4
+  coordinate_frame: ECEF
+  t_zero_utc: "2014-03-08T00:10:00.000Z"
+  t_one_utc: "2014-03-08T00:20:00.000Z"
+  interval_seconds: 600.0
+  target_delta_t_seconds: 569.416
+  normalized_parameter: 0.9490266666666668
+  method: CUBIC_HERMITE_POSITION_WITH_ENDPOINT_VELOCITIES
+  method_status: PROPOSED_PENDING_INDEPENDENT_REVIEW
+  source_nodes:
+    t_zero:
+      ecef_position_km:
+        x: 18177.5
+        y: 38051.7
+        z: 440.0
+      ecef_velocity_km_s:
+        x: 0.00160
+        y: -0.00151
+        z: -0.08188
+    t_one:
+      ecef_position_km:
+        x: 18178.4
+        y: 38050.8
+        z: 390.5
+      ecef_velocity_km_s:
+        x: 0.00150
+        y: -0.00158
+        z: -0.08321
+  hermite_basis_at_target:
+    h00: 0.007529956075770894
+    h10: 0.0024658376823299966
+    h01: 0.9924700439242291
+    h11: -0.045909214939892085
+  candidate_state_at_event:
+    ecef_position_km:
+      x: 18178.35427195
+      y: 38050.84806485
+      z: 393.04365462
+    ecef_velocity_km_s:
+      x: 0.00149058
+      y: -0.00156337
+      z: -0.08312914
+    result_status: PROVISIONAL_NUMERICAL_RESULT
+
+range_calculation:
+  half_path_term_km: 77058.503508091
+  satellite_ges_range_km: 39196.53411288632
+  satellite_aircraft_range_km: 37861.96939520468
+  result_status: PROVISIONAL_PENDING_SOURCE_AND_METHOD_REVIEW
+
+interpolation_sensitivity_check:
+  comparison_method: LINEAR_POSITION_INTERPOLATION
+  linear_position_at_event_km:
+    x: 18178.354124
+    y: 38050.845876
+    z: 393.02318
+  hermite_minus_linear_position_norm_km: 0.02059181610572185
+  hermite_minus_linear_position_norm_m: 20.59181610572185
+  hermite_minus_linear_satellite_ges_range_km: 0.003880875141476281
+  hermite_minus_linear_satellite_ges_range_m: 3.880875141476281
+  finding: >
+    For the registered bounding nodes, Hermite and linear position interpolation
+    differ by approximately 20.6 metres in satellite position and 3.9 metres in
+    satellite-to-GES range. Therefore the claim that linear interpolation is
+    necessarily insufficient for sub-kilometre accuracy is not established by
+    this comparison. Hermite remains proposed because endpoint velocities are
+    available, but the authoritative interpolation rule requires independent review.
+
+geodetic_projection_constraints:
+  earth_model: WGS84
+  source_publication_ring_altitude_m: 10000.0
+  proposed_35000_ft_altitude_m: 10668.0
+  l04_fixture_altitude_m: 0.0
+  altitude_contract_status: UNRESOLVED
+  finding: >
+    The Inmarsat paper reports rings at an assumed cruising altitude of 10000 m.
+    A 10668 m assumption is not source-equivalent, and the current L0.4 fixture
+    contract requires zero altitude. No coordinate fixture may be generated until
+    this difference is explicitly resolved and documented.
+  numerical_tolerances:
+    candidate_position_interpolation_km: 0.01
+    candidate_velocity_interpolation_km_s: 0.00001
+    candidate_wgs84_intersection_m: 1.0
+    tolerance_status: PROPOSED_NOT_VALIDATED
+
+verification_status:
+  arithmetic_reproduction: COMPLETE
+  primary_source_value_review: PARTIAL
+  interpolation_method_review: PENDING
+  altitude_contract_review: PENDING
+  independent_mathematical_review: PENDING
+  source_pdf_byte_capture_and_sha256: PENDING
+  benchmark_id_assignment: BLOCKED
+  benchmark_fixture_generation: BLOCKED
+
+admission_requirements_remaining:
+  - Capture the exact source PDF bytes and record their SHA-256 digests.
+  - Independently verify every extracted Table 2 and Table 4 value.
+  - Review or replace the proposed cubic Hermite interpolation contract.
+  - Confirm whether an exact event-epoch ephemeris is available.
+  - Resolve the Perth GES antenna phase-centre and height questions.
+  - Resolve the 10000 m source altitude, 10668 m proposal, and zero-altitude L0.4 contract.
+  - Define and test the sphere-to-WGS84 ellipsoid intersection algorithm.
+  - Independently review any generated coordinates.
+  - Assign a stable benchmark_id and freeze exact fixture bytes only after admission.
