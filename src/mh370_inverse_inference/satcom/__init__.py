@@ -24,6 +24,15 @@ from mh370_inverse_inference.satcom.uncertainty import (
     SlantRangeUncertaintyBands,
     generate_uncertainty_bands,
 )
+from mh370_inverse_inference.satcom.validation import (
+    BTO_POINT_MATCHING_CONFIGURATION_ID,
+    BTOValidationResult,
+    BTOValidationSample,
+    PublishedBTOBenchmark,
+    PublishedBTOBenchmarkPoint,
+    compare_published_bto_benchmark,
+    load_published_bto_benchmark_csv,
+)
 from mh370_inverse_inference.satcom.wgs84 import (
     WGS84_A_M,
     WGS84_B_M,
@@ -39,11 +48,16 @@ from mh370_inverse_inference.satcom.wgs84 import (
 )
 
 __all__ = [
+    "BTO_POINT_MATCHING_CONFIGURATION_ID",
+    "BTOValidationResult",
+    "BTOValidationSample",
     "BandIdentity",
     "ECEFPoint",
     "EXPORT_SCHEMA",
     "EXPORT_SCHEMA_VERSION",
     "GeodeticPoint",
+    "PublishedBTOBenchmark",
+    "PublishedBTOBenchmarkPoint",
     "SPEED_OF_LIGHT_M_S",
     "SatellitePosition",
     "SlantRangeBand",
@@ -56,6 +70,7 @@ __all__ = [
     "WGS84_E2",
     "WGS84_EP2",
     "WGS84_F",
+    "compare_published_bto_benchmark",
     "ecef_distance_m",
     "ecef_to_geodetic",
     "export_uncertainty_bands_csv",
@@ -63,6 +78,7 @@ __all__ = [
     "generate_surface_locus",
     "generate_uncertainty_bands",
     "geodetic_to_ecef",
+    "load_published_bto_benchmark_csv",
     "normalize_longitude_deg",
     "slant_range_m",
     "timing_error_to_range_m",
