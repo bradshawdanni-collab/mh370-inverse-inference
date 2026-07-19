@@ -1,16 +1,100 @@
 schema_version: 1
-artifacts: []
+issue: 172
+register_status: PROPOSED
+review_date: "2026-07-19"
 
-# Required fields for each admitted artifact:
-# - artifact_id
-# - publisher
-# - publication_title
-# - source_url
-# - publication_date
-# - retrieved_utc
-# - sha256
-# - licence_or_terms
-# - provenance
-# - transformation_history
-# - uncertainty_notes
-# - admission_status
+artifacts:
+  - artifact_id: atsb-bto-characteristics-2014
+    admission_status: PROPOSED
+    benchmark_id: null
+    publisher: Australian Transport Safety Bureau
+    publication_title: Burst Timing Offset (BTO) MH370 Characteristics
+    publication_type: Educational Fact Sheet
+    publication_date: "2014-12-23"
+    source_url: https://www.atsb.gov.au/publications/educational-fact-sheet/2022/aviation/mh370-burst-timing-offset-bto-characteristics
+    artifact_url: https://www.atsb.gov.au/sites/default/files/media/5187038/mh370_burst_timing_offset_dec2014.pdf
+    retrieved_utc: null
+    sha256: null
+    checksum_status: PENDING_BYTE_CAPTURE
+    licence_or_terms: null
+    usage_basis_status: PENDING_CONFIRMATION
+    role: methodology_and_uncertainty_reference
+    coordinate_reference_system: null
+    units:
+      bto: microseconds
+      satellite_range_error: kilometres
+      line_of_position_error: kilometres
+    provenance:
+      authority: Official ATSB publication
+      verification_scope:
+        - BTO is a measured round-trip SATCOM timing quantity used to calculate satellite-to-aircraft distance.
+        - BTO-derived distance permits possible location rings to be mapped on the Earth surface.
+        - ATSB reports approximately 50 microseconds effective BTO accuracy and approximately 10 kilometres horizontal line-of-position tolerance.
+    transformation_history: []
+    uncertainty_notes:
+      - The fact sheet reports non-Gaussian timing error components and treats individual MH370 measurements separately.
+      - The fact sheet does not publish a machine-readable benchmark coordinate sequence.
+      - The fact sheet alone cannot produce benchmark_fixture.csv.
+
+  - artifact_id: atsb-signalling-unit-logs-2017
+    admission_status: PROPOSED
+    benchmark_id: null
+    publisher: Australian Transport Safety Bureau
+    publication_title: MH370 Update to Signalling Unit Logs
+    publication_type: Educational Fact Sheet with amended data-communication log attachment
+    publication_date: "2017-03-30"
+    source_url: https://www.atsb.gov.au/publications/educational-fact-sheet/2022/aviation/mh370-update-signalling-unit-logs
+    artifact_url: https://www.atsb.gov.au/sites/default/files/media/5772619/public_mh370-data-communication-logs.pdf
+    retrieved_utc: null
+    sha256: null
+    checksum_status: PENDING_BYTE_CAPTURE
+    licence_or_terms: null
+    usage_basis_status: PENDING_CONFIRMATION
+    role: raw_satcom_log_reference
+    coordinate_reference_system: null
+    units:
+      time: UTC
+      bto: microseconds
+      bfo: hertz
+    provenance:
+      authority: Official ATSB release of MH370 SATCOM signalling-unit log records
+      verification_scope:
+        - Only R-channel messages carry the BTO values used for distance analysis.
+        - R600 values require a 4600 microsecond calibration subtraction when compared with R1200 values.
+        - The ATSB notes that this calibration applies to the 18:25:27 and 00:19:29 logon requests.
+    transformation_history: []
+    uncertainty_notes:
+      - Multiple transmissions occur around some handshake events; choosing one record per benchmark epoch is a transformation decision that must be declared.
+      - The logs do not publish Earth-surface benchmark coordinates.
+      - Satellite ephemeris, calibration constants, and a reproducible coordinate-generation method remain required.
+
+candidate_extraction_review:
+  admission_status: EXCLUDED_FROM_ADMISSION
+  source_description: User-supplied summary reviewed against official ATSB publications
+  findings:
+    - The ATSB BTO characteristics fact sheet is an official methodology and uncertainty reference, not a coordinate benchmark by itself.
+    - The amended ATSB signalling-unit logs are the appropriate official source for raw BTO records.
+    - The supplied elevation-angle values have not been verified in the registered ATSB artifacts.
+    - The supplied handshake table must not be copied into benchmark_fixture.csv without a declared event-selection and calibration rule.
+    - Official log records show 11740 microseconds at 20:41:04.904, not 11820.
+    - Official log records show 14540 microseconds at 22:41:21.906, not 14360.
+    - Official log records show 18040 microseconds at 00:10:59.928, not 16740.
+    - The 00:19 event includes an R600 logon request of 23000 microseconds at 00:19:29.416, which becomes 18400 after the declared 4600 microsecond calibration subtraction.
+    - The final received R1200 transmission at 00:19:37.443 is a distinct record with BTO 49660.
+
+admission_requirements_remaining:
+  - Capture the exact official PDF bytes and record reproducible SHA-256 digests.
+  - Confirm licence, usage terms, or another documented access basis.
+  - Select and document the exact benchmark epoch and message-selection rule.
+  - Identify and verify satellite ephemeris and all calibration constants used to derive each surface ring.
+  - Define a reproducible transformation from admitted source records to canonical WGS84 zero-altitude coordinates.
+  - Independently review the transformed coordinates.
+  - Assign a stable benchmark_id.
+  - Freeze benchmark_fixture.csv bytes and record their SHA-256 digest.
+  - Change admission_status only through Issue #172 review.
+
+fixture:
+  filename: data/satcom/published/benchmark_fixture.csv
+  admission_status: NOT_CREATED
+  sha256: null
+  prohibition: Do not create or populate until all admission requirements are complete.
