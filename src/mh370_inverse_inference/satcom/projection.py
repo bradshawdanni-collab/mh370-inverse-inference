@@ -12,6 +12,7 @@ from mh370_inverse_inference.satcom.wgs84 import (
     GeodeticPoint,
     ecef_distance_m,
     geodetic_to_ecef,
+    normalize_longitude_deg,
 )
 
 SURFACE_MODEL_ID: Final = "WGS84_GEODETIC_HEIGHT"
@@ -100,6 +101,7 @@ def solve_sphere_wgs84_intersection_at_longitude(
         raise TypeError("satellite_position must be ECEFPoint")
     _require_positive_finite(target_range_m, "target_range_m")
     _require_canonical_longitude(longitude_deg)
+    longitude_deg = normalize_longitude_deg(longitude_deg)
     _require_finite(altitude_m, "altitude_m")
     _require_positive_finite(latitude_step_deg, "latitude_step_deg")
     if latitude_step_deg > 1.0:
@@ -198,6 +200,9 @@ def compare_lower_branch_altitudes_at_longitude(
     minimum_root_separation_deg: float = 0.01,
 ) -> SameLongitudeAltitudeShift:
     """Compare lower-latitude roots using exact same-longitude pairing."""
+    _require_canonical_longitude(longitude_deg)
+    longitude_deg = normalize_longitude_deg(longitude_deg)
+
     source = solve_sphere_wgs84_intersection_at_longitude(
         satellite_position,
         target_range_m,
