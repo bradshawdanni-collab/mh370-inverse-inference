@@ -263,10 +263,7 @@ def test_csv_loader_rejects_changed_fixture_checksum() -> None:
     "header",
     [
         "point_id,sequence_index,longitude_deg,latitude_deg\n",
-        (
-            "point_id,sequence_index,longitude_deg,latitude_deg,altitude_m,"
-            "extra\n"
-        ),
+        ("point_id,sequence_index,longitude_deg,latitude_deg,altitude_m," "extra\n"),
         "sequence_index,point_id,longitude_deg,latitude_deg,altitude_m\n",
     ],
 )
@@ -314,9 +311,7 @@ def test_csv_loader_rejects_malformed_coordinates(row: str) -> None:
 
 
 def test_csv_loader_rejects_blank_rows_and_missing_values() -> None:
-    blank_row_fixture = (
-        _CSV_HEADER + "point-000,0,80.0,-20.0,0.0\n\n"
-    ).encode("utf-8")
+    blank_row_fixture = (_CSV_HEADER + "point-000,0,80.0,-20.0,0.0\n\n").encode("utf-8")
     missing_value_fixture = _csv_fixture("point-000,0,80.0,,0.0")
 
     with pytest.raises(ValueError, match="blank rows"):

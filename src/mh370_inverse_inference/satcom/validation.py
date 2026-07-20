@@ -59,9 +59,7 @@ class PublishedBTOBenchmark:
             raise TypeError("points must be tuple")
         if not self.points:
             raise ValueError("points must not be empty")
-        if any(
-            type(point) is not PublishedBTOBenchmarkPoint for point in self.points
-        ):
+        if any(type(point) is not PublishedBTOBenchmarkPoint for point in self.points):
             raise TypeError("points must contain PublishedBTOBenchmarkPoint values")
 
         point_ids = tuple(point.point_id for point in self.points)
