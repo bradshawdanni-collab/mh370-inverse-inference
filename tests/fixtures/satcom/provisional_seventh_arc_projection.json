@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.0.0",
+  "fixture_id": "provisional-seventh-arc-projection-regression-v1",
+  "fixture_scope": "TEST_ONLY_NUMERICAL_REGRESSION",
+  "result_status": "PROVISIONAL_PENDING_INDEPENDENT_REVIEW",
+  "authoritative": false,
+  "benchmark_fixture_generation": "prohibited",
+  "prohibited_repository_target": "data/satcom/published/benchmark_fixture.csv",
+  "source_note": "The checkpoint values reproduce a provisional calculation and are not independent physical verification.",
+  "surface_model": "WGS84_GEODETIC_HEIGHT",
+  "source_altitude_m": 10000.0,
+  "target_altitude_m": 0.0,
+  "branch_rule": "LOWER_LATITUDE_ROOT",
+  "root_solver": "BRACKETED_FAIL_CLOSED",
+  "implementation_root_solver": "BRACKETED_BISECTION_FAIL_CLOSED",
+  "point_pairing_rule": "SAME_LONGITUDE",
+  "endpoint_policy": "EXCLUDE_TANGENCY_NEIGHBOURHOOD",
+  "numerical_regression_tolerance_m": 0.5,
+  "physical_accuracy_claim": "NONE",
+  "solver_parameters": {
+    "latitude_step_deg": 0.25,
+    "residual_tolerance_m": 0.001,
+    "maximum_iterations": 80,
+    "minimum_root_separation_deg": 0.01
+  },
+  "provisional_geometry": {
+    "satellite_ecef_m": {
+      "x": 18178354.27195,
+      "y": 38050848.06485,
+      "z": 393043.65462
+    },
+    "satellite_aircraft_range_m": 37861969.39520468
+  },
+  "minimum_shift_claim_scope": "WITHIN_THIS_SAMPLED_SET_ONLY",
+  "checkpoints": [
+    {
+      "longitude_deg": 30.0,
+      "target_0m_lower_latitude_deg": -29.06121677,
+      "source_10000m_lower_latitude_deg": -29.18564022,
+      "horizontal_shift_m": 13790.821
+    },
+    {
+      "longitude_deg": 40.0,
+      "target_0m_lower_latitude_deg": -37.57176149,
+      "source_10000m_lower_latitude_deg": -37.66205445,
+      "horizontal_shift_m": 10021.547
+    },
+    {
+      "longitude_deg": 50.0,
+      "target_0m_lower_latitude_deg": -41.80892272,
+      "source_10000m_lower_latitude_deg": -41.88668263,
+      "horizontal_shift_m": 8636.818
+    },
+    {
+      "longitude_deg": 60.0,
+      "target_0m_lower_latitude_deg": -43.60881881,
+      "source_10000m_lower_latitude_deg": -43.68185452,
+      "horizontal_shift_m": 8114.655
+    },
+    {
+      "longitude_deg": 64.4644,
+      "target_0m_lower_latitude_deg": -43.79001841,
+      "source_10000m_lower_latitude_deg": -43.86259550,
+      "horizontal_shift_m": 8063.957
+    },
+    {
+      "longitude_deg": 70.0,
+      "target_0m_lower_latitude_deg": -43.51080723,
+      "source_10000m_lower_latitude_deg": -43.58409223,
+      "horizontal_shift_m": 8142.213
+    },
+    {
+      "longitude_deg": 80.0,
+      "target_0m_lower_latitude_deg": -41.48819217,
+      "source_10000m_lower_latitude_deg": -41.56682786,
+      "horizontal_shift_m": 8733.604
+    },
+    {
+      "longitude_deg": 90.0,
+      "target_0m_lower_latitude_deg": -36.92019254,
+      "source_10000m_lower_latitude_deg": -37.01262042,
+      "horizontal_shift_m": 10257.370
+    },
+    {
+      "longitude_deg": 100.0,
+      "target_0m_lower_latitude_deg": -27.69278949,
+      "source_10000m_lower_latitude_deg": -27.82437348,
+      "horizontal_shift_m": 14581.555
+    }
+  ]
+}
