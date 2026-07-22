@@ -16,8 +16,8 @@ artifacts:
     retrieved_utc: "2026-07-22T08:55:20Z"
     sha256: f9f5bf26ba88da713fe665ac2d9b72e752f02523014b28bac452e3f4b17fe382
     checksum_status: SHA256_RECORDED_FROM_LOCAL_CAPTURE
-    licence_or_terms: null
-    usage_basis_status: PENDING_CONFIRMATION
+    licence_or_terms: Creative Commons Attribution 4.0 International; attribution required; excludes Commonwealth Coat of Arms, ATSB logo, specifically excluded material, and third-party material
+    usage_basis_status: VERIFIED_ON_ATSB_COPYRIGHT_STATEMENT
     role: methodology_and_uncertainty_reference
     coordinate_reference_system: null
     units:
@@ -48,8 +48,8 @@ artifacts:
     retrieved_utc: "2026-07-22T08:55:20Z"
     sha256: b6690c7acd6b0aba0d87a7fd53282449e0573bbee73ec1787a62762c5a7d0cd6
     checksum_status: SHA256_RECORDED_FROM_LOCAL_CAPTURE
-    licence_or_terms: null
-    usage_basis_status: PENDING_CONFIRMATION
+    licence_or_terms: Creative Commons Attribution 4.0 International; attribution required; excludes Commonwealth Coat of Arms, ATSB logo, specifically excluded material, and third-party material
+    usage_basis_status: VERIFIED_ON_ATSB_COPYRIGHT_STATEMENT
     role: raw_satcom_log_reference
     coordinate_reference_system: null
     units:
@@ -177,7 +177,6 @@ rejected_derivations:
         - deterministic sphere-to-WGS84 intersection method
 
 admission_requirements_remaining:
-  - Capture the exact official PDF bytes and record reproducible SHA-256 digests.
   - Select and document the exact benchmark epoch and message-selection rule.
   - Define and test the satellite-state interpolation rule for the exact 00:19:29 epoch or obtain an independently verified exact ephemeris vector.
   - Confirm the Perth GES ECEF extraction and document whether any antenna phase-centre correction is required.
