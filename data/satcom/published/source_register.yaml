@@ -366,7 +366,7 @@ altitude_convention_review:
 
     unresolved_parameters:
       - Source altitude reference or datum.
-      - Exact slant-range value used for the selected event.
+      - Independent review of the provisional selected-event slant range after antenna-reference resolution.
       - Root or branch-selection rule.
       - Longitude sampling sequence.
       - Endpoint and tangency policy.
@@ -385,6 +385,70 @@ altitude_convention_review:
     - It does not admit any transformed coordinates.
     - It does not resolve the Perth GES antenna-reference question.
     - It does not authorize creation of benchmark_fixture.csv.
+
+selected_event_slant_range_derivation_contract:
+  contract_status: PROPOSED_PENDING_INDEPENDENT_REVIEW
+  derivation_status: PROVISIONAL_FROM_ROUNDED_SOURCE_GEOMETRY
+  benchmark_epoch_utc: "2014-03-08T00:19:29.416Z"
+
+  input_contracts:
+    event_selection: benchmark_event_selection_contract
+    satellite_state: satellite_state_interpolation_contract
+    perth_ges_reference: perth_ges_reference_review
+
+  timing_inputs:
+    corrected_bto_microseconds: 18400
+    fixed_processing_bias_microseconds: -495679
+    corrected_round_trip_timing_microseconds: 514079
+    speed_of_light_m_s: 299792458.0
+
+  geometry_inputs:
+    satellite_ecef_position_m:
+      x: 18178354.27195026
+      y: 38050848.06484729
+      z: 393043.6546171822
+    perth_ges_ecef_position_m:
+      x: -2368800.0
+      y: 4881100.0
+      z: -3342000.0
+    antenna_phase_centre_correction_applied: false
+    antenna_phase_centre_correction_status: NOT_STATED_IN_REGISTERED_SOURCE
+
+  calculation:
+    equation: >
+      satellite_aircraft_range =
+      speed_of_light * (corrected_bto - fixed_processing_bias) / 2
+      - satellite_ges_range
+    timing_half_path_m: 77058503.50809099
+    satellite_to_ges_range_m: 39196534.11288632
+    satellite_to_aircraft_slant_range_m: 37861969.39520467
+
+  implementation:
+    commit_sha: 971c7ab038361810a3f3d2f4e49fea829ce4e194
+    module: src/mh370_inverse_inference/satcom/bto.py
+    exported_symbol: refined_bto_to_satellite_aircraft_range_m
+    test_module: tests/test_bto.py
+
+  verification:
+    focused_bto_tests_passed: 10
+    negative_ges_range_rejected: true
+    negative_derived_range_rejected: true
+    non_finite_inputs_rejected: true
+
+  uncertainty_boundary:
+    - The target-epoch satellite state is interpolated from rounded published nodes.
+    - The Perth GES ECEF vector is rounded to 0.1 kilometre in the publication.
+    - No antenna phase-centre correction has been established or applied.
+    - Displayed digits are deterministic calculation output and do not imply equivalent physical precision.
+    - Independent reproduction and review remain required.
+
+  authority_boundary:
+    - This contract records a provisional selected-event slant range only.
+    - It does not admit the value as exact or authoritative.
+    - It does not authorize zero-altitude intersection calculations.
+    - It does not generate or admit Earth-surface coordinates.
+    - It does not authorize creation of benchmark_fixture.csv.
+    - It does not change any source admission status.
 
 admission_requirements_remaining:
   - Confirm the Perth GES ECEF extraction and document whether any antenna phase-centre correction is required.
