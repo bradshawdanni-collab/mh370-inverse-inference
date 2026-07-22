@@ -49,5 +49,5 @@ packages = ["mh370_inverse_inference"]
 mypy_path = "src"
 
 [tool.pytest.ini_options]
-addopts = "--strict-markers --strict-config --cov=mh370_inverse_inference --cov-report=term-missing"
+addopts = "--strict-markers --strict-config --import-mode=importlib --cov=mh370_inverse_inference --cov-report=term-missing"
 testpaths = ["tests"]
