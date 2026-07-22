@@ -290,6 +290,49 @@ satellite_state_interpolation_contract:
     - It does not define aircraft altitude or Earth-surface coordinates.
     - It does not authorize creation of benchmark_fixture.csv.
 
+perth_ges_reference_review:
+  review_status: PROPOSED_PENDING_INDEPENDENT_REVIEW
+  source_artifact_id: inmarsat-search-for-mh370-2014
+  source_location: Table 2 BTO Calibration Geometry
+
+  published_terminal_location:
+    coordinate_reference_system:
+      frame: Earth-Centred Earth-Fixed
+      earth_model: ellipsoid
+      position_units: kilometres
+    ecef_position_km:
+      x: -2368.8
+      y: 4881.1
+      z: -3342.0
+    approximate_geodetic_degrees:
+      latitude: -31.8
+      longitude: 115.9
+
+  normalized_terminal_location:
+    position_units: metres
+    ecef_position_m:
+      x: -2368800.0
+      y: 4881100.0
+      z: -3342000.0
+    transformation: exact multiplication of published kilometre values by 1000
+
+  source_precision_boundary:
+    - Published ECEF components are rounded to 0.1 kilometre.
+    - Converted metre values do not imply metre-level physical precision.
+    - The source does not quantify uncertainty for the terminal coordinates.
+
+  antenna_reference_review:
+    phase_centre_correction_status: NOT_STATED_IN_REGISTERED_SOURCE
+    correction_applied: false
+    correction_vector_m: null
+    decision_status: PENDING_AUTHORITATIVE_EVIDENCE_OR_INDEPENDENT_REVIEW
+
+  authority_boundary:
+    - The published terminal ECEF vector is recorded without modification.
+    - Absence of a stated phase-centre correction is not evidence that the correction is zero.
+    - This review does not authorize range calculation or coordinate generation.
+    - This review does not authorize creation of benchmark_fixture.csv.
+
 admission_requirements_remaining:
   - Confirm the Perth GES ECEF extraction and document whether any antenna phase-centre correction is required.
   - Define the altitude convention and reconcile the source publication's 10000 metre ring with the L0.4 zero-altitude fixture contract.
