@@ -47,3 +47,48 @@ def bto_to_slant_range_m(
         raise ValueError("Corrected BTO timing must be non-negative")
 
     return timing_error_to_range_m(corrected_round_trip_s, round_trip=True)
+
+
+def refined_bto_to_satellite_aircraft_range_m(
+    corrected_bto_s: float,
+    *,
+    fixed_processing_bias_s: float,
+    satellite_to_ges_range_m: float,
+) -> float:
+    """Apply the refined BTO satellite-to-aircraft range equation.
+
+    ``corrected_bto_s`` must already include any message-format
+    normalization, such as the declared R600 correction.
+    """
+
+    values = (
+        corrected_bto_s,
+        fixed_processing_bias_s,
+        satellite_to_ges_range_m,
+    )
+    if not all(isfinite(value) for value in values):
+        raise ValueError("Refined BTO inputs must be finite")
+
+    if satellite_to_ges_range_m < 0.0:
+        raise ValueError("satellite_to_ges_range_m must be non-negative")
+
+    corrected_round_trip_s = corrected_bto_s - fixed_processing_bias_s
+    if corrected_round_trip_s < 0.0:
+        raise ValueError(
+            "BTO minus fixed processing bias must be non-negative"
+        )
+
+    total_one_way_path_m = timing_error_to_range_m(
+        corrected_round_trip_s,
+        round_trip=True,
+    )
+    satellite_to_aircraft_range_m = (
+        total_one_way_path_m - satellite_to_ges_range_m
+    )
+
+    if satellite_to_aircraft_range_m < 0.0:
+        raise ValueError(
+            "Derived satellite-to-aircraft range must be non-negative"
+        )
+
+    return satellite_to_aircraft_range_m
