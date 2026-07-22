@@ -333,6 +333,59 @@ perth_ges_reference_review:
     - This review does not authorize range calculation or coordinate generation.
     - This review does not authorize creation of benchmark_fixture.csv.
 
+altitude_convention_review:
+  review_status: PROPOSED_PENDING_INDEPENDENT_REVIEW
+  source_artifact_id: inmarsat-search-for-mh370-2014
+
+  source_ring_convention:
+    reported_altitude_m: 10000.0
+    source_description: assumed cruising altitude
+    earth_model: ellipsoid
+    altitude_reference_status: NOT_EXPLICITLY_DEFINED_IN_REGISTERED_SOURCE
+    interpretation_status: PENDING_INDEPENDENT_REVIEW
+
+  target_fixture_convention:
+    coordinate_reference_system: WGS84
+    height_model: geodetic_height
+    altitude_m: 0.0
+    non_zero_altitude_permitted: false
+    contract_source: docs/l0-4-published-bto-arc-validation.md
+
+  proposed_reconciliation:
+    status: PROPOSED_NOT_EXECUTED
+    invariant: preserve_satellite_to_aircraft_slant_range
+    method: >
+      Solve a new intersection between the declared satellite-centred
+      slant-range sphere and the WGS84 geodetic-height zero surface.
+
+    prohibited_shortcuts:
+      - Do not copy a 10000 metre ring point and only replace altitude_m with zero.
+      - Do not assume latitude and longitude remain unchanged across the altitude conversion.
+      - Do not describe the source altitude as WGS84 ellipsoidal height without independent evidence.
+      - Do not generate benchmark_fixture.csv before the transformation and review gates are complete.
+
+    unresolved_parameters:
+      - Source altitude reference or datum.
+      - Exact slant-range value used for the selected event.
+      - Root or branch-selection rule.
+      - Longitude sampling sequence.
+      - Endpoint and tangency policy.
+      - Numerical residual tolerance.
+      - Independent reproduction criteria.
+
+  uncertainty_boundary:
+    - The publication states an assumed 10000 metre cruising altitude but does not fully define its altitude datum.
+    - The zero-altitude locus is geometrically distinct from the published 10000 metre locus.
+    - Any derived coordinates must be labelled transformed and provisional until independently reviewed.
+    - Displayed numerical precision must not exceed the precision supported by the registered sources.
+
+  authority_boundary:
+    - This review defines the altitude-governance boundary only.
+    - It does not execute the proposed transformation.
+    - It does not admit any transformed coordinates.
+    - It does not resolve the Perth GES antenna-reference question.
+    - It does not authorize creation of benchmark_fixture.csv.
+
 admission_requirements_remaining:
   - Confirm the Perth GES ECEF extraction and document whether any antenna phase-centre correction is required.
   - Define the altitude convention and reconcile the source publication's 10000 metre ring with the L0.4 zero-altitude fixture contract.
