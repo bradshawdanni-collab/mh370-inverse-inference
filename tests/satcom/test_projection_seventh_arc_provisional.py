@@ -19,6 +19,7 @@ from mh370_inverse_inference.satcom.wgs84 import (
     GeodeticPoint,
     ecef_distance_m,
     geodetic_to_ecef,
+    normalize_longitude_deg,
 )
 
 _FIXTURE_PATH = (
@@ -44,16 +45,12 @@ def _solver_kwargs() -> dict[str, float | int]:
         "latitude_step_deg": float(_SOLVER["latitude_step_deg"]),
         "residual_tolerance_m": float(_SOLVER["residual_tolerance_m"]),
         "maximum_iterations": int(_SOLVER["maximum_iterations"]),
-        "minimum_root_separation_deg": float(
-            _SOLVER["minimum_root_separation_deg"]
-        ),
+        "minimum_root_separation_deg": float(_SOLVER["minimum_root_separation_deg"]),
     }
 
 
 def _range_residual_m(point: GeodeticPoint) -> float:
-    return abs(
-        ecef_distance_m(_SATELLITE, geodetic_to_ecef(point)) - _TARGET_RANGE_M
-    )
+    return abs(ecef_distance_m(_SATELLITE, geodetic_to_ecef(point)) - _TARGET_RANGE_M)
 
 
 def _checkpoint_id(checkpoint: dict[str, float]) -> str:
@@ -62,9 +59,7 @@ def _checkpoint_id(checkpoint: dict[str, float]) -> str:
 
 def test_provisional_fixture_preserves_non_authoritative_boundary() -> None:
     assert _FIXTURE["fixture_scope"] == "TEST_ONLY_NUMERICAL_REGRESSION"
-    assert _FIXTURE["result_status"] == (
-        "PROVISIONAL_PENDING_INDEPENDENT_REVIEW"
-    )
+    assert _FIXTURE["result_status"] == ("PROVISIONAL_PENDING_INDEPENDENT_REVIEW")
     assert _FIXTURE["authoritative"] is False
     assert _FIXTURE["benchmark_fixture_generation"] == "prohibited"
     assert _FIXTURE["prohibited_repository_target"] == (
@@ -93,6 +88,7 @@ def test_provisional_seventh_arc_checkpoint(
     checkpoint: dict[str, float],
 ) -> None:
     longitude_deg = float(checkpoint["longitude_deg"])
+    canonical_longitude_deg = normalize_longitude_deg(longitude_deg)
     source_altitude_m = float(_FIXTURE["source_altitude_m"])
     target_altitude_m = float(_FIXTURE["target_altitude_m"])
     solver_kwargs = _solver_kwargs()
@@ -150,8 +146,9 @@ def test_provisional_seventh_arc_checkpoint(
 
     assert result.source_point == source.lower_point
     assert result.target_point == target.lower_point
-    assert result.source_point.longitude_deg == longitude_deg
-    assert result.target_point.longitude_deg == longitude_deg
+    assert result.source_point.longitude_deg == canonical_longitude_deg
+    assert result.target_point.longitude_deg == canonical_longitude_deg
+    assert result.source_point.longitude_deg == result.target_point.longitude_deg
     assert result.target_point.latitude_deg > result.source_point.latitude_deg
 
     assert result.target_point.latitude_deg == pytest.approx(
@@ -184,6 +181,4 @@ def test_minimum_shift_claim_is_limited_to_sampled_set() -> None:
         shifts[longitude_deg] = result.horizontal_shift_m
 
     assert min(shifts, key=shifts.__getitem__) == 64.4644
-    assert _FIXTURE["minimum_shift_claim_scope"] == (
-        "WITHIN_THIS_SAMPLED_SET_ONLY"
-    )
+    assert _FIXTURE["minimum_shift_claim_scope"] == ("WITHIN_THIS_SAMPLED_SET_ONLY")
