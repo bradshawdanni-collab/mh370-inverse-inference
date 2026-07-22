@@ -215,8 +215,82 @@ benchmark_event_selection_contract:
     - It does not define the exact satellite state at the selected epoch.
     - It does not generate Earth-surface coordinates or benchmark_fixture.csv.
 
+satellite_state_interpolation_contract:
+  contract_status: PROPOSED_PENDING_INDEPENDENT_REVIEW
+  derivation_status: PROVISIONAL_INTERPOLATION_FROM_ROUNDED_PUBLISHED_NODES
+  source_artifact_id: inmarsat-search-for-mh370-2014
+  coordinate_reference_system:
+    frame: Earth-Centred Earth-Fixed
+    position_units: metres
+    velocity_units: metres_per_second
+    time_scale: UTC
+
+  implementation:
+    commit_sha: a609922531b608d42cfa353171bada8b158dc656
+    module: src/mh370_inverse_inference/satcom/satellite.py
+    exported_symbol: interpolate_satellite_state_cubic_hermite
+    test_module: tests/satcom/test_satellite.py
+    method: cubic_Hermite_position_and_velocity_interpolation
+
+  interpolation_interval:
+    start_epoch_utc: "2014-03-08T00:10:00Z"
+    target_epoch_utc: "2014-03-08T00:19:29.416Z"
+    end_epoch_utc: "2014-03-08T00:20:00Z"
+    duration_seconds: 600.0
+    target_offset_seconds: 569.416
+    extrapolation_permitted: false
+
+  published_start_state:
+    ecef_position_m:
+      x: 18177500.0
+      y: 38051700.0
+      z: 440000.0
+    ecef_velocity_m_s:
+      x: 1.60
+      y: -1.51
+      z: -81.88
+
+  published_end_state:
+    ecef_position_m:
+      x: 18178400.0
+      y: 38050800.0
+      z: 390500.0
+    ecef_velocity_m_s:
+      x: 1.50
+      y: -1.58
+      z: -83.21
+
+  derived_provisional_state:
+    epoch_utc: "2014-03-08T00:19:29.416Z"
+    ecef_position_m:
+      x: 18178354.27195026
+      y: 38050848.06484729
+      z: 393043.6546171822
+    ecef_velocity_m_s:
+      x: 1.4905848175466667
+      y: -1.5633706024564664
+      z: -83.12914420245867
+
+  verification:
+    endpoint_reproduction_tested: true
+    extrapolation_rejection_tested: true
+    focused_satellite_tests_passed: 10
+    full_repository_tests_passed: 607
+    warning_count: 1
+
+  uncertainty_boundary:
+    - The publication reports rounded endpoint positions and velocities.
+    - The displayed derived digits are deterministic calculation output and do not imply equivalent physical measurement precision.
+    - This is not an exact ephemeris row published for the target epoch.
+    - Independent reproduction and review remain required.
+
+  authority_boundary:
+    - This contract defines a provisional satellite-state derivation only.
+    - It does not admit the derived state as authoritative ephemeris.
+    - It does not define aircraft altitude or Earth-surface coordinates.
+    - It does not authorize creation of benchmark_fixture.csv.
+
 admission_requirements_remaining:
-  - Define and test the satellite-state interpolation rule for the exact 00:19:29 epoch or obtain an independently verified exact ephemeris vector.
   - Confirm the Perth GES ECEF extraction and document whether any antenna phase-centre correction is required.
   - Define the altitude convention and reconcile the source publication's 10000 metre ring with the L0.4 zero-altitude fixture contract.
   - Define a reproducible transformation from admitted source records to canonical WGS84 zero-altitude coordinates.
