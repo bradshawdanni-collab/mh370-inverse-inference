@@ -176,8 +176,46 @@ rejected_derivations:
         - declared altitude convention
         - deterministic sphere-to-WGS84 intersection method
 
+benchmark_event_selection_contract:
+  contract_status: PROPOSED_PENDING_INDEPENDENT_REVIEW
+  benchmark_role: seventh_arc_bto_event
+  benchmark_epoch_utc: "2014-03-08T00:19:29.416Z"
+
+  selected_source_record:
+    source_artifact_id: atsb-signalling-unit-logs-2017
+    message_type: Logon Request
+    channel: R
+    burst_format: R600
+    raw_bto_microseconds: 23000
+
+  calibration:
+    rule: corrected_bto_microseconds = raw_bto_microseconds - 4600
+    adjustment_microseconds: -4600
+    corrected_bto_microseconds: 18400
+    authority:
+      - atsb-signalling-unit-logs-2017
+      - inmarsat-search-for-mh370-2014
+
+  excluded_source_record:
+    epoch_utc: "2014-03-08T00:19:37.443Z"
+    channel: R
+    burst_format: R1200
+    raw_bto_microseconds: 49660
+    exclusion_reason: >
+      Excluded from the refined Inmarsat analysis because the timing is
+      unreliable.
+
+  selection_rule:
+    - Use the 00:19:29.416 R600 Logon Request as the benchmark BTO event.
+    - Apply the declared 4600 microsecond R600 normalization before range calculations.
+    - Do not substitute the 00:19:37.443 R1200 record.
+
+  authority_boundary:
+    - This contract selects and calibrates a source record only.
+    - It does not define the exact satellite state at the selected epoch.
+    - It does not generate Earth-surface coordinates or benchmark_fixture.csv.
+
 admission_requirements_remaining:
-  - Select and document the exact benchmark epoch and message-selection rule.
   - Define and test the satellite-state interpolation rule for the exact 00:19:29 epoch or obtain an independently verified exact ephemeris vector.
   - Confirm the Perth GES ECEF extraction and document whether any antenna phase-centre correction is required.
   - Define the altitude convention and reconcile the source publication's 10000 metre ring with the L0.4 zero-altitude fixture contract.
