@@ -450,6 +450,55 @@ selected_event_slant_range_derivation_contract:
     - It does not authorize creation of benchmark_fixture.csv.
     - It does not change any source admission status.
 
+perth_ges_antenna_reference_evidence_review:
+  review_status: PROPOSED_PENDING_AUTHORITATIVE_EVIDENCE
+  review_scope:
+    - inmarsat-search-for-mh370-2014
+    - atsb-bto-characteristics-2014
+    - atsb-signalling-unit-logs-2017
+
+  published_reference:
+    label: GES (Perth)
+    coordinate_reference_system: Earth-Centred Earth-Fixed
+    published_position_units: kilometres
+    published_component_resolution_km: 0.1
+    approximate_component_resolution_m: 100.0
+
+  evidence_findings:
+    - The Inmarsat publication supplies a rounded terminal ECEF vector.
+    - The refined BTO equation uses the satellite-to-Perth-GES range.
+    - The registered sources do not define the coordinate as an antenna phase centre.
+    - The registered sources do not identify a surveyed monument or station datum.
+    - The registered sources do not publish an antenna phase-centre correction vector.
+    - The registered sources do not establish that the required correction is zero.
+
+  correction_decision:
+    correction_status: NOT_ESTABLISHED_BY_REGISTERED_SOURCES
+    correction_applied: false
+    correction_vector_m: null
+    zero_correction_assumption_permitted: false
+    range_status: PROVISIONAL_PENDING_REFERENCE_RESOLUTION
+
+  evidence_required_for_resolution:
+    - Authoritative Inmarsat engineering documentation identifying the Perth GES coordinate reference point.
+    - A surveyed station or antenna-reference record tied to the published ECEF vector.
+    - A documented correction vector or authoritative confirmation that no correction is required.
+    - Independent review of the effect on the satellite-to-GES and satellite-to-aircraft ranges.
+
+  precision_boundary:
+    - The published ECEF components are rounded to 0.1 kilometre.
+    - The normalized metre representation does not establish metre-level physical accuracy.
+    - A correction cannot be inferred solely from the number of displayed digits.
+    - Absence of a published correction is not evidence of a zero correction.
+
+  authority_boundary:
+    - This review records an unresolved evidence gap.
+    - It does not modify the published Perth GES vector.
+    - It does not authorize a zero-correction assumption.
+    - It does not promote the provisional selected-event slant range.
+    - It does not authorize zero-altitude intersections.
+    - It does not authorize creation of benchmark_fixture.csv.
+
 admission_requirements_remaining:
   - Confirm the Perth GES ECEF extraction and document whether any antenna phase-centre correction is required.
   - Define the altitude convention and reconcile the source publication's 10000 metre ring with the L0.4 zero-altitude fixture contract.
