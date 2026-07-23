@@ -504,10 +504,110 @@ perth_ges_antenna_reference_evidence_review:
     - It does not promote the provisional selected-event slant range.
     - It does not authorize zero-altitude intersections until the remaining transformation gates are defined.
     - It does not authorize creation of benchmark_fixture.csv.
+zero_altitude_transformation_contract:
+  contract_status: PROPOSED_PENDING_INDEPENDENT_REVIEW
+  execution_status: NOT_EXECUTED
+
+  purpose: >
+    Transform the provisional selected-event satellite-to-aircraft
+    slant range into deterministic WGS84 zero-altitude surface
+    intersections without copying the publication's 10000 metre
+    coordinates.
+
+  input_contracts:
+    satellite_state: satellite_state_interpolation_contract
+    selected_event_range: selected_event_slant_range_derivation_contract
+    altitude_review: altitude_convention_review
+    antenna_reference_review: perth_ges_antenna_reference_evidence_review
+
+  source_altitude_treatment:
+    published_assumed_altitude_m: 10000.0
+    published_altitude_datum_status: NOT_EXPLICITLY_DEFINED
+    transformation_rule: PRESERVE_SELECTED_EVENT_SLANT_RANGE
+    copy_published_latitude_longitude_then_set_zero_altitude: PROHIBITED
+
+  target_surface:
+    horizontal_datum: WGS84
+    altitude_reference: WGS84_ELLIPSOIDAL_HEIGHT
+    altitude_m: 0.0
+    earth_model: EXISTING_REPOSITORY_WGS84_IMPLEMENTATION
+
+  provisional_geometry_inputs:
+    satellite_ecef_position_m:
+      x: 18178354.27195026
+      y: 38050848.06484729
+      z: 393043.6546171822
+    satellite_to_aircraft_slant_range_m: 37861969.39520467
+    input_status: PROVISIONAL_FROM_ROUNDED_PUBLISHED_GEOMETRY
+
+  solver_binding:
+    module: src/mh370_inverse_inference/satcom/locus.py
+    function: generate_surface_locus
+    implementation_status: REUSE_EXISTING_TESTED_L0_2_SOLVER
+    focused_test_result:
+      passed: 23
+      deselected: 588
+      warnings: 1
+
+  deterministic_parameters:
+    tolerance_m: 1.0
+    longitude:
+      minimum_deg: -180.0
+      maximum_deg: 180.0
+      step_deg: 1.0
+      bounds_inclusive: true
+    latitude:
+      minimum_deg: -90.0
+      maximum_deg: 90.0
+      step_deg: 1.0
+      bounds_inclusive: true
+    maximum_bisection_iterations: 64
+
+  root_policy:
+    latitude_bracketing: CONSECUTIVE_DECLARED_LATITUDE_SAMPLES
+    direct_sample_acceptance: ABSOLUTE_RESIDUAL_WITHIN_TOLERANCE
+    sign_change_refinement: DETERMINISTIC_BISECTION
+    emitted_roots: ALL_VALID_ROOTS_WITHIN_DECLARED_BOUNDS
+    geographic_branch_filtering: NONE
+    endpoint_policy: INCLUDE_DECLARED_BOUNDS
+    tangency_policy: >
+      Accept a tangent only when a declared latitude sample is within
+      residual tolerance; do not infer an unsampled tangent.
+    no_root_policy: EMIT_NO_POINT_FOR_LONGITUDE
+
+  output_policy:
+    geodetic_altitude_m: 0.0
+    ordering:
+      primary: LONGITUDE_ASCENDING
+      secondary: LATITUDE_ASCENDING
+    duplicate_suppression:
+      longitude_decimal_places: 12
+      latitude_decimal_places: 12
+    required_residual_invariant: >
+      absolute computed slant range minus target slant range must be
+      less than or equal to tolerance_m
+
+  independent_review_required:
+    - Confirm the source-to-target altitude reconciliation.
+    - Confirm the provisional geometry inputs against their source contracts.
+    - Confirm the full longitude and latitude sampling sequences.
+    - Confirm the all-roots policy introduces no unsupported geographic branch selection.
+    - Confirm tangency and endpoint handling.
+    - Independently reproduce every emitted coordinate and residual.
+
+  authority_boundary:
+    - This contract defines a proposed deterministic transformation only.
+    - It does not execute generate_surface_locus.
+    - It does not generate or admit Earth-surface coordinates.
+    - It does not select a northern or southern geographic branch.
+    - It does not promote the provisional satellite state or slant range.
+    - It does not authorize creation of benchmark_fixture.csv.
+    - It does not change any source admission status.
+
 admission_requirements_remaining:
   - Independently review reproduction of the published BTO model using the calibrated timing bias and published Perth GES ECEF vector, without introducing an unsupported separate phase-centre term.
-  - Define the altitude convention and reconcile the source publication's 10000 metre ring with the L0.4 zero-altitude fixture contract.
-  - Define a reproducible transformation from admitted source records to canonical WGS84 zero-altitude coordinates.
+  - Independently review the proposed slant-range-preserving reconciliation from the source publication's 10000 metre assumption to WGS84 zero ellipsoidal height.
+  - Independently review the deterministic solver binding, root policy, sampling sequence, tangency policy, and residual tolerance before execution.
   - Independently review the transformed coordinates.
   - Assign a stable benchmark_id.
   - Freeze benchmark_fixture.csv bytes and record their SHA-256 digest.
