@@ -438,7 +438,7 @@ selected_event_slant_range_derivation_contract:
   uncertainty_boundary:
     - The target-epoch satellite state is interpolated from rounded published nodes.
     - The Perth GES ECEF vector is rounded to 0.1 kilometre in the publication.
-    - No antenna phase-centre correction has been established or applied.
+    - No separate antenna phase-centre term is parameterized in the published BTO model or applied by this derivation.
     - Displayed digits are deterministic calculation output and do not imply equivalent physical precision.
     - Independent reproduction and review remain required.
 
@@ -451,7 +451,7 @@ selected_event_slant_range_derivation_contract:
     - It does not change any source admission status.
 
 perth_ges_antenna_reference_evidence_review:
-  review_status: PROPOSED_PENDING_AUTHORITATIVE_EVIDENCE
+  review_status: PROPOSED_MODEL_BOUNDED_PENDING_INDEPENDENT_REVIEW
   review_scope:
     - inmarsat-search-for-mh370-2014
     - atsb-bto-characteristics-2014
@@ -465,42 +465,47 @@ perth_ges_antenna_reference_evidence_review:
     approximate_component_resolution_m: 100.0
 
   evidence_findings:
-    - The Inmarsat publication supplies a rounded terminal ECEF vector.
-    - The refined BTO equation uses the satellite-to-Perth-GES range.
-    - The registered sources do not define the coordinate as an antenna phase centre.
-    - The registered sources do not identify a surveyed monument or station datum.
-    - The registered sources do not publish an antenna phase-centre correction vector.
-    - The registered sources do not establish that the required correction is zero.
+    - The Inmarsat publication supplies a rounded Perth GES ECEF vector.
+    - The refined BTO equation separately uses the satellite-to-Perth-GES geometric range.
+    - Fixed GES and AES timing delays are represented by the empirically calibrated BTO bias.
+    - The published BTO model does not introduce a separate antenna phase-centre correction parameter.
+    - The registered sources do not establish that any physical antenna-reference offset is zero.
+    - Reproducing the published model therefore does not require inventing an unsupported correction vector.
 
   correction_decision:
-    correction_status: NOT_ESTABLISHED_BY_REGISTERED_SOURCES
+    correction_status: NOT_SEPARATELY_PARAMETERIZED_IN_PUBLISHED_BTO_MODEL
     correction_applied: false
     correction_vector_m: null
     zero_correction_assumption_permitted: false
-    range_status: PROVISIONAL_PENDING_REFERENCE_RESOLUTION
+    range_status: PROVISIONAL_FROM_ROUNDED_PUBLISHED_GEOMETRY
 
-  evidence_required_for_resolution:
-    - Authoritative Inmarsat engineering documentation identifying the Perth GES coordinate reference point.
-    - A surveyed station or antenna-reference record tied to the published ECEF vector.
-    - A documented correction vector or authoritative confirmation that no correction is required.
-    - Independent review of the effect on the satellite-to-GES and satellite-to-aircraft ranges.
+  published_model_treatment:
+    fixed_timing_delays: EMPIRICALLY_ABSORBED_IN_CALIBRATED_BTO_BIAS
+    perth_ges_geometry: SUPPLIED_BY_PUBLISHED_ECEF_VECTOR
+    separate_phase_centre_term: NOT_PRESENT
+    implementation_rule: DO_NOT_INTRODUCE_UNSUPPORTED_GEOMETRIC_CORRECTION
+
+  independent_review_required:
+    - Confirm that the implementation reproduces the published refined BTO equation.
+    - Confirm that the calibrated timing bias remains distinct from the satellite-to-GES geometric range.
+    - Confirm that no unsupported antenna phase-centre term is introduced.
+    - Review the effect of rounded satellite and Perth GES source geometry on the provisional range.
 
   precision_boundary:
-    - The published ECEF components are rounded to 0.1 kilometre.
+    - The published Perth GES ECEF components are rounded to 0.1 kilometre.
     - The normalized metre representation does not establish metre-level physical accuracy.
-    - A correction cannot be inferred solely from the number of displayed digits.
-    - Absence of a published correction is not evidence of a zero correction.
+    - Absence of a separate published correction term is not evidence that a physical offset is zero.
+    - The provisional range remains limited by rounded published geometry and interpolation uncertainty.
 
   authority_boundary:
-    - This review records an unresolved evidence gap.
+    - This review records the treatment used by the reproducible published BTO model.
+    - It does not claim that the physical antenna-reference offset is zero.
     - It does not modify the published Perth GES vector.
-    - It does not authorize a zero-correction assumption.
     - It does not promote the provisional selected-event slant range.
-    - It does not authorize zero-altitude intersections.
+    - It does not authorize zero-altitude intersections until the remaining transformation gates are defined.
     - It does not authorize creation of benchmark_fixture.csv.
-
 admission_requirements_remaining:
-  - Confirm the Perth GES ECEF extraction and document whether any antenna phase-centre correction is required.
+  - Independently review reproduction of the published BTO model using the calibrated timing bias and published Perth GES ECEF vector, without introducing an unsupported separate phase-centre term.
   - Define the altitude convention and reconcile the source publication's 10000 metre ring with the L0.4 zero-altitude fixture contract.
   - Define a reproducible transformation from admitted source records to canonical WGS84 zero-altitude coordinates.
   - Independently review the transformed coordinates.
