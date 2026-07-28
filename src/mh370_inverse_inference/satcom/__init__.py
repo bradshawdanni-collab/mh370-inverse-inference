@@ -15,6 +15,10 @@ from mh370_inverse_inference.satcom.locus import (
     SurfaceLocusResult,
     generate_surface_locus,
 )
+from mh370_inverse_inference.satcom.published_bto import (
+    generate_published_bto_zero_height_locus,
+    published_bto_aircraft_range_m,
+)
 from mh370_inverse_inference.satcom.satellite import (
     ECEFVelocity,
     SatellitePosition,
@@ -67,11 +71,13 @@ __all__ = [
     "ecef_to_geodetic",
     "export_uncertainty_bands_csv",
     "export_uncertainty_bands_geojson",
+    "generate_published_bto_zero_height_locus",
     "generate_surface_locus",
     "generate_uncertainty_bands",
     "geodetic_to_ecef",
     "interpolate_satellite_state_cubic_hermite",
     "normalize_longitude_deg",
+    "published_bto_aircraft_range_m",
     "slant_range_m",
     "timing_error_to_range_m",
 ]
