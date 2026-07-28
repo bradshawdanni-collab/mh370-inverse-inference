@@ -1,7 +1,8 @@
 schema_version: 1
 issue: 172
-register_status: PROPOSED
-review_date: "2026-07-19"
+register_status: PROPOSED_PENDING_FINAL_ADMISSION_REVIEW
+review_date: "2026-07-29"
+benchmark_id: mh370-seventh-arc-published-bto-v1
 
 artifacts:
   - artifact_id: atsb-bto-characteristics-2014
@@ -34,11 +35,11 @@ artifacts:
     uncertainty_notes:
       - The fact sheet reports non-Gaussian timing error components and treats individual MH370 measurements separately.
       - The fact sheet does not publish a machine-readable benchmark coordinate sequence.
-      - The fact sheet alone cannot produce benchmark_fixture.csv.
+      - The fact sheet is retained as methodology and uncertainty context rather than as the direct coordinate source for benchmark_fixture.csv.
 
   - artifact_id: atsb-signalling-unit-logs-2017
-    admission_status: PROPOSED
-    benchmark_id: null
+    admission_status: PROPOSED_PENDING_FINAL_ADMISSION_REVIEW
+    benchmark_id: mh370-seventh-arc-published-bto-v1
     publisher: Australian Transport Safety Bureau
     publication_title: MH370 Update to Signalling Unit Logs
     publication_type: Educational Fact Sheet with amended data-communication log attachment
@@ -62,15 +63,18 @@ artifacts:
         - Only R-channel messages carry the BTO values used for distance analysis.
         - R600 values require a 4600 microsecond calibration subtraction when compared with R1200 values.
         - The ATSB notes that this calibration applies to the 18:25:27 and 00:19:29 logon requests.
-    transformation_history: []
+    transformation_history:
+      - Select the 2014-03-08T00:19:29.416Z R600 Logon Request with raw BTO 23000 microseconds.
+      - Apply the declared 4600 microsecond R600 calibration subtraction to obtain corrected BTO 18400 microseconds.
+      - Exclude the 2014-03-08T00:19:37.443Z R1200 record from the refined benchmark event.
     uncertainty_notes:
-      - Multiple transmissions occur around some handshake events; choosing one record per benchmark epoch is a transformation decision that must be declared.
+      - Multiple transmissions occur around some handshake events; the selected event and calibration rule are explicitly frozen in this register.
       - The logs do not publish Earth-surface benchmark coordinates.
-      - Satellite ephemeris, calibration constants, and a reproducible coordinate-generation method remain required.
+      - Earth-surface coordinates are derived only through the separately frozen Inmarsat geometry, WGS84 transformation, sampling, and review artifacts.
 
   - artifact_id: inmarsat-search-for-mh370-2014
-    admission_status: PROPOSED
-    benchmark_id: null
+    admission_status: PROPOSED_PENDING_FINAL_ADMISSION_REVIEW
+    benchmark_id: mh370-seventh-arc-published-bto-v1
     publisher: The Royal Institute of Navigation
     publication_title: The Search for MH370
     publication_type: Open-access research article authored by Inmarsat engineers
@@ -131,12 +135,21 @@ artifacts:
         - Reports Perth GES ECEF coordinates in Table 2.
         - Reports Inmarsat-3 F1 ECEF position and velocity nodes in Table 4.
         - States that the 00:19:37 logon-sequence BTO must be ignored and that 18400 microseconds is derived from the 00:19:29 Logon Request.
-    transformation_history: []
+    transformation_history:
+      - Freeze published Table 4 00:10 and 00:20 ECEF endpoint values as inmarsat-3f1-table4-endpoints-20140308.
+      - Apply the frozen cubic-Hermite transformation inmarsat-3f1-hermite-transform-v1 at target offset 569.416 seconds.
+      - Freeze the derived target state inmarsat-3f1-table4-target-state-20140308T001929416Z and independently review its numerical reproduction.
+      - Freeze Perth GES Table 2 ECEF geometry and reproduce the published BTO model without inventing an unreported phase-centre correction.
+      - Preserve the source publication's assumed 10000 metre in-flight ring separately from the canonical WGS84 zero-ellipsoidal-height fixture surface.
+      - Apply mh370-seventh-arc-bto-wgs84-transform-v1 to derive satellite-to-aircraft range 37861969.39520467 metres and independently reproduce that transformation.
+      - Apply mh370-seventh-arc-canonical-fixture-sampling-v1 to sample all distinct zero-height roots at integer longitudes on the half-open [-180, 180) domain.
+      - Independently review the exact 176-point sequence and freeze benchmark_fixture.csv bytes with SHA-256 3ae049f3de7383a433cb8b0b2e1a83e503da99d0dd6e0e96bb9cc39b530cd5a7.
     uncertainty_notes:
-      - Table 4 supplies nodes at 00:10:00 and 00:20:00, not an exact 00:19:29 state vector.
-      - An interpolation contract must be specified and independently tested before deriving the 00:19:29 satellite state.
-      - The publication supplies an approximate Perth latitude and longitude but no ellipsoidal height; the tabulated ECEF vector is the preferred extracted geometry value.
-      - The article uses 10000 metres assumed cruising altitude for the published in-flight rings; L0.4 currently requires zero-altitude benchmark coordinates, so any transformation must explicitly declare that difference.
+      - Table 4 endpoint values are rounded to the precision published in the source.
+      - The exact 00:19:29.416Z satellite state is interpolation-derived rather than an exact published operational ephemeris row.
+      - The publication supplies an approximate Perth latitude and longitude but no ellipsoidal height; the tabulated ECEF vector is used for published-model reproduction without claiming surveyed RF phase-centre identity.
+      - The article uses 10000 metres assumed cruising altitude for published in-flight rings; the canonical fixture instead recomputes the range constraint on WGS84 ellipsoidal height 0 metres.
+      - The fixture is a deterministic sampled representation of the zero-height locus, not a directly published coordinate sequence and not an inferred aircraft location.
 
 candidate_extraction_review:
   admission_status: EXCLUDED_FROM_ADMISSION
@@ -170,14 +183,15 @@ rejected_derivations:
       corrected_bto_microseconds: 18400
       fixed_processing_bias_microseconds: -495679
       range_equation: satellite_aircraft_range = c * (BTO - bias) / 2 - satellite_GES_range
-      unresolved_inputs:
-        - exact epoch satellite ECEF state
-        - Perth GES geometry
-        - declared altitude convention
-        - deterministic sphere-to-WGS84 intersection method
+      replacement_inputs_resolved_by:
+        - inmarsat-3f1-table4-target-state-20140308T001929416Z
+        - perth-ges-table2-ecef-geometry-v1
+        - mh370-seventh-arc-altitude-convention-v1
+        - mh370-seventh-arc-bto-wgs84-transform-v1
+        - mh370-seventh-arc-bto-wgs84-independent-reproduction-v1
 
 benchmark_event_selection_contract:
-  contract_status: PROPOSED_PENDING_INDEPENDENT_REVIEW
+  contract_status: FROZEN_PROPOSED_PENDING_FINAL_ADMISSION_REVIEW
   benchmark_role: seventh_arc_bto_event
   benchmark_epoch_utc: "2014-03-08T00:19:29.416Z"
 
@@ -212,21 +226,81 @@ benchmark_event_selection_contract:
 
   authority_boundary:
     - This contract selects and calibrates a source record only.
-    - It does not define the exact satellite state at the selected epoch.
-    - It does not generate Earth-surface coordinates or benchmark_fixture.csv.
+    - It does not represent derived Earth-surface coordinates as directly published coordinates.
+    - Final benchmark admission remains subject to the Issue #172 admission review.
+
+benchmark_transformation_history:
+  status: COMPLETE_PENDING_FINAL_ADMISSION_REVIEW
+  steps:
+    - order: 1
+      operation: SELECT_AND_CALIBRATE_BTO_EVENT
+      output: corrected_bto_microseconds=18400
+    - order: 2
+      operation: FREEZE_TABLE4_SATELLITE_ENDPOINTS
+      artifact_id: inmarsat-3f1-table4-endpoints-20140308
+      sha256: 835c5a93ca9af0c618bb692404a8af59a079aa08af3188df0abcaa3b515eebbc
+    - order: 3
+      operation: CUBIC_HERMITE_INTERPOLATION_AT_569_416_SECONDS
+      artifact_id: inmarsat-3f1-table4-target-state-20140308T001929416Z
+      sha256: c61f400c8b27b07b3acc57701d958068ee8cbb2654a5e325e3f2d0f0cb166452
+    - order: 4
+      operation: FREEZE_PERTH_GES_TABLE2_ECEF_GEOMETRY
+      artifact_id: perth-ges-table2-ecef-geometry-v1
+      sha256: 59db12275ff74a4469ff3676c0c07319df66d33234e657c52fe8de1f2384f88a
+    - order: 5
+      operation: FREEZE_WGS84_ZERO_ELLIPSOIDAL_HEIGHT_CONVENTION
+      artifact_id: mh370-seventh-arc-altitude-convention-v1
+      sha256: 04006848dd912fc1d106cb095f2b8bd065689d947639c44e2dfcd37b80209319
+    - order: 6
+      operation: DERIVE_BTO_RANGE_AND_ZERO_HEIGHT_LOCUS
+      artifact_id: mh370-seventh-arc-bto-wgs84-transform-v1
+      sha256: 4142c33134df8704a466e037b0e1cb065116daea06b74307a986274509f2db21
+    - order: 7
+      operation: INDEPENDENTLY_REPRODUCE_TRANSFORMATION
+      review_id: mh370-seventh-arc-bto-wgs84-independent-reproduction-v1
+      sha256: 7d5945d3c1d1cbb0328d6316ee0ac3508c3077af0c7457fd4c1b294ba03aa83e
+    - order: 8
+      operation: SAMPLE_AND_SERIALIZE_CANONICAL_FIXTURE
+      artifact_id: mh370-seventh-arc-canonical-fixture-sampling-v1
+      sha256: 1974f6c5e4be64b211248a34fecbf9d51aa74a9e68e03081a20e5aae4b1a8732
+    - order: 9
+      operation: INDEPENDENTLY_REVIEW_EXACT_FIXTURE_SEQUENCE
+      review_id: mh370-seventh-arc-canonical-fixture-independent-review-v1
+      sha256: efc2f18255b934c0d1986e106b722c1fff5dc1f85fe82cacacb00a8b6639a66c
+    - order: 10
+      operation: FREEZE_FIXTURE_BYTES_AND_SHA256
+      filename: data/satcom/published/benchmark_fixture.csv
+      sha256: 3ae049f3de7383a433cb8b0b2e1a83e503da99d0dd6e0e96bb9cc39b530cd5a7
 
 admission_requirements_remaining:
-  - Define and test the satellite-state interpolation rule for the exact 00:19:29 epoch or obtain an independently verified exact ephemeris vector.
-  - Confirm the Perth GES ECEF extraction and document whether any antenna phase-centre correction is required.
-  - Define the altitude convention and reconcile the source publication's 10000 metre ring with the L0.4 zero-altitude fixture contract.
-  - Define a reproducible transformation from admitted source records to canonical WGS84 zero-altitude coordinates.
-  - Independently review the transformed coordinates.
-  - Assign a stable benchmark_id.
-  - Freeze benchmark_fixture.csv bytes and record their SHA-256 digest.
-  - Change admission_status only through Issue #172 review.
+  - Run the final Issue #172 admission review across source metadata, usage basis, event selection, hashes, transformation history, sampling contract, independent reviews, fixture schema, and fixture bytes.
+  - Change source and fixture admission_status to ADMITTED only after that final review passes.
 
 fixture:
+  artifact_id: mh370-seventh-arc-published-bto-v1-fixture
+  benchmark_id: mh370-seventh-arc-published-bto-v1
   filename: data/satcom/published/benchmark_fixture.csv
-  admission_status: NOT_CREATED
-  sha256: null
-  prohibition: Do not create or populate until all admission requirements are complete.
+  admission_status: FROZEN_PROPOSED_PENDING_FINAL_ADMISSION_REVIEW
+  sha256: 3ae049f3de7383a433cb8b0b2e1a83e503da99d0dd6e0e96bb9cc39b530cd5a7
+  byte_length: 7798
+  point_count: 176
+  coordinate_reference_system: WGS84 geodetic, EPSG:4979 semantics at ellipsoidal height 0 metres
+  units:
+    longitude: degrees
+    latitude: degrees
+    altitude: metres
+  schema: point_id,sequence_index,longitude_deg,latitude_deg,altitude_m
+  sampling_artifact_id: mh370-seventh-arc-canonical-fixture-sampling-v1
+  sampling_sha256: 1974f6c5e4be64b211248a34fecbf9d51aa74a9e68e03081a20e5aae4b1a8732
+  independent_review_id: mh370-seventh-arc-canonical-fixture-independent-review-v1
+  independent_review_sha256: efc2f18255b934c0d1986e106b722c1fff5dc1f85fe82cacacb00a8b6639a66c
+  output_classification: DERIVED_FROM_PUBLISHED_EVIDENCE
+  directly_published_coordinates: false
+  assumptions_and_limitations:
+    - The fixture samples both distinct range-constraint roots at each integer longitude where roots are present; it applies no north/south branch preference.
+    - The longitude domain is half-open [-180, 180) to avoid duplicate antimeridian representation.
+    - Unsampled tangency endpoints between integer meridians are not synthesized.
+    - Latitude values are serialized to 10 decimal places after deterministic root solving with a 0.01 metre slant-range residual tolerance.
+    - Upstream published satellite and Perth GES ECEF values are rounded to the precision reported by the source.
+    - The fixture is suitable only as a deterministic validation reference after final admission and is not a crash-location, ranking, or search-area claim.
+  admission_gate: Do not mark ADMITTED or unblock Issue #7 until the final Issue #172 admission review passes.
