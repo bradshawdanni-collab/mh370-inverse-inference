@@ -1,0 +1,69 @@
+schema_version: 1
+review_id: mh370-seventh-arc-canonical-fixture-independent-review-v1
+issue: 172
+benchmark_id: mh370-seventh-arc-published-bto-v1
+status: REVIEWED_METHOD_INDEPENDENT
+external_third_party_signoff: NOT_CLAIMED
+
+scope:
+  fixture_filename: data/satcom/published/benchmark_fixture.csv
+  fixture_sha256: 3ae049f3de7383a433cb8b0b2e1a83e503da99d0dd6e0e96bb9cc39b530cd5a7
+  sampling_artifact_id: mh370-seventh-arc-canonical-fixture-sampling-v1
+  sampling_sha256: 1974f6c5e4be64b211248a34fecbf9d51aa74a9e68e03081a20e5aae4b1a8732
+  reviewed_point_count: 176
+
+independent_method:
+  target_range:
+    arithmetic: DECIMAL_60_DIGIT
+    reproduced_m: 37861969.3952046868537912093179490665928265592794054035211922
+    frozen_binary64_m: 37861969.39520467
+    absolute_difference_m: 1.6853791209317949e-8
+  coordinate_transform:
+    library: pyproj
+    geodetic_crs: EPSG:4979
+    ecef_crs: EPSG:4978
+    production_wgs84_conversion_called: false
+  root_solver:
+    latitude_scan_step_deg: 0.1
+    solver: INDEPENDENT_BRACKETED_BISECTION
+    slant_range_residual_tolerance_m: 1.0e-7
+    production_surface_locus_solver_called: false
+    production_published_bto_wrapper_called: false
+
+sequence_review:
+  exact_header: PASS
+  utf8_lf_serialization: PASS
+  final_newline: PASS
+  contiguous_zero_based_sequence_index: PASS
+  deterministic_point_ids: PASS
+  longitude_then_latitude_ordering: PASS
+  all_altitude_values_zero_m: PASS
+  duplicate_points: NONE
+  sampled_longitudes_with_roots:
+    first_deg: 21.0
+    last_deg: 108.0
+    count: 88
+  roots_per_included_longitude: 2
+  branch_preference: NONE
+  reviewed_point_count: 176
+
+numerical_comparison:
+  maximum_fixture_slant_range_residual_m: 0.009976580739021301
+  maximum_independent_slant_range_residual_m: 9.685754776000977e-8
+  maximum_latitude_difference_deg: 6.897403643790767e-7
+  maximum_ecef_point_separation_m: 0.0762897467236152
+  mean_ecef_point_separation_m: 0.009296984262619786
+  interpretation: >
+    The independently solved roots reproduce the exact frozen fixture sequence
+    within the declared 0.01 metre production slant-range stopping tolerance.
+    The remaining coordinate differences are numerical solver and serialization
+    effects and are not treated as evidence disagreement.
+
+authority_boundary:
+  - The fixture is derived from frozen published-source inputs and deterministic transformations.
+  - The fixture coordinates are not represented as directly published coordinates.
+  - This review is method-independent computational review, not external institutional sign-off.
+  - This review does not admit the fixture for Issue #7 consumption.
+  - No BFO processing, inference, ranking, endpoint selection, search recommendation, or crash-location claim is made.
+
+disposition: PASS_FOR_PROGRESS_TO_FINAL_ADMISSION_REVIEW
