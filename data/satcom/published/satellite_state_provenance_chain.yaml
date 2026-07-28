@@ -79,6 +79,15 @@ transformation_artifacts:
     output_surface: WGS84_ZERO_ELLIPSOIDAL_HEIGHT
     output_classification: DERIVED_FROM_PUBLISHED_EVIDENCE
     disposition: PASS_FOR_PROGRESS_TO_INDEPENDENT_TRANSFORMATION_REPRODUCTION
+transformation_review_artifacts:
+  - review_id: mh370-seventh-arc-bto-wgs84-independent-reproduction-v1
+    filename: data/satcom/published/seventh_arc_bto_wgs84_independent_reproduction_v1.yaml
+    sha256: 7d5945d3c1d1cbb0328d6316ee0ac3508c3077af0c7457fd4c1b294ba03aa83e
+    status: REVIEWED_METHOD_INDEPENDENT
+    external_third_party_signoff: NOT_CLAIMED
+    matched_point_count: 16
+    maximum_ecef_point_separation_m: 1.5278604724812659
+    disposition: PASS_FOR_PROGRESS_TO_CANONICAL_FIXTURE_SAMPLING_AND_FREEZE
 chain_semantics:
   - Published source bytes remain distinct from extracted values.
   - Extracted endpoint values remain distinct from deterministic interpolation.
@@ -89,7 +98,9 @@ chain_semantics:
   - The publication's 10000 metre ring assumption remains distinct from the canonical WGS84 zero-ellipsoidal-height fixture surface.
   - Zero-height fixture coordinates must be recomputed from the frozen BTO and geometry inputs and are derived artifacts, not directly published coordinates.
   - The deterministic BTO transformation derives a zero-height WGS84 locus but does not create or admit benchmark_fixture.csv.
+  - The independent transformation review reproduces the range and zero-height locus without using the production published-BTO wrapper for its independent calculation.
+  - The independent review's coordinate separation is evaluated against the implementation-regression solver configuration and does not freeze canonical fixture sampling.
   - Historical TLE/SGP4 data is secondary corroboration only.
   - No layer in this chain independently admits benchmark_fixture.csv.
 next_gate:
-  - Independently reproduce the BTO range and zero-height WGS84 locus without calling the production transformation wrapper before benchmark_fixture.csv is created.
+  - Define and freeze canonical benchmark fixture sampling, generate and independently review the exact zero-height coordinate sequence, then freeze benchmark_fixture.csv bytes and SHA-256 before final Issue #172 admission review.
