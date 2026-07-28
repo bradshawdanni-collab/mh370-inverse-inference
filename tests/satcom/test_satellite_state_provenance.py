@@ -17,7 +17,7 @@ TARGET_STATE_SHA256 = "c61f400c8b27b07b3acc57701d958068ee8cbb2654a5e325e3f2d0f0c
 SOURCE_PDF_SHA256 = "2ff0f10c1cf0bad299e5398ad9019a113963f6a5bd86b96bf4d04d330bc08028"
 PROOF_SHA256 = "6ac053c8417707c71766b5a90981e406d77a4f3e6cdbc36553b705ce6284ae4a"
 REVIEW_SHA256 = "f661f502be4d267a583b7efd1f770a445cbdbe478f17acfa8339978bde1d0dce"
-PENDING_FIXTURE_STATUS = "FROZEN_PROPOSED_PENDING_FINAL_ADMISSION_REVIEW"
+ADMITTED_FIXTURE_STATUS = "ADMITTED"
 
 FROZEN_HASHES = {
     "inmarsat_3f1_table4_endpoints.yaml": ENDPOINTS_SHA256,
@@ -129,7 +129,7 @@ def test_satellite_state_review_matches_recorded_sha256() -> None:
     assert _sha256(review_path) == REVIEW_SHA256
 
 
-def test_provenance_chain_preserves_satellite_review_after_fixture_freeze() -> None:
+def test_provenance_chain_preserves_satellite_review_after_admission() -> None:
     chain_path = PUBLISHED_DIR / "satellite_state_provenance_chain.yaml"
     chain = chain_path.read_text(encoding="utf-8")
     fixture_path = PUBLISHED_DIR / "benchmark_fixture.csv"
@@ -141,9 +141,9 @@ def test_provenance_chain_preserves_satellite_review_after_fixture_freeze() -> N
     assert REVIEW_SHA256 in chain
     assert "PASS_FOR_PROGRESS_TO_PERTH_GES" in chain
     assert "benchmark_fixture.csv" in chain
-    assert f"status: {PENDING_FIXTURE_STATUS}" in chain
+    assert f"status: {ADMITTED_FIXTURE_STATUS}" in chain
+    assert "mh370-seventh-arc-final-admission-review-v1" in chain
     assert fixture_path.exists()
-    assert "status: ADMITTED" not in chain
 
 
 def test_independent_binary64_reproduction_matches_frozen_target_state() -> None:
