@@ -1,0 +1,46 @@
+schema_version: 1
+artifact_id: inmarsat-3f1-table4-endpoints-20140308
+record_type: published_endpoint_extraction
+status: PROPOSED_PENDING_INDEPENDENT_REVIEW
+source:
+  source_artifact_id: inmarsat-search-for-mh370-2014
+  publisher: The Royal Institute of Navigation
+  publication_title: The Search for MH370
+  publication_section: Table 4 - Satellite Location and Velocity (ECEF)
+  source_class: PRIMARY_PUBLISHED_INMARSAT_ECEF
+  source_sha256: 2ff0f10c1cf0bad299e5398ad9019a113963f6a5bd86b96bf4d04d330bc08028
+reference_frame:
+  name: Earth-Centred Earth-Fixed
+  abbreviation: ECEF
+units:
+  position: kilometres
+  velocity: kilometres_per_second
+  time: UTC
+endpoints:
+  - epoch_utc: "2014-03-08T00:10:00Z"
+    position_km:
+      x: 18177.5
+      y: 38051.7
+      z: 440.0
+    velocity_km_s:
+      x: 0.00160
+      y: -0.00151
+      z: -0.08188
+  - epoch_utc: "2014-03-08T00:20:00Z"
+    position_km:
+      x: 18178.4
+      y: 38050.8
+      z: 390.5
+    velocity_km_s:
+      x: 0.00150
+      y: -0.00158
+      z: -0.08321
+extraction:
+  method: manual_table_transcription_verified_against_registered_source
+  transformations_applied: []
+limitations:
+  - Published endpoint values are rounded to the precision shown in Table 4.
+  - This record contains published endpoint values only and does not contain an exact 00:19:29.416 ephemeris row.
+hash_scope:
+  encoding: UTF-8
+  bytes: exact_file_bytes
