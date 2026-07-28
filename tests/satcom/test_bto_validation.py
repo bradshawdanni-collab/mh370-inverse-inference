@@ -383,8 +383,9 @@ def test_validation_json_is_stable_machine_readable_output() -> None:
 def test_admitted_fixture_is_consumed_exactly_without_regeneration() -> None:
     fixture_bytes = FIXTURE_PATH.read_bytes()
     benchmark = load_admitted_seventh_arc_benchmark(fixture_bytes)
+    fixture_sha256 = hashlib.sha256(fixture_bytes).hexdigest()
 
-    assert hashlib.sha256(fixture_bytes).hexdigest() == ADMITTED_SEVENTH_ARC_FIXTURE_SHA256
+    assert fixture_sha256 == ADMITTED_SEVENTH_ARC_FIXTURE_SHA256
     assert benchmark.benchmark_id == ADMITTED_SEVENTH_ARC_BENCHMARK_ID
     assert benchmark.fixture_sha256 == ADMITTED_SEVENTH_ARC_FIXTURE_SHA256
     assert len(benchmark.points) == 176
