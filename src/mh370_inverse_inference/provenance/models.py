@@ -199,10 +199,7 @@ class ArtifactProvenanceRecord:
         _non_empty_tuple(self.uncertainty_notes, "uncertainty_notes")
         _non_empty_tuple(self.limitations, "limitations")
         if self.contract_version != PROVENANCE_CONTRACT_VERSION:
-            raise ValueError(
-                "contract_version must be "
-                f"{PROVENANCE_CONTRACT_VERSION}"
-            )
+            raise ValueError(f"contract_version must be {PROVENANCE_CONTRACT_VERSION}")
         self._validate_source_boundary()
         self._validate_transformations()
         self._validate_supersession()
@@ -300,10 +297,7 @@ class ValidationReportRecord:
         _non_empty(self.model_version, "model_version")
         _non_empty(self.configuration_id, "configuration_id")
         if self.contract_version != PROVENANCE_CONTRACT_VERSION:
-            raise ValueError(
-                "contract_version must be "
-                f"{PROVENANCE_CONTRACT_VERSION}"
-            )
+            raise ValueError(f"contract_version must be {PROVENANCE_CONTRACT_VERSION}")
 
     def to_payload(self) -> dict[str, Any]:
         """Return the canonical validation-report payload."""
