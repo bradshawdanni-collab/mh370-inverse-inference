@@ -166,11 +166,14 @@ def test_registry_lookup_requires_exact_version_and_never_falls_back() -> None:
     assert lookup_record(snapshot, "artifact-a", "v1") == v1
     assert lookup_record(snapshot, "artifact-a", "v2") is None
     assert contains_reference(snapshot, v1.artifact) is True
-    assert contains_reference(
-        snapshot,
-        ArtifactReference(
-            artifact_id="artifact-a",
-            version="v1",
-            sha256="0" * 64,
-        ),
-    ) is False
+    assert (
+        contains_reference(
+            snapshot,
+            ArtifactReference(
+                artifact_id="artifact-a",
+                version="v1",
+                sha256="0" * 64,
+            ),
+        )
+        is False
+    )
