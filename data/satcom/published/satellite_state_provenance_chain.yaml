@@ -52,13 +52,22 @@ review_artifacts:
     status: REVIEWED_METHOD_INDEPENDENT
     external_third_party_signoff: NOT_CLAIMED
     disposition: PASS_FOR_PROGRESS_TO_PERTH_GES
+geometry_artifacts:
+  - artifact_id: perth-ges-table2-ecef-geometry-v1
+    filename: data/satcom/published/perth_ges_table2_ecef_geometry_v1.yaml
+    sha256: 59db12275ff74a4469ff3676c0c07319df66d33234e657c52fe8de1f2384f88a
+    status: REVIEWED_FOR_PUBLISHED_MODEL_REPRODUCTION
+    operational_reference_decision: USE_PUBLISHED_TABLE2_ECEF_VECTOR_WITHOUT_ADDITIONAL_GEOMETRIC_CORRECTION
+    external_phase_centre_identity_claimed: false
+    disposition: PASS_FOR_PROGRESS_TO_ALTITUDE_CONVENTION
 chain_semantics:
   - Published source bytes remain distinct from extracted values.
   - Extracted endpoint values remain distinct from deterministic interpolation.
   - The derived target state is not represented as an exact published ephemeris row.
   - The mathematical proof verifies the declared transform but does not promote admission state.
   - The method-independent review closes only the satellite-state review subgate and is not an external institutional sign-off.
+  - The Perth GES artifact fixes the geometry reference used to reproduce the published BTO model without asserting a surveyed RF phase-centre coordinate.
   - Historical TLE/SGP4 data is secondary corroboration only.
   - No layer in this chain independently admits benchmark_fixture.csv.
 next_gate:
-  - Freeze and review the Perth GES ECEF geometry and its operational reference treatment.
+  - Define and freeze the altitude convention separating the publication's 10000 metre rings from the repository's WGS84 zero-altitude fixture contract.
