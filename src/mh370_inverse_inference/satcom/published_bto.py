@@ -5,7 +5,10 @@ from __future__ import annotations
 import math
 
 from mh370_inverse_inference.satcom.bto import SPEED_OF_LIGHT_M_S
-from mh370_inverse_inference.satcom.locus import SurfaceLocusResult, generate_surface_locus
+from mh370_inverse_inference.satcom.locus import (
+    SurfaceLocusResult,
+    generate_surface_locus,
+)
 from mh370_inverse_inference.satcom.satellite import SatellitePosition
 from mh370_inverse_inference.satcom.wgs84 import ECEFPoint, ecef_distance_m
 
