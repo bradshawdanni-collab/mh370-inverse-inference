@@ -69,6 +69,16 @@ altitude_artifacts:
     canonical_fixture_ellipsoidal_height_m: 0.0
     normalization_decision: RECOMPUTE_BTO_LOCUS_ON_WGS84_ZERO_ELLIPSOIDAL_HEIGHT
     disposition: PASS_FOR_PROGRESS_TO_DETERMINISTIC_WGS84_TRANSFORMATION
+transformation_artifacts:
+  - artifact_id: mh370-seventh-arc-bto-wgs84-transform-v1
+    filename: data/satcom/published/seventh_arc_bto_wgs84_transform_v1.yaml
+    sha256: 4142c33134df8704a466e037b0e1cb065116daea06b74307a986274509f2db21
+    status: IMPLEMENTED_PENDING_INDEPENDENT_REPRODUCTION
+    satellite_to_ges_range_m: 39196534.11288632
+    satellite_to_aircraft_range_m: 37861969.39520467
+    output_surface: WGS84_ZERO_ELLIPSOIDAL_HEIGHT
+    output_classification: DERIVED_FROM_PUBLISHED_EVIDENCE
+    disposition: PASS_FOR_PROGRESS_TO_INDEPENDENT_TRANSFORMATION_REPRODUCTION
 chain_semantics:
   - Published source bytes remain distinct from extracted values.
   - Extracted endpoint values remain distinct from deterministic interpolation.
@@ -78,7 +88,8 @@ chain_semantics:
   - The Perth GES artifact fixes the geometry reference used to reproduce the published BTO model without asserting a surveyed RF phase-centre coordinate.
   - The publication's 10000 metre ring assumption remains distinct from the canonical WGS84 zero-ellipsoidal-height fixture surface.
   - Zero-height fixture coordinates must be recomputed from the frozen BTO and geometry inputs and are derived artifacts, not directly published coordinates.
+  - The deterministic BTO transformation derives a zero-height WGS84 locus but does not create or admit benchmark_fixture.csv.
   - Historical TLE/SGP4 data is secondary corroboration only.
   - No layer in this chain independently admits benchmark_fixture.csv.
 next_gate:
-  - Implement and independently verify the deterministic BTO-to-WGS84 zero-ellipsoidal-height transformation before benchmark_fixture.csv is created.
+  - Independently reproduce the BTO range and zero-height WGS84 locus without calling the production transformation wrapper before benchmark_fixture.csv is created.
