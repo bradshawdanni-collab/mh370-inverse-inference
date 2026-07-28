@@ -1,0 +1,97 @@
+schema_version: 1
+artifact_id: mh370-seventh-arc-bto-wgs84-transform-v1
+issue: 172
+benchmark_id: mh370-seventh-arc-published-bto-v1
+status: IMPLEMENTED_PENDING_INDEPENDENT_REPRODUCTION
+
+purpose: >
+  Freeze the deterministic transformation contract from the selected corrected
+  seventh-arc BTO measurement to a WGS84 zero-ellipsoidal-height surface locus.
+  This artifact defines the calculation and implementation boundary only; it
+  does not create benchmark_fixture.csv or promote benchmark admission.
+
+inputs:
+  corrected_bto_microseconds:
+    value: 18400.0
+    source_contract: benchmark_event_selection_contract
+  fixed_processing_bias_microseconds:
+    value: -495679.0
+    source_artifact_id: inmarsat-search-for-mh370-2014
+  satellite_state:
+    artifact_id: inmarsat-3f1-table4-target-state-20140308T001929416Z
+    sha256: c61f400c8b27b07b3acc57701d958068ee8cbb2654a5e325e3f2d0f0cb166452
+    epoch_utc: "2014-03-08T00:19:29.416Z"
+    ecef_m:
+      x: 18178354.27195026
+      y: 38050848.06484729
+      z: 393043.6546171822
+  perth_ges_geometry:
+    artifact_id: perth-ges-table2-ecef-geometry-v1
+    sha256: 59db12275ff74a4469ff3676c0c07319df66d33234e657c52fe8de1f2384f88a
+    ecef_m:
+      x: -2368800.0
+      y: 4881100.0
+      z: -3342000.0
+  altitude_convention:
+    artifact_id: mh370-seventh-arc-altitude-convention-v1
+    sha256: 04006848dd912fc1d106cb095f2b8bd065689d947639c44e2dfcd37b80209319
+    target_surface: WGS84_ZERO_ELLIPSOIDAL_HEIGHT
+
+constants:
+  speed_of_light_m_s: 299792458.0
+
+range_equation:
+  bto_timing_seconds: "(corrected_bto_microseconds - fixed_processing_bias_microseconds) * 1e-6"
+  bto_half_path_m: "speed_of_light_m_s * bto_timing_seconds / 2"
+  satellite_to_ges_range_m: "euclidean_norm(satellite_ecef_m - perth_ges_ecef_m)"
+  satellite_to_aircraft_range_m: "bto_half_path_m - satellite_to_ges_range_m"
+
+derived_reference_values:
+  bto_timing_seconds: 0.514079
+  bto_half_path_m: 77058503.50809099
+  satellite_to_ges_range_m: 39196534.11288632
+  satellite_to_aircraft_range_m: 37861969.39520467
+
+implementation:
+  range_function: mh370_inverse_inference.satcom.published_bto.published_bto_aircraft_range_m
+  locus_function: mh370_inverse_inference.satcom.published_bto.generate_published_bto_zero_height_locus
+  surface_solver: mh370_inverse_inference.satcom.locus.generate_surface_locus
+  output_surface:
+    horizontal_reference: WGS84
+    vertical_reference: WGS84_ELLIPSOID
+    ellipsoidal_height_m: 0.0
+  deterministic: true
+  network_access: false
+
+verification_configuration:
+  role: IMPLEMENTATION_REGRESSION_ONLY_NOT_FINAL_FIXTURE_SAMPLING
+  tolerance_m: 1.0
+  longitude_step_deg: 10.0
+  latitude_step_deg: 5.0
+  minimum_longitude_deg: -180.0
+  maximum_longitude_deg: 180.0
+  minimum_latitude_deg: -90.0
+  maximum_latitude_deg: 90.0
+  maximum_iterations: 64
+  note: >
+    Canonical benchmark fixture sampling and exact output bytes are intentionally
+    not frozen by this transformation gate.
+
+classification:
+  output_coordinates: DERIVED_FROM_PUBLISHED_EVIDENCE
+  directly_published_coordinates: false
+  inferred_aircraft_location: false
+  ranked_location_output: false
+
+governance:
+  benchmark_fixture_csv_status: NOT_CREATED
+  independent_transformation_reproduction_complete: false
+  admission_promoted: false
+  bfo_processing: false
+  inference_or_ranking: false
+  crash_location_claim: false
+
+next_gate: >
+  Independently reproduce the range calculation and zero-height WGS84 locus
+  without calling the production transformation wrapper; record numerical
+  residuals before benchmark_fixture.csv bytes are created.
