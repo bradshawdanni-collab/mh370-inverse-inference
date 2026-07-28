@@ -190,8 +190,7 @@ class ArtifactProvenanceRecord:
         if type(self.transformation_history) is not tuple:
             raise TypeError("transformation_history must be tuple")
         if any(
-            type(step) is not TransformationStep
-            for step in self.transformation_history
+            type(step) is not TransformationStep for step in self.transformation_history
         ):
             raise TypeError(
                 "transformation_history must contain TransformationStep values"
@@ -213,9 +212,7 @@ class ArtifactProvenanceRecord:
                     "SOURCE artifact cannot include transformation_history"
                 )
             if self.artifact.sha256 != self.source.content_hash:
-                raise ValueError(
-                    "SOURCE artifact hash must match source content_hash"
-                )
+                raise ValueError("SOURCE artifact hash must match source content_hash")
             return
         if not self.transformation_history:
             raise ValueError(
@@ -258,9 +255,7 @@ class ArtifactProvenanceRecord:
             "limitations": list(self.limitations),
             "source": None if self.source is None else self.source.to_payload(),
             "superseded_by": (
-                None
-                if self.superseded_by is None
-                else self.superseded_by.to_payload()
+                None if self.superseded_by is None else self.superseded_by.to_payload()
             ),
             "transformation_history": [
                 step.to_payload() for step in self.transformation_history
