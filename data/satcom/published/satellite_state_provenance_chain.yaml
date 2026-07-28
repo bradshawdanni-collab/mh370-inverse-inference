@@ -36,11 +36,21 @@ layers:
     sha256: null
     status: NOT_CREATED
     prohibition: Do not create until all remaining Issue #172 admission gates are complete.
+verification_artifacts:
+  - artifact_id: inmarsat-3f1-hermite-mathematical-proof-v1
+    filename: docs/satcom/inmarsat_3f1_hermite_mathematical_proof_v1.md
+    sha256: 6ac053c8417707c71766b5a90981e406d77a4f3e6cdbc36553b705ce6284ae4a
+    status: FROZEN_PROPOSED
+    verifies:
+      - inmarsat-3f1-table4-endpoints-20140308
+      - inmarsat-3f1-hermite-transform-v1
+      - inmarsat-3f1-table4-target-state-20140308T001929416Z
 chain_semantics:
   - Published source bytes remain distinct from extracted values.
   - Extracted endpoint values remain distinct from deterministic interpolation.
   - The derived target state is not represented as an exact published ephemeris row.
+  - The mathematical proof verifies the declared transform but does not promote admission state.
   - Historical TLE/SGP4 data is secondary corroboration only.
   - No layer in this chain independently admits benchmark_fixture.csv.
 next_gate:
-  - Independent review of the frozen endpoint extraction, transformation specification, derived state, and recorded hashes.
+  - Independent review of the frozen endpoint extraction, Hermite proof, derived state, and recorded hashes.
