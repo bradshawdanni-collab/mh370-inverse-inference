@@ -238,9 +238,7 @@ def test_csv_loader_fails_closed_on_ambiguous_or_malformed_rows() -> None:
         )
 
     with pytest.raises(ValueError, match="blank rows"):
-        _load_fixture(
-            (CSV_HEADER + "point-000,0,80.0,-20.0,0.0\n\n").encode("utf-8")
-        )
+        _load_fixture((CSV_HEADER + "point-000,0,80.0,-20.0,0.0\n\n").encode("utf-8"))
 
     with pytest.raises(ValueError, match="point_id values must be unique"):
         _load_fixture(
