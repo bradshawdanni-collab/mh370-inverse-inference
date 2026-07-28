@@ -1,0 +1,51 @@
+schema_version: 1
+artifact_id: perth-ges-table2-ecef-geometry-v1
+issue: 172
+status: REVIEWED_FOR_PUBLISHED_MODEL_REPRODUCTION
+source:
+  artifact_id: inmarsat-search-for-mh370-2014
+  publication_title: The Search for MH370
+  publication_section: Table 2 - BTO Calibration Geometry
+  source_sha256: 2ff0f10c1cf0bad299e5398ad9019a113963f6a5bd86b96bf4d04d330bc08028
+geometry:
+  terminal: GES (Perth)
+  reference_frame: ECEF
+  earth_model: ellipsoid
+  units: kilometres
+  ecef_km:
+    x: -2368.8
+    y: 4881.1
+    z: -3342.0
+  publication_geodetic_approximation:
+    latitude_deg: -31.8
+    longitude_deg: 115.9
+    ellipsoidal_height_m: null
+published_bto_model:
+  equation: "satellite_aircraft_range = c * (BTO - bias) / 2 - satellite_GES_range"
+  fixed_processing_bias_microseconds: -495679
+  geometry_term: "Range(satellite to Perth GES)"
+operational_reference_treatment:
+  source_specifies_separate_antenna_phase_centre_correction: false
+  repository_model_reproduction_decision: USE_PUBLISHED_TABLE2_ECEF_VECTOR_WITHOUT_ADDITIONAL_GEOMETRIC_CORRECTION
+  rationale:
+    - The primary publication explicitly supplies the Perth GES ECEF vector in Table 2 for BTO calibration geometry.
+    - Equation 1 explicitly subtracts the range from the satellite to the Perth GES.
+    - The publication defines the timing bias as fixed GES and AES processing delay.
+    - The publication does not specify a separate antenna phase-centre coordinate or correction term for the BTO geometry.
+    - Reproducing the published model must not invent an unreported geometric correction.
+  non_claims:
+    - This record does not assert that the Table 2 ECEF vector is a surveyed RF antenna phase-centre coordinate.
+    - This record does not assert that no physical antenna reference offset exists.
+    - This record only fixes the geometry reference used for reproduction of the published BTO model.
+precision_and_limitations:
+  - Table 2 publishes ECEF coordinates to 0.1 kilometre precision.
+  - The displayed precision does not support treating the vector as an exact survey coordinate.
+  - If the displayed coordinates were rounded to nearest 0.1 kilometre, the implied half-unit bound is 0.05 kilometre per axis; this is a formatting-derived bound, not a stated source uncertainty.
+  - The publication gives approximate latitude and longitude but no ellipsoidal height.
+  - Any later WGS84 surface transformation must keep this source precision distinct from numerical computation precision.
+governance:
+  overall_benchmark_admission: UNCHANGED
+  benchmark_fixture_csv: NOT_CREATED
+  earth_surface_coordinates_created: false
+  altitude_convention_resolved: false
+  next_gate: ALTITUDE_CONVENTION
