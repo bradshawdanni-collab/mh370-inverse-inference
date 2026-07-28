@@ -7,7 +7,6 @@ import math
 from decimal import Decimal, localcontext
 from pathlib import Path
 
-
 REPO_ROOT = Path(__file__).resolve().parents[2]
 PUBLISHED_DIR = REPO_ROOT / "data" / "satcom" / "published"
 
