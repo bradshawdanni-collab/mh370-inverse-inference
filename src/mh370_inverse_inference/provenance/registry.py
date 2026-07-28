@@ -55,10 +55,7 @@ class ProvenanceRegistrySnapshot:
         if any(type(record) is not ArtifactProvenanceRecord for record in self.records):
             raise TypeError("records must contain ArtifactProvenanceRecord values")
         if self.contract_version != REGISTRY_CONTRACT_VERSION:
-            raise ValueError(
-                "contract_version must be "
-                f"{REGISTRY_CONTRACT_VERSION}"
-            )
+            raise ValueError("contract_version must be " f"{REGISTRY_CONTRACT_VERSION}")
 
         keys = tuple(_record_key(record) for record in self.records)
         if keys != tuple(sorted(keys)):
