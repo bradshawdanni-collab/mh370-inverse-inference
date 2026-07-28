@@ -1,0 +1,80 @@
+schema_version: 1
+artifact_id: mh370-seventh-arc-altitude-convention-v1
+issue: 172
+benchmark_id: mh370-seventh-arc-published-bto-v1
+status: FROZEN_PROPOSED
+
+purpose: >
+  Freeze the altitude/reference-surface convention that separates the
+  Inmarsat publication's 10000 metre assumed aircraft altitude from the
+  repository's canonical WGS84 zero-altitude benchmark fixture.
+
+source_reference:
+  artifact_id: inmarsat-search-for-mh370-2014
+  publication_title: The Search for MH370
+  source_sha256: 2ff0f10c1cf0bad299e5398ad9019a113963f6a5bd86b96bf4d04d330bc08028
+  published_ring_assumption:
+    aircraft_altitude_m: 10000.0
+    role: SOURCE_PUBLICATION_RING_ASSUMPTION
+    height_datum_interpretation: NOT_REDEFINED_BY_REPOSITORY
+    note: >
+      The source uses an assumed 10000 metre aircraft altitude for the
+      published in-flight rings. This record preserves that source assumption
+      without asserting an unreported height-datum interpretation.
+
+canonical_fixture_surface:
+  horizontal_reference: WGS84
+  vertical_reference: WGS84_ELLIPSOID
+  ellipsoidal_height_m: 0.0
+  fixture_altitude_m_required: 0.0
+  role: CANONICAL_L0_4_VALIDATION_SURFACE
+
+normalization_rule:
+  decision: RECOMPUTE_BTO_LOCUS_ON_WGS84_ZERO_ELLIPSOIDAL_HEIGHT
+  prohibited_shortcuts:
+    - Do not relabel a 10000 metre published-ring coordinate as altitude 0.
+    - Do not obtain the zero-height fixture by radial projection of the published 10000 metre ring.
+    - Do not represent recomputed zero-height coordinates as directly published coordinates.
+    - Do not silently mix the publication ring surface and the canonical fixture surface.
+  required_method:
+    - Use the admitted BTO timing/range inputs and frozen geometry references.
+    - Solve the deterministic range constraint directly against the WGS84 ellipsoid at ellipsoidal height 0 metres.
+    - Record the complete transformation history and numerical tolerances.
+    - Preserve stable point ordering and deterministic output bytes.
+  output_classification: DERIVED_FROM_PUBLISHED_EVIDENCE
+  direct_publication_coordinate_claim: false
+
+comparison_semantics:
+  published_10000m_ring:
+    use: SOURCE_METHOD_AND_GEOMETRY_REFERENCE
+    canonical_fixture: false
+  wgs84_zero_height_locus:
+    use: REPOSITORY_VALIDATION_FIXTURE_TARGET
+    canonical_fixture: true
+  rule: >
+    Any comparison between the publication's 10000 metre ring and the
+    repository's zero-height locus must retain the surface difference as an
+    explicit transformation assumption rather than treating the two loci as
+    identical.
+
+uncertainty_and_limitations:
+  - The source publication's 10000 metre altitude is an assumed aircraft altitude, not a measured MH370 altitude at the benchmark epoch.
+  - This record does not infer aircraft altitude at 2014-03-08T00:19:29.416Z.
+  - The source does not provide a machine-readable zero-height benchmark coordinate sequence.
+  - Zero-height benchmark coordinates must be generated deterministically from the frozen source-derived inputs.
+  - The resulting coordinates are derived validation artifacts and must not be labelled as directly published evidence.
+  - Source rounding in the published satellite and Perth GES ECEF values remains part of the upstream evidence limitation.
+
+governance:
+  benchmark_fixture_csv_status: NOT_CREATED
+  earth_surface_coordinates_generated_by_this_record: false
+  admission_promoted: false
+  bfo_processing: false
+  inference_or_ranking: false
+  crash_location_claim: false
+
+disposition: PASS_FOR_PROGRESS_TO_DETERMINISTIC_WGS84_TRANSFORMATION
+next_gate: >
+  Implement and independently verify the deterministic BTO-to-WGS84
+  zero-ellipsoidal-height transformation before benchmark_fixture.csv is
+  created.
