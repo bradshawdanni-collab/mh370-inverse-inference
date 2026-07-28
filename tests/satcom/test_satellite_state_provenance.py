@@ -12,21 +12,16 @@ import pytest
 REPO_ROOT = Path(__file__).resolve().parents[2]
 PUBLISHED_DIR = REPO_ROOT / "data" / "satcom" / "published"
 
-FROZEN_HASHES = {
-    "inmarsat_3f1_table4_endpoints.yaml": (
-        "835c5a93ca9af0c618bb692404a8af59a079aa08af3188df0abcaa3b515eebbc"
-    ),
-    "inmarsat_3f1_hermite_transform_v1.yaml": (
-        "ea135509fc6d1dcc9e2f5dad07780ad74e976337a02ba073351f243c1b79ee82"
-    ),
-    "inmarsat_3f1_target_state_20140308T001929416Z.yaml": (
-        "c61f400c8b27b07b3acc57701d958068ee8cbb2654a5e325e3f2d0f0cb166452"
-    ),
-}
+ENDPOINTS_SHA256 = "835c5a93ca9af0c618bb692404a8af59a079aa08af3188df0abcaa3b515eebbc"
+TRANSFORM_SHA256 = "ea135509fc6d1dcc9e2f5dad07780ad74e976337a02ba073351f243c1b79ee82"
+TARGET_STATE_SHA256 = "c61f400c8b27b07b3acc57701d958068ee8cbb2654a5e325e3f2d0f0cb166452"
+SOURCE_PDF_SHA256 = "2ff0f10c1cf0bad299e5398ad9019a113963f6a5bd86b96bf4d04d330bc08028"
 
-SOURCE_PDF_SHA256 = (
-    "2ff0f10c1cf0bad299e5398ad9019a113963f6a5bd86b96bf4d04d330bc08028"
-)
+FROZEN_HASHES = {
+    "inmarsat_3f1_table4_endpoints.yaml": ENDPOINTS_SHA256,
+    "inmarsat_3f1_hermite_transform_v1.yaml": TRANSFORM_SHA256,
+    "inmarsat_3f1_target_state_20140308T001929416Z.yaml": TARGET_STATE_SHA256,
+}
 
 START_POSITION_M = (18_177_500.0, 38_051_700.0, 440_000.0)
 START_VELOCITY_M_S = (1.60, -1.51, -81.88)
