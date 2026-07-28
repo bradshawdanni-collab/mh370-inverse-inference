@@ -15,7 +15,12 @@ from mh370_inverse_inference.satcom.locus import (
     SurfaceLocusResult,
     generate_surface_locus,
 )
-from mh370_inverse_inference.satcom.satellite import SatellitePosition
+from mh370_inverse_inference.satcom.satellite import (
+    ECEFVelocity,
+    SatellitePosition,
+    SatelliteState,
+    interpolate_satellite_state_cubic_hermite,
+)
 from mh370_inverse_inference.satcom.slant_range import slant_range_m
 from mh370_inverse_inference.satcom.uncertainty import (
     BandIdentity,
@@ -41,11 +46,13 @@ from mh370_inverse_inference.satcom.wgs84 import (
 __all__ = [
     "BandIdentity",
     "ECEFPoint",
+    "ECEFVelocity",
     "EXPORT_SCHEMA",
     "EXPORT_SCHEMA_VERSION",
     "GeodeticPoint",
     "SPEED_OF_LIGHT_M_S",
     "SatellitePosition",
+    "SatelliteState",
     "SlantRangeBand",
     "SlantRangeUncertainty",
     "SlantRangeUncertaintyBands",
@@ -63,6 +70,7 @@ __all__ = [
     "generate_surface_locus",
     "generate_uncertainty_bands",
     "geodetic_to_ecef",
+    "interpolate_satellite_state_cubic_hermite",
     "normalize_longitude_deg",
     "slant_range_m",
     "timing_error_to_range_m",

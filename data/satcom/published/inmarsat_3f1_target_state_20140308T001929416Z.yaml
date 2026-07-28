@@ -1,0 +1,40 @@
+schema_version: 1
+artifact_id: inmarsat-3f1-table4-target-state-20140308T001929416Z
+benchmark_id: mh370-seventh-arc-published-bto-v1
+record_type: deterministic_derived_satellite_state
+status: PROPOSED_PENDING_INDEPENDENT_REVIEW
+inputs:
+  endpoint_artifact_id: inmarsat-3f1-table4-endpoints-20140308
+  transformation_artifact_id: inmarsat-3f1-hermite-transform-v1
+target:
+  epoch_utc: "2014-03-08T00:19:29.416Z"
+  target_offset_seconds: 569.416
+reference_frame:
+  name: Earth-Centred Earth-Fixed
+  abbreviation: ECEF
+units:
+  position: kilometres
+  velocity: kilometres_per_second
+derived_state:
+  position_km:
+    x: 18178.35427195026
+    y: 38050.84806484729
+    z: 393.0436546171822
+  velocity_km_s:
+    x: 0.0014905848175466667
+    y: -0.0015633706024564664
+    z: -0.08312914420245867
+provenance:
+  source_class: PRIMARY_PUBLISHED_INMARSAT_ECEF
+  derivation_method: DETERMINISTIC_CUBIC_HERMITE_INTERPOLATION
+  source_artifact_id: inmarsat-search-for-mh370-2014
+  source_sha256: 2ff0f10c1cf0bad299e5398ad9019a113963f6a5bd86b96bf4d04d330bc08028
+limitations:
+  - Published endpoint values are rounded.
+  - Target state is interpolation-derived, not an exact published ephemeris row.
+  - Historical TLE/SGP4 data is secondary corroboration only.
+  - This record does not by itself establish benchmark admission or Earth-surface coordinates.
+admission_state: PROPOSED_PENDING_INDEPENDENT_REVIEW
+hash_scope:
+  encoding: UTF-8
+  bytes: exact_file_bytes

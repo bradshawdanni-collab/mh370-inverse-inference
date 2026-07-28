@@ -1,0 +1,42 @@
+schema_version: 1
+artifact_id: inmarsat-3f1-hermite-transform-v1
+record_type: deterministic_transformation_specification
+status: PROPOSED_PENDING_INDEPENDENT_REVIEW
+input_artifact_id: inmarsat-3f1-table4-endpoints-20140308
+method:
+  name: CUBIC_HERMITE
+  implementation: mh370_inverse_inference.satcom.satellite.interpolate_satellite_state_cubic_hermite
+  reference_frame: ECEF
+  interpolation_interval_seconds: 600.0
+  start_offset_seconds: 0.0
+  target_offset_seconds: 569.416
+  end_offset_seconds: 600.0
+  extrapolation_permitted: false
+  deterministic: true
+boundary_conditions:
+  - "H(0) = r_0"
+  - "H(T) = r_1"
+  - "H'(0) = v_0"
+  - "H'(T) = v_1"
+component_formula:
+  normalized_parameter: "u = (t - t_0) / T"
+  position: "H(u) = h00*r0 + h10*T*v0 + h01*r1 + h11*T*v1"
+  basis:
+    h00: "2*u^3 - 3*u^2 + 1"
+    h10: "u^3 - 2*u^2 + u"
+    h01: "-2*u^3 + 3*u^2"
+    h11: "u^3 - u^2"
+velocity:
+  derivation: analytic_derivative_of_position_polynomial
+  units: metres_per_second_in_repository_implementation
+validation:
+  endpoint_reproduction_required: true
+  extrapolation_rejection_required: true
+  selected_epoch_regression_required: true
+authority_boundary:
+  - The transform is deterministic mathematics applied to published rounded endpoints.
+  - The transform does not create an exact published ephemeris row.
+  - Historical TLE/SGP4 data is secondary corroboration only.
+hash_scope:
+  encoding: UTF-8
+  bytes: exact_file_bytes

@@ -1,16 +1,232 @@
 schema_version: 1
-artifacts: []
+issue: 172
+register_status: PROPOSED
+review_date: "2026-07-19"
 
-# Required fields for each admitted artifact:
-# - artifact_id
-# - publisher
-# - publication_title
-# - source_url
-# - publication_date
-# - retrieved_utc
-# - sha256
-# - licence_or_terms
-# - provenance
-# - transformation_history
-# - uncertainty_notes
-# - admission_status
+artifacts:
+  - artifact_id: atsb-bto-characteristics-2014
+    admission_status: PROPOSED
+    benchmark_id: null
+    publisher: Australian Transport Safety Bureau
+    publication_title: Burst Timing Offset (BTO) MH370 Characteristics
+    publication_type: Educational Fact Sheet
+    publication_date: "2014-12-23"
+    source_url: https://www.atsb.gov.au/publications/educational-fact-sheet/2022/aviation/mh370-burst-timing-offset-bto-characteristics
+    artifact_url: https://www.atsb.gov.au/sites/default/files/media/5187038/mh370_burst_timing_offset_dec2014.pdf
+    retrieved_utc: "2026-07-22T08:55:20Z"
+    sha256: f9f5bf26ba88da713fe665ac2d9b72e752f02523014b28bac452e3f4b17fe382
+    checksum_status: SHA256_RECORDED_FROM_LOCAL_CAPTURE
+    licence_or_terms: Creative Commons Attribution 4.0 International; attribution required; excludes Commonwealth Coat of Arms, ATSB logo, specifically excluded material, and third-party material
+    usage_basis_status: VERIFIED_ON_ATSB_COPYRIGHT_STATEMENT
+    role: methodology_and_uncertainty_reference
+    coordinate_reference_system: null
+    units:
+      bto: microseconds
+      satellite_range_error: kilometres
+      line_of_position_error: kilometres
+    provenance:
+      authority: Official ATSB publication
+      verification_scope:
+        - BTO is a measured round-trip SATCOM timing quantity used to calculate satellite-to-aircraft distance.
+        - BTO-derived distance permits possible location rings to be mapped on the Earth surface.
+        - ATSB reports approximately 50 microseconds effective BTO accuracy and approximately 10 kilometres horizontal line-of-position tolerance.
+    transformation_history: []
+    uncertainty_notes:
+      - The fact sheet reports non-Gaussian timing error components and treats individual MH370 measurements separately.
+      - The fact sheet does not publish a machine-readable benchmark coordinate sequence.
+      - The fact sheet alone cannot produce benchmark_fixture.csv.
+
+  - artifact_id: atsb-signalling-unit-logs-2017
+    admission_status: PROPOSED
+    benchmark_id: null
+    publisher: Australian Transport Safety Bureau
+    publication_title: MH370 Update to Signalling Unit Logs
+    publication_type: Educational Fact Sheet with amended data-communication log attachment
+    publication_date: "2017-03-30"
+    source_url: https://www.atsb.gov.au/publications/educational-fact-sheet/2022/aviation/mh370-update-signalling-unit-logs
+    artifact_url: https://www.atsb.gov.au/sites/default/files/media/5772619/public_mh370-data-communication-logs.pdf
+    retrieved_utc: "2026-07-22T08:55:20Z"
+    sha256: b6690c7acd6b0aba0d87a7fd53282449e0573bbee73ec1787a62762c5a7d0cd6
+    checksum_status: SHA256_RECORDED_FROM_LOCAL_CAPTURE
+    licence_or_terms: Creative Commons Attribution 4.0 International; attribution required; excludes Commonwealth Coat of Arms, ATSB logo, specifically excluded material, and third-party material
+    usage_basis_status: VERIFIED_ON_ATSB_COPYRIGHT_STATEMENT
+    role: raw_satcom_log_reference
+    coordinate_reference_system: null
+    units:
+      time: UTC
+      bto: microseconds
+      bfo: hertz
+    provenance:
+      authority: Official ATSB release of MH370 SATCOM signalling-unit log records
+      verification_scope:
+        - Only R-channel messages carry the BTO values used for distance analysis.
+        - R600 values require a 4600 microsecond calibration subtraction when compared with R1200 values.
+        - The ATSB notes that this calibration applies to the 18:25:27 and 00:19:29 logon requests.
+    transformation_history: []
+    uncertainty_notes:
+      - Multiple transmissions occur around some handshake events; choosing one record per benchmark epoch is a transformation decision that must be declared.
+      - The logs do not publish Earth-surface benchmark coordinates.
+      - Satellite ephemeris, calibration constants, and a reproducible coordinate-generation method remain required.
+
+  - artifact_id: inmarsat-search-for-mh370-2014
+    admission_status: PROPOSED
+    benchmark_id: null
+    publisher: The Royal Institute of Navigation
+    publication_title: The Search for MH370
+    publication_type: Open-access research article authored by Inmarsat engineers
+    publication_date: "2014-10-07"
+    doi: 10.1017/S037346331400068X
+    source_url: https://www.cambridge.org/core/journals/journal-of-navigation/article/search-for-mh370/D2D1C4C99E7BFDE35841CFD70081114A
+    artifact_url: https://www.cambridge.org/core/services/aop-cambridge-core/content/view/D2D1C4C99E7BFDE35841CFD70081114A/S037346331400068Xa.pdf/the-search-for-mh370.pdf
+    retrieved_utc: "2026-07-22T08:55:20Z"
+    sha256: 2ff0f10c1cf0bad299e5398ad9019a113963f6a5bd86b96bf4d04d330bc08028
+    checksum_status: SHA256_RECORDED_FROM_LOCAL_CAPTURE
+    licence_or_terms: Creative Commons Attribution 3.0
+    usage_basis_status: VERIFIED_ON_PUBLICATION_PAGE
+    role: range_equation_calibration_geometry_and_ephemeris_reference
+    coordinate_reference_system:
+      frame: Earth-Centred Earth-Fixed
+      earth_model: ellipsoid
+      axis_definition: x at 0 degrees longitude, y at 90 degrees east, z north
+    units:
+      position: kilometres
+      velocity: kilometres_per_second
+      time: UTC
+      bto: microseconds
+    verified_primary_source_values:
+      fixed_bto_bias_microseconds: -495679
+      perth_ges:
+        ecef_km:
+          x: -2368.8
+          y: 4881.1
+          z: -3342.0
+        approximate_geodetic_from_publication:
+          latitude_deg: -31.8
+          longitude_deg: 115.9
+          ellipsoidal_height_m: null
+      satellite_ephemeris_nodes:
+        - time_utc: "2014-03-08T00:10:00Z"
+          ecef_position_km:
+            x: 18177.5
+            y: 38051.7
+            z: 440.0
+          ecef_velocity_km_s:
+            x: 0.00160
+            y: -0.00151
+            z: -0.08188
+        - time_utc: "2014-03-08T00:20:00Z"
+          ecef_position_km:
+            x: 18178.4
+            y: 38050.8
+            z: 390.5
+          ecef_velocity_km_s:
+            x: 0.00150
+            y: -0.00158
+            z: -0.08321
+    provenance:
+      authority: Primary technical paper authored by Inmarsat engineers involved in the MH370 SATCOM analysis
+      verification_scope:
+        - Defines the refined BTO satellite-to-aircraft range equation.
+        - Reports the mean fixed BTO processing bias of -495679 microseconds.
+        - Reports Perth GES ECEF coordinates in Table 2.
+        - Reports Inmarsat-3 F1 ECEF position and velocity nodes in Table 4.
+        - States that the 00:19:37 logon-sequence BTO must be ignored and that 18400 microseconds is derived from the 00:19:29 Logon Request.
+    transformation_history: []
+    uncertainty_notes:
+      - Table 4 supplies nodes at 00:10:00 and 00:20:00, not an exact 00:19:29 state vector.
+      - An interpolation contract must be specified and independently tested before deriving the 00:19:29 satellite state.
+      - The publication supplies an approximate Perth latitude and longitude but no ellipsoidal height; the tabulated ECEF vector is the preferred extracted geometry value.
+      - The article uses 10000 metres assumed cruising altitude for the published in-flight rings; L0.4 currently requires zero-altitude benchmark coordinates, so any transformation must explicitly declare that difference.
+
+candidate_extraction_review:
+  admission_status: EXCLUDED_FROM_ADMISSION
+  source_description: User-supplied summary reviewed against official ATSB and Inmarsat publications
+  findings:
+    - The ATSB BTO characteristics fact sheet is an official methodology and uncertainty reference, not a coordinate benchmark by itself.
+    - The amended ATSB signalling-unit logs are the appropriate official source for raw BTO records.
+    - The supplied elevation-angle values have not been verified in the registered ATSB artifacts.
+    - The supplied handshake table must not be copied into benchmark_fixture.csv without a declared event-selection and calibration rule.
+    - Official log records show 11740 microseconds at 20:41:04.904, not 11820.
+    - Official log records show 14540 microseconds at 22:41:21.906, not 14360.
+    - Official log records show 18040 microseconds at 00:10:59.928, not 16740.
+    - The 00:19 event includes an R600 logon request of 23000 microseconds at 00:19:29.416, which becomes 18400 after the declared 4600 microsecond calibration subtraction.
+    - The final received R1200 transmission at 00:19:37.443 is a distinct record with BTO 49660 and is excluded from the refined Inmarsat analysis.
+
+rejected_derivations:
+  - rejection_id: rejected-bto-constant-minus-11460-v1
+    admission_status: EXCLUDED_FROM_ADMISSION
+    permanence: PERMANENT_FOR_THIS_DERIVATION
+    claim: A -11460 microsecond Perth ground-station constant converts corrected BTO 18400 microseconds into a 4475.89 kilometre satellite-to-aircraft range.
+    finding: >
+      The proposed -11460 microsecond constant is not established by the
+      registered ATSB or Inmarsat primary sources. It conflates the 4600
+      microsecond R600 correction, the -495679 microsecond calibrated BTO
+      processing bias, and the separately calculated satellite-to-GES range.
+    prohibited_uses:
+      - Do not calculate a 4475.89 kilometre seventh-arc radius from this derivation.
+      - Do not create benchmark_fixture.csv from this derivation.
+      - Do not generate geospatial paths, search corridors, or location claims from this derivation.
+    replacement_contract:
+      corrected_bto_microseconds: 18400
+      fixed_processing_bias_microseconds: -495679
+      range_equation: satellite_aircraft_range = c * (BTO - bias) / 2 - satellite_GES_range
+      unresolved_inputs:
+        - exact epoch satellite ECEF state
+        - Perth GES geometry
+        - declared altitude convention
+        - deterministic sphere-to-WGS84 intersection method
+
+benchmark_event_selection_contract:
+  contract_status: PROPOSED_PENDING_INDEPENDENT_REVIEW
+  benchmark_role: seventh_arc_bto_event
+  benchmark_epoch_utc: "2014-03-08T00:19:29.416Z"
+
+  selected_source_record:
+    source_artifact_id: atsb-signalling-unit-logs-2017
+    message_type: Logon Request
+    channel: R
+    burst_format: R600
+    raw_bto_microseconds: 23000
+
+  calibration:
+    rule: corrected_bto_microseconds = raw_bto_microseconds - 4600
+    adjustment_microseconds: -4600
+    corrected_bto_microseconds: 18400
+    authority:
+      - atsb-signalling-unit-logs-2017
+      - inmarsat-search-for-mh370-2014
+
+  excluded_source_record:
+    epoch_utc: "2014-03-08T00:19:37.443Z"
+    channel: R
+    burst_format: R1200
+    raw_bto_microseconds: 49660
+    exclusion_reason: >
+      Excluded from the refined Inmarsat analysis because the timing is
+      unreliable.
+
+  selection_rule:
+    - Use the 00:19:29.416 R600 Logon Request as the benchmark BTO event.
+    - Apply the declared 4600 microsecond R600 normalization before range calculations.
+    - Do not substitute the 00:19:37.443 R1200 record.
+
+  authority_boundary:
+    - This contract selects and calibrates a source record only.
+    - It does not define the exact satellite state at the selected epoch.
+    - It does not generate Earth-surface coordinates or benchmark_fixture.csv.
+
+admission_requirements_remaining:
+  - Define and test the satellite-state interpolation rule for the exact 00:19:29 epoch or obtain an independently verified exact ephemeris vector.
+  - Confirm the Perth GES ECEF extraction and document whether any antenna phase-centre correction is required.
+  - Define the altitude convention and reconcile the source publication's 10000 metre ring with the L0.4 zero-altitude fixture contract.
+  - Define a reproducible transformation from admitted source records to canonical WGS84 zero-altitude coordinates.
+  - Independently review the transformed coordinates.
+  - Assign a stable benchmark_id.
+  - Freeze benchmark_fixture.csv bytes and record their SHA-256 digest.
+  - Change admission_status only through Issue #172 review.
+
+fixture:
+  filename: data/satcom/published/benchmark_fixture.csv
+  admission_status: NOT_CREATED
+  sha256: null
+  prohibition: Do not create or populate until all admission requirements are complete.
