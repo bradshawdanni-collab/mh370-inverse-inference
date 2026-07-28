@@ -1,0 +1,94 @@
+schema_version: 1
+review_id: mh370-seventh-arc-bto-wgs84-independent-reproduction-v1
+issue: 172
+benchmark_id: mh370-seventh-arc-published-bto-v1
+status: REVIEWED_METHOD_INDEPENDENT
+external_third_party_signoff: NOT_CLAIMED
+
+purpose: >
+  Independently reproduce the frozen seventh-arc BTO range calculation and the
+  implementation-regression WGS84 zero-ellipsoidal-height locus without calling
+  the production published-BTO transformation wrapper.
+
+reviewed_transform:
+  artifact_id: mh370-seventh-arc-bto-wgs84-transform-v1
+  filename: data/satcom/published/seventh_arc_bto_wgs84_transform_v1.yaml
+  sha256: 4142c33134df8704a466e037b0e1cb065116daea06b74307a986274509f2db21
+  status_at_review: IMPLEMENTED_PENDING_INDEPENDENT_REPRODUCTION
+
+independent_range_method:
+  arithmetic: decimal_60_digit
+  speed_of_light_m_s: 299792458.0
+  corrected_bto_microseconds: 18400.0
+  fixed_processing_bias_microseconds: -495679.0
+  satellite_ecef_m:
+    x: 18178354.27195026
+    y: 38050848.06484729
+    z: 393043.6546171822
+  perth_ges_ecef_m:
+    x: -2368800.0
+    y: 4881100.0
+    z: -3342000.0
+  equation: "rho_aircraft = c * (BTO - bias) / 2 - ||satellite_ecef - ges_ecef||"
+  reproduced_satellite_to_ges_range_m: 39196534.1128863131462087906820509334071734407205945964788078
+  reproduced_bto_half_path_m: 77058503.50809100
+  reproduced_satellite_to_aircraft_range_m: 37861969.3952046868537912093179490665928265592794054035211922
+  frozen_binary64_satellite_to_aircraft_range_m: 37861969.39520467
+  absolute_range_difference_m: 0.0000000168537912093179490665928265592794054035211922
+
+independent_surface_method:
+  geodetic_to_ecef_engine: pyproj
+  source_crs: EPSG:4979
+  target_crs: EPSG:4978
+  ellipsoidal_height_m: 0.0
+  longitude_sampling_deg: 10.0
+  latitude_bracketing_deg: 5.0
+  root_method: independent_bisection
+  root_residual_target_m: 0.000001
+  production_wrapper_called_by_independent_solver: false
+  note: >
+    The independent solver uses PROJ through pyproj for WGS84 geodetic-to-ECEF
+    conversion and its own latitude-root bisection. The production wrapper
+    mh370_inverse_inference.satcom.published_bto.generate_published_bto_zero_height_locus
+    is not called by the independent solver.
+
+comparison_to_production_regression:
+  production_surface_solver: mh370_inverse_inference.satcom.locus.generate_surface_locus
+  production_regression_tolerance_m: 1.0
+  production_longitude_step_deg: 10.0
+  production_latitude_step_deg: 5.0
+  matched_point_count: 16
+  maximum_production_slant_range_residual_m: 0.9629569053649902
+  maximum_independent_slant_range_residual_m: 0.00000009685754776000977
+  maximum_ecef_point_separation_m: 1.5278604724812659
+  mean_ecef_point_separation_m: 0.7420162353676968
+  maximum_latitude_difference_deg: 0.000013784779184788931
+  interpretation: >
+    The production regression points and independently solved roots describe the
+    same zero-height range locus. The finite coordinate separation is consistent
+    with the production solver's declared 1 metre slant-range stopping tolerance
+    and is not treated as evidence disagreement.
+
+review_findings:
+  - The high-precision range calculation reproduces the frozen binary64 target range within 1.7e-8 metres.
+  - The independent WGS84 solver reproduces 16 roots at the same sampled longitudes as the production regression configuration.
+  - Every production regression point remains within the declared 1 metre slant-range tolerance.
+  - Independent roots are solved to sub-micrometre slant-range residual under the review configuration.
+  - No canonical benchmark fixture sampling or output bytes are frozen by this review.
+
+governance:
+  benchmark_fixture_csv_status: NOT_CREATED
+  admission_promoted: false
+  generated_coordinates_classification: DERIVED_FROM_PUBLISHED_EVIDENCE
+  directly_published_coordinate_claim: false
+  external_institutional_review_claimed: false
+  bfo_processing: false
+  inference_or_ranking: false
+  crash_location_claim: false
+
+disposition: PASS_FOR_PROGRESS_TO_CANONICAL_FIXTURE_SAMPLING_AND_FREEZE
+next_gate: >
+  Define the canonical benchmark fixture sampling rule, generate the exact
+  WGS84 zero-height coordinate sequence deterministically, independently review
+  that sequence, then freeze benchmark_fixture.csv bytes and SHA-256 before
+  final Issue #172 admission review.
