@@ -9,6 +9,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 PUBLISHED_DIR = REPO_ROOT / "data" / "satcom" / "published"
 
 PERTH_GES_SHA256 = "59db12275ff74a4469ff3676c0c07319df66d33234e657c52fe8de1f2384f88a"
+PENDING_FIXTURE_STATUS = "FROZEN_PROPOSED_PENDING_FINAL_ADMISSION_REVIEW"
 
 
 def _sha256(path: Path) -> str:
@@ -36,12 +37,14 @@ def test_perth_ges_geometry_preserves_published_reference_boundary() -> None:
     assert "does not assert that the Table 2 ECEF vector is a surveyed RF" in record
 
 
-def test_provenance_chain_advances_only_to_altitude_gate() -> None:
+def test_provenance_chain_preserves_perth_gate_after_fixture_freeze() -> None:
     chain_path = PUBLISHED_DIR / "satellite_state_provenance_chain.yaml"
     chain = chain_path.read_text(encoding="utf-8")
+    fixture_path = PUBLISHED_DIR / "benchmark_fixture.csv"
 
     assert PERTH_GES_SHA256 in chain
     assert "PASS_FOR_PROGRESS_TO_ALTITUDE_CONVENTION" in chain
     assert "benchmark_fixture.csv" in chain
-    assert "status: NOT_CREATED" in chain
-    assert not (PUBLISHED_DIR / "benchmark_fixture.csv").exists()
+    assert f"status: {PENDING_FIXTURE_STATUS}" in chain
+    assert fixture_path.exists()
+    assert "status: ADMITTED" not in chain

@@ -21,6 +21,7 @@ PUBLISHED_DIR = REPO_ROOT / "data" / "satcom" / "published"
 
 REVIEW_SHA256 = "7d5945d3c1d1cbb0328d6316ee0ac3508c3077af0c7457fd4c1b294ba03aa83e"
 FROZEN_TARGET_RANGE_M = 37_861_969.39520467
+PENDING_FIXTURE_STATUS = "FROZEN_PROPOSED_PENDING_FINAL_ADMISSION_REVIEW"
 
 SATELLITE = SatellitePosition(
     epoch_utc="2014-03-08T00:19:29.416Z",
@@ -227,13 +228,15 @@ def test_independent_surface_roots_match_production_regression_locus() -> None:
     )
 
 
-def test_provenance_chain_advances_only_to_fixture_sampling_and_freeze() -> None:
+def test_provenance_chain_preserves_independent_review_after_fixture_freeze() -> None:
     chain = (PUBLISHED_DIR / "satellite_state_provenance_chain.yaml").read_text(
         encoding="utf-8"
     )
+    fixture_path = PUBLISHED_DIR / "benchmark_fixture.csv"
 
     assert REVIEW_SHA256 in chain
     assert "PASS_FOR_PROGRESS_TO_CANONICAL_FIXTURE_SAMPLING_AND_FREEZE" in chain
     assert "benchmark_fixture.csv" in chain
-    assert "status: NOT_CREATED" in chain
-    assert not (PUBLISHED_DIR / "benchmark_fixture.csv").exists()
+    assert f"status: {PENDING_FIXTURE_STATUS}" in chain
+    assert fixture_path.exists()
+    assert "status: ADMITTED" not in chain
