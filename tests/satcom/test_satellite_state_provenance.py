@@ -9,11 +9,13 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 PUBLISHED_DIR = REPO_ROOT / "data" / "satcom" / "published"
+DOCS_SATCOM_DIR = REPO_ROOT / "docs" / "satcom"
 
 ENDPOINTS_SHA256 = "835c5a93ca9af0c618bb692404a8af59a079aa08af3188df0abcaa3b515eebbc"
 TRANSFORM_SHA256 = "ea135509fc6d1dcc9e2f5dad07780ad74e976337a02ba073351f243c1b79ee82"
 TARGET_STATE_SHA256 = "c61f400c8b27b07b3acc57701d958068ee8cbb2654a5e325e3f2d0f0cb166452"
 SOURCE_PDF_SHA256 = "2ff0f10c1cf0bad299e5398ad9019a113963f6a5bd86b96bf4d04d330bc08028"
+PROOF_SHA256 = "6ac053c8417707c71766b5a90981e406d77a4f3e6cdbc36553b705ce6284ae4a"
 
 FROZEN_HASHES = {
     "inmarsat_3f1_table4_endpoints.yaml": ENDPOINTS_SHA256,
@@ -113,6 +115,11 @@ def test_frozen_repository_records_match_recorded_sha256() -> None:
         assert _sha256(PUBLISHED_DIR / filename) == expected_sha256
 
 
+def test_frozen_hermite_proof_matches_recorded_sha256() -> None:
+    proof_path = DOCS_SATCOM_DIR / "inmarsat_3f1_hermite_mathematical_proof_v1.md"
+    assert _sha256(proof_path) == PROOF_SHA256
+
+
 def test_provenance_chain_references_frozen_hashes_and_source_hash() -> None:
     chain_path = PUBLISHED_DIR / "satellite_state_provenance_chain.yaml"
     chain = chain_path.read_text(encoding="utf-8")
@@ -120,6 +127,7 @@ def test_provenance_chain_references_frozen_hashes_and_source_hash() -> None:
     for expected_sha256 in FROZEN_HASHES.values():
         assert expected_sha256 in chain
     assert SOURCE_PDF_SHA256 in chain
+    assert PROOF_SHA256 in chain
     assert "benchmark_fixture.csv" in chain
     assert "status: NOT_CREATED" in chain
 
