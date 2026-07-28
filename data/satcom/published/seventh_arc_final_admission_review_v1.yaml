@@ -1,0 +1,134 @@
+schema_version: 1
+review_id: mh370-seventh-arc-final-admission-review-v1
+issue: 172
+benchmark_id: mh370-seventh-arc-published-bto-v1
+review_date: "2026-07-29"
+reviewed_main_commit: 132ee1be3bec63213e438f54a60d90c1ac41170b
+status: FINAL_ADMISSION_REVIEW_PASS
+
+scope:
+  purpose: >
+    Perform the final Issue #172 admission review over the complete frozen
+    seventh-arc published-BTO benchmark provenance chain and authorize admission
+    only if every acceptance criterion is satisfied.
+
+source_metadata_and_usage_basis:
+  - artifact_id: atsb-signalling-unit-logs-2017
+    role: raw_satcom_log_reference
+    sha256: b6690c7acd6b0aba0d87a7fd53282449e0573bbee73ec1787a62762c5a7d0cd6
+    usage_basis_status: VERIFIED_ON_ATSB_COPYRIGHT_STATEMENT
+    licence_or_terms: Creative Commons Attribution 4.0 International
+    review_result: PASS
+  - artifact_id: inmarsat-search-for-mh370-2014
+    role: range_equation_calibration_geometry_and_ephemeris_reference
+    sha256: 2ff0f10c1cf0bad299e5398ad9019a113963f6a5bd86b96bf4d04d330bc08028
+    usage_basis_status: VERIFIED_ON_PUBLICATION_PAGE
+    licence_or_terms: Creative Commons Attribution 3.0
+    review_result: PASS
+  - artifact_id: atsb-bto-characteristics-2014
+    role: methodology_and_uncertainty_reference
+    sha256: f9f5bf26ba88da713fe665ac2d9b72e752f02523014b28bac452e3f4b17fe382
+    admission_dependency: false
+    review_result: REFERENCE_ONLY
+
+event_selection_and_calibration:
+  benchmark_epoch_utc: "2014-03-08T00:19:29.416Z"
+  selected_record:
+    channel: R
+    burst_format: R600
+    message_type: Logon Request
+    raw_bto_microseconds: 23000
+  calibration_adjustment_microseconds: -4600
+  corrected_bto_microseconds: 18400
+  excluded_record:
+    epoch_utc: "2014-03-08T00:19:37.443Z"
+    channel: R
+    burst_format: R1200
+    raw_bto_microseconds: 49660
+  review_result: PASS
+
+frozen_repository_artifacts:
+  - path: data/satcom/published/inmarsat_3f1_table4_endpoints.yaml
+    sha256: 835c5a93ca9af0c618bb692404a8af59a079aa08af3188df0abcaa3b515eebbc
+  - path: data/satcom/published/inmarsat_3f1_hermite_transform_v1.yaml
+    sha256: ea135509fc6d1dcc9e2f5dad07780ad74e976337a02ba073351f243c1b79ee82
+  - path: data/satcom/published/inmarsat_3f1_target_state_20140308T001929416Z.yaml
+    sha256: c61f400c8b27b07b3acc57701d958068ee8cbb2654a5e325e3f2d0f0cb166452
+  - path: docs/satcom/inmarsat_3f1_hermite_mathematical_proof_v1.md
+    sha256: 6ac053c8417707c71766b5a90981e406d77a4f3e6cdbc36553b705ce6284ae4a
+  - path: data/satcom/published/inmarsat_3f1_satellite_state_method_independent_review_v1.yaml
+    sha256: f661f502be4d267a583b7efd1f770a445cbdbe478f17acfa8339978bde1d0dce
+  - path: data/satcom/published/perth_ges_table2_ecef_geometry_v1.yaml
+    sha256: 59db12275ff74a4469ff3676c0c07319df66d33234e657c52fe8de1f2384f88a
+  - path: data/satcom/published/altitude_convention_wgs84_zero_height_v1.yaml
+    sha256: 04006848dd912fc1d106cb095f2b8bd065689d947639c44e2dfcd37b80209319
+  - path: data/satcom/published/seventh_arc_bto_wgs84_transform_v1.yaml
+    sha256: 4142c33134df8704a466e037b0e1cb065116daea06b74307a986274509f2db21
+  - path: data/satcom/published/seventh_arc_bto_wgs84_independent_reproduction_v1.yaml
+    sha256: 7d5945d3c1d1cbb0328d6316ee0ac3508c3077af0c7457fd4c1b294ba03aa83e
+  - path: data/satcom/published/seventh_arc_canonical_fixture_sampling_v1.yaml
+    sha256: 1974f6c5e4be64b211248a34fecbf9d51aa74a9e68e03081a20e5aae4b1a8732
+  - path: data/satcom/published/seventh_arc_canonical_fixture_independent_review_v1.yaml
+    sha256: efc2f18255b934c0d1986e106b722c1fff5dc1f85fe82cacacb00a8b6639a66c
+  - path: data/satcom/published/benchmark_fixture.csv
+    sha256: 3ae049f3de7383a433cb8b0b2e1a83e503da99d0dd6e0e96bb9cc39b530cd5a7
+
+fixture_review:
+  filename: data/satcom/published/benchmark_fixture.csv
+  sha256: 3ae049f3de7383a433cb8b0b2e1a83e503da99d0dd6e0e96bb9cc39b530cd5a7
+  byte_length: 7798
+  point_count: 176
+  schema: point_id,sequence_index,longitude_deg,latitude_deg,altitude_m
+  coordinate_reference_system: WGS84 geodetic, EPSG:4979 semantics at ellipsoidal height 0 metres
+  output_classification: DERIVED_FROM_PUBLISHED_EVIDENCE
+  directly_published_coordinates: false
+  independent_sequence_review: PASS
+  review_result: PASS
+
+acceptance_criteria:
+  source_metadata_independently_verified: PASS
+  usage_basis_and_licence_recorded: PASS
+  event_selection_and_calibration_frozen: PASS
+  satellite_state_chain_verified: PASS
+  perth_ges_geometry_verified_for_published_model_reproduction: PASS
+  altitude_convention_frozen: PASS
+  deterministic_bto_to_wgs84_transform_verified: PASS
+  method_independent_transform_reproduction_passed: PASS
+  canonical_sampling_contract_frozen: PASS
+  exact_fixture_sequence_independently_reviewed: PASS
+  fixture_bytes_frozen: PASS
+  fixture_sha256_explicit_and_reproducible: PASS
+  fixture_schema_matches_repository_contract: PASS
+  derived_coordinates_not_represented_as_directly_published: PASS
+  transformation_history_complete: PASS
+  assumptions_and_limitations_recorded: PASS
+  pre_admission_quality_gates_green: PASS
+
+ci_evidence:
+  source_pr: 184
+  source_head_sha: 8496d4fbe0649d056a0a4a726ac60f94ecd709f8
+  ci_run_id: 30400444535
+  ci_conclusion: success
+  dx2_run_id: 30400444481
+  dx2_conclusion: success
+  quality_gates:
+    ruff: PASS
+    black: PASS
+    mypy: PASS
+    pytest: PASS
+    dx2: PASS
+
+limitations:
+  - The registered source-PDF SHA-256 values were recorded from prior local captures; the source PDFs are not vendored in this repository.
+  - The final review verifies the registered source metadata, prior verification statuses, frozen repository artifacts, transformation chain, and exact fixture contract; it does not claim external institutional sign-off.
+  - The exact 00:19:29.416Z satellite state is interpolation-derived from rounded published Table 4 values.
+  - Perth GES geometry reproduces the published model without asserting surveyed RF phase-centre identity.
+  - The canonical fixture is a deterministic zero-ellipsoidal-height validation reference and is not a crash-location, ranking, endpoint-selection, or search-area claim.
+
+disposition:
+  result: PASS
+  benchmark_admission_authorized: true
+  fixture_admission_authorized: true
+  issue_172_closure_authorized_after_merge: true
+  issue_7_consumption_authorized_after_merge: true
+  external_third_party_signoff: NOT_CLAIMED

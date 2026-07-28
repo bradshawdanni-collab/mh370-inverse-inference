@@ -1,6 +1,6 @@
 schema_version: 1
 issue: 172
-register_status: PROPOSED_PENDING_FINAL_ADMISSION_REVIEW
+register_status: ADMITTED
 review_date: "2026-07-29"
 benchmark_id: mh370-seventh-arc-published-bto-v1
 
@@ -38,7 +38,7 @@ artifacts:
       - The fact sheet is retained as methodology and uncertainty context rather than as the direct coordinate source for benchmark_fixture.csv.
 
   - artifact_id: atsb-signalling-unit-logs-2017
-    admission_status: PROPOSED_PENDING_FINAL_ADMISSION_REVIEW
+    admission_status: ADMITTED
     benchmark_id: mh370-seventh-arc-published-bto-v1
     publisher: Australian Transport Safety Bureau
     publication_title: MH370 Update to Signalling Unit Logs
@@ -73,7 +73,7 @@ artifacts:
       - Earth-surface coordinates are derived only through the separately frozen Inmarsat geometry, WGS84 transformation, sampling, and review artifacts.
 
   - artifact_id: inmarsat-search-for-mh370-2014
-    admission_status: PROPOSED_PENDING_FINAL_ADMISSION_REVIEW
+    admission_status: ADMITTED
     benchmark_id: mh370-seventh-arc-published-bto-v1
     publisher: The Royal Institute of Navigation
     publication_title: The Search for MH370
@@ -191,7 +191,7 @@ rejected_derivations:
         - mh370-seventh-arc-bto-wgs84-independent-reproduction-v1
 
 benchmark_event_selection_contract:
-  contract_status: FROZEN_PROPOSED_PENDING_FINAL_ADMISSION_REVIEW
+  contract_status: ADMITTED
   benchmark_role: seventh_arc_bto_event
   benchmark_epoch_utc: "2014-03-08T00:19:29.416Z"
 
@@ -227,10 +227,10 @@ benchmark_event_selection_contract:
   authority_boundary:
     - This contract selects and calibrates a source record only.
     - It does not represent derived Earth-surface coordinates as directly published coordinates.
-    - Final benchmark admission remains subject to the Issue #172 admission review.
+    - Admission was authorized by mh370-seventh-arc-final-admission-review-v1.
 
 benchmark_transformation_history:
-  status: COMPLETE_PENDING_FINAL_ADMISSION_REVIEW
+  status: COMPLETE_ADMITTED
   steps:
     - order: 1
       operation: SELECT_AND_CALIBRATE_BTO_EVENT
@@ -271,16 +271,28 @@ benchmark_transformation_history:
       operation: FREEZE_FIXTURE_BYTES_AND_SHA256
       filename: data/satcom/published/benchmark_fixture.csv
       sha256: 3ae049f3de7383a433cb8b0b2e1a83e503da99d0dd6e0e96bb9cc39b530cd5a7
+    - order: 11
+      operation: FINAL_ISSUE_172_ADMISSION_REVIEW
+      review_id: mh370-seventh-arc-final-admission-review-v1
+      filename: data/satcom/published/seventh_arc_final_admission_review_v1.yaml
+      sha256: aabc8794f240a1789258bb456f07693ee3f747d575553c4a483d94a6a3c11272
+      result: PASS
 
-admission_requirements_remaining:
-  - Run the final Issue #172 admission review across source metadata, usage basis, event selection, hashes, transformation history, sampling contract, independent reviews, fixture schema, and fixture bytes.
-  - Change source and fixture admission_status to ADMITTED only after that final review passes.
+admission_requirements_remaining: []
+
+final_admission_review:
+  review_id: mh370-seventh-arc-final-admission-review-v1
+  filename: data/satcom/published/seventh_arc_final_admission_review_v1.yaml
+  sha256: aabc8794f240a1789258bb456f07693ee3f747d575553c4a483d94a6a3c11272
+  status: FINAL_ADMISSION_REVIEW_PASS
+  reviewed_main_commit: 132ee1be3bec63213e438f54a60d90c1ac41170b
+  external_third_party_signoff: NOT_CLAIMED
 
 fixture:
   artifact_id: mh370-seventh-arc-published-bto-v1-fixture
   benchmark_id: mh370-seventh-arc-published-bto-v1
   filename: data/satcom/published/benchmark_fixture.csv
-  admission_status: FROZEN_PROPOSED_PENDING_FINAL_ADMISSION_REVIEW
+  admission_status: ADMITTED
   sha256: 3ae049f3de7383a433cb8b0b2e1a83e503da99d0dd6e0e96bb9cc39b530cd5a7
   byte_length: 7798
   point_count: 176
@@ -302,5 +314,5 @@ fixture:
     - Unsampled tangency endpoints between integer meridians are not synthesized.
     - Latitude values are serialized to 10 decimal places after deterministic root solving with a 0.01 metre slant-range residual tolerance.
     - Upstream published satellite and Perth GES ECEF values are rounded to the precision reported by the source.
-    - The fixture is suitable only as a deterministic validation reference after final admission and is not a crash-location, ranking, or search-area claim.
-  admission_gate: Do not mark ADMITTED or unblock Issue #7 until the final Issue #172 admission review passes.
+    - The fixture is suitable only as a deterministic validation reference and is not a crash-location, ranking, or search-area claim.
+  admission_gate: ADMITTED_FOR_ISSUE_7_CONSUMPTION_BY_FINAL_ISSUE_172_REVIEW

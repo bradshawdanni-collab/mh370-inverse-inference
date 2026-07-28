@@ -1,4 +1,4 @@
-"""Checks for the frozen #172 canonical seventh-arc benchmark fixture."""
+"""Checks for the admitted #172 canonical seventh-arc benchmark fixture."""
 
 from __future__ import annotations
 
@@ -18,10 +18,12 @@ PUBLISHED_DIR = REPO_ROOT / "data" / "satcom" / "published"
 FIXTURE_PATH = PUBLISHED_DIR / "benchmark_fixture.csv"
 SAMPLING_PATH = PUBLISHED_DIR / "seventh_arc_canonical_fixture_sampling_v1.yaml"
 REVIEW_PATH = PUBLISHED_DIR / "seventh_arc_canonical_fixture_independent_review_v1.yaml"
+FINAL_REVIEW_PATH = PUBLISHED_DIR / "seventh_arc_final_admission_review_v1.yaml"
 
 FIXTURE_SHA256 = "3ae049f3de7383a433cb8b0b2e1a83e503da99d0dd6e0e96bb9cc39b530cd5a7"
 SAMPLING_SHA256 = "1974f6c5e4be64b211248a34fecbf9d51aa74a9e68e03081a20e5aae4b1a8732"
 REVIEW_SHA256 = "efc2f18255b934c0d1986e106b722c1fff5dc1f85fe82cacacb00a8b6639a66c"
+FINAL_REVIEW_SHA256 = "aabc8794f240a1789258bb456f07693ee3f747d575553c4a483d94a6a3c11272"
 TARGET_RANGE_M = 37_861_969.39520467
 EXPECTED_HEADER = [
     "point_id",
@@ -61,6 +63,7 @@ def test_frozen_fixture_and_review_artifacts_match_recorded_hashes() -> None:
     assert _sha256(FIXTURE_PATH) == FIXTURE_SHA256
     assert _sha256(SAMPLING_PATH) == SAMPLING_SHA256
     assert _sha256(REVIEW_PATH) == REVIEW_SHA256
+    assert _sha256(FINAL_REVIEW_PATH) == FINAL_REVIEW_SHA256
     assert len(FIXTURE_PATH.read_bytes()) == 7798
     assert FIXTURE_PATH.read_bytes().endswith(b"\n")
 
@@ -124,19 +127,25 @@ def test_fixture_points_satisfy_range_with_independent_pyproj_transform() -> Non
         assert residual_m <= 0.011
 
 
-def test_register_and_provenance_stop_at_final_admission_review() -> None:
+def test_register_and_provenance_record_final_admission() -> None:
     register = (PUBLISHED_DIR / "source_register.yaml").read_text(encoding="utf-8")
     chain = (PUBLISHED_DIR / "satellite_state_provenance_chain.yaml").read_text(
         encoding="utf-8"
     )
-    expected_admission_status = "FROZEN_PROPOSED_PENDING_FINAL_ADMISSION_REVIEW"
+    readme = (PUBLISHED_DIR / "README.md").read_text(encoding="utf-8")
 
-    assert "register_status: PROPOSED_PENDING_FINAL_ADMISSION_REVIEW" in register
-    assert f"admission_status: {expected_admission_status}" in register
+    assert "register_status: ADMITTED" in register
+    assert "contract_status: ADMITTED" in register
+    assert "admission_status: ADMITTED" in register
+    assert "admission_requirements_remaining: []" in register
+    assert FINAL_REVIEW_SHA256 in register
     assert FIXTURE_SHA256 in register
     assert SAMPLING_SHA256 in register
     assert REVIEW_SHA256 in register
-    assert "chain_status: PROPOSED_PENDING_FINAL_ADMISSION_REVIEW" in chain
-    assert "PASS_FOR_PROGRESS_TO_FINAL_ADMISSION_REVIEW" in chain
+    assert "chain_status: ADMITTED" in chain
+    assert "status: ADMITTED" in chain
+    assert "mh370-seventh-arc-final-admission-review-v1" in chain
+    assert FINAL_REVIEW_SHA256 in chain
     assert FIXTURE_SHA256 in chain
-    assert "final Issue #172 admission review" in chain
+    assert "mh370-seventh-arc-published-bto-v1" in readme
+    assert ",longitude_deg,latitude_deg,altitude_m" in readme

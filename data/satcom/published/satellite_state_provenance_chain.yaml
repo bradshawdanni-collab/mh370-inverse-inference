@@ -2,7 +2,7 @@ schema_version: 1
 chain_id: inmarsat-3f1-table4-satellite-state-provenance-v1
 issue: 172
 benchmark_id: mh370-seventh-arc-published-bto-v1
-chain_status: PROPOSED_PENDING_FINAL_ADMISSION_REVIEW
+chain_status: ADMITTED
 hash_algorithm: SHA-256
 hash_encoding: lowercase_hex
 layers:
@@ -34,10 +34,10 @@ layers:
     artifact_id: mh370-seventh-arc-published-bto-v1-fixture
     filename: data/satcom/published/benchmark_fixture.csv
     sha256: 3ae049f3de7383a433cb8b0b2e1a83e503da99d0dd6e0e96bb9cc39b530cd5a7
-    status: FROZEN_PROPOSED_PENDING_FINAL_ADMISSION_REVIEW
+    status: ADMITTED
     point_count: 176
     output_classification: DERIVED_FROM_PUBLISHED_EVIDENCE
-    admission_gate: Do not mark ADMITTED until the final Issue #172 admission review passes.
+    admission_review_id: mh370-seventh-arc-final-admission-review-v1
 verification_artifacts:
   - artifact_id: inmarsat-3f1-hermite-mathematical-proof-v1
     filename: docs/satcom/inmarsat_3f1_hermite_mathematical_proof_v1.md
@@ -109,18 +109,26 @@ fixture_review_artifacts:
     reviewed_point_count: 176
     maximum_ecef_point_separation_m: 0.0762897467236152
     disposition: PASS_FOR_PROGRESS_TO_FINAL_ADMISSION_REVIEW
+final_admission_review_artifacts:
+  - review_id: mh370-seventh-arc-final-admission-review-v1
+    filename: data/satcom/published/seventh_arc_final_admission_review_v1.yaml
+    sha256: aabc8794f240a1789258bb456f07693ee3f747d575553c4a483d94a6a3c11272
+    status: FINAL_ADMISSION_REVIEW_PASS
+    reviewed_main_commit: 132ee1be3bec63213e438f54a60d90c1ac41170b
+    external_third_party_signoff: NOT_CLAIMED
+    disposition: ADMIT_BENCHMARK_FOR_ISSUE_7_CONSUMPTION
 chain_semantics:
   - Published source bytes remain distinct from extracted values.
   - Extracted endpoint values remain distinct from deterministic interpolation.
   - The derived target state is not represented as an exact published ephemeris row.
-  - The mathematical proof verifies the declared transform but does not promote admission state.
-  - The method-independent review closes only the satellite-state review subgate and is not an external institutional sign-off.
+  - The mathematical proof verifies the declared transform but does not independently confer admission.
+  - The method-independent satellite-state review is not an external institutional sign-off.
   - The Perth GES artifact fixes the geometry reference used to reproduce the published BTO model without asserting a surveyed RF phase-centre coordinate.
   - The publication's 10000 metre ring assumption remains distinct from the canonical WGS84 zero-ellipsoidal-height fixture surface.
   - Zero-height fixture coordinates are recomputed from the frozen BTO and geometry inputs and are derived artifacts, not directly published coordinates.
   - The deterministic BTO transformation and independent reproduction remain distinct from canonical fixture sampling and serialization.
   - The canonical fixture includes both distinct roots at each sampled integer longitude and applies no north/south branch preference.
-  - The exact fixture bytes and SHA-256 are frozen, but the fixture is not admitted until the final Issue #172 admission review passes.
+  - Supporting frozen artifacts retain their creation-stage statuses; benchmark admission is conferred only by the final admission review and the ADMITTED fixture layer.
   - Historical TLE/SGP4 data is secondary corroboration only.
 next_gate:
-  - Run the final Issue #172 admission review before changing the benchmark or fixture to ADMITTED or unblocking Issue #7.
+  - Issue #7 may consume the exact admitted benchmark_fixture.csv bytes and recorded SHA-256 without regenerating provenance.
