@@ -31,7 +31,10 @@ def test_altitude_convention_keeps_source_and_fixture_surfaces_distinct() -> Non
     assert "ellipsoidal_height_m: 0.0" in record
     assert "fixture_altitude_m_required: 0.0" in record
     assert "RECOMPUTE_BTO_LOCUS_ON_WGS84_ZERO_ELLIPSOIDAL_HEIGHT" in record
-    assert "Do not relabel a 10000 metre published-ring coordinate as altitude 0." in record
+    assert (
+        "Do not relabel a 10000 metre published-ring coordinate as altitude 0."
+        in record
+    )
     assert "output_classification: DERIVED_FROM_PUBLISHED_EVIDENCE" in record
     assert "direct_publication_coordinate_claim: false" in record
 
