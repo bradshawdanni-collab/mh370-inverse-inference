@@ -17,9 +17,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 PUBLISHED_DIR = REPO_ROOT / "data" / "satcom" / "published"
 FIXTURE_PATH = PUBLISHED_DIR / "benchmark_fixture.csv"
 SAMPLING_PATH = PUBLISHED_DIR / "seventh_arc_canonical_fixture_sampling_v1.yaml"
-REVIEW_PATH = (
-    PUBLISHED_DIR / "seventh_arc_canonical_fixture_independent_review_v1.yaml"
-)
+REVIEW_PATH = PUBLISHED_DIR / "seventh_arc_canonical_fixture_independent_review_v1.yaml"
 
 FIXTURE_SHA256 = "3ae049f3de7383a433cb8b0b2e1a83e503da99d0dd6e0e96bb9cc39b530cd5a7"
 SAMPLING_SHA256 = "1974f6c5e4be64b211248a34fecbf9d51aa74a9e68e03081a20e5aae4b1a8732"
