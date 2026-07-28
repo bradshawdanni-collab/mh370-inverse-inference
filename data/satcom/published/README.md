@@ -1,18 +1,30 @@
 # Published BTO validation data
 
-This directory is reserved for published MH370 BTO reference data admitted for validation.
+This directory contains source-bounded MH370 BTO reference data admitted for deterministic validation.
 
-A file must not be added unless its corresponding record in `source_register.yaml` includes:
+An admitted file must have a corresponding record in `source_register.yaml` that includes:
 
-- stable artifact identifier,
-- publisher and publication title,
-- source URL,
-- publication and retrieval dates,
-- SHA-256 checksum,
-- licence or usage terms,
-- provenance notes,
-- transformation history,
-- uncertainty notes,
+- stable artifact and benchmark identifiers;
+- publisher and publication title;
+- source URL and retrieval date;
+- publication date where available;
+- SHA-256 checksum;
+- licence or usage terms;
+- provenance and transformation history;
+- uncertainty and limitation notes;
+- coordinate reference system and units where applicable;
 - admission status.
 
-The current repository contains no admitted published benchmark dataset in this directory. Synthetic test fixtures are used only to verify the validation code path and must not be represented as official MH370 evidence.
+## Admitted seventh-arc fixture
+
+`benchmark_fixture.csv` is admitted under benchmark ID `mh370-seventh-arc-published-bto-v1` for Issue #7 deterministic validation consumption.
+
+Exact schema:
+
+```text
+point_id,sequence_index,longitude_deg,latitude_deg,altitude_m
+```
+
+The fixture is a deterministic sampled WGS84 zero-ellipsoidal-height locus derived from frozen published-source inputs. Its coordinates are not directly published coordinates and must not be represented as an inferred aircraft location, ranked endpoint, search recommendation, or crash-location claim.
+
+The exact fixture bytes, SHA-256, sampling rule, independent sequence review, and final admission review are recorded in `source_register.yaml` and the associated provenance artifacts.
