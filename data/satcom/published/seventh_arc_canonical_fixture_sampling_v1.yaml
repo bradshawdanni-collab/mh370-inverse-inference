@@ -1,0 +1,84 @@
+schema_version: 1
+artifact_id: mh370-seventh-arc-canonical-fixture-sampling-v1
+issue: 172
+benchmark_id: mh370-seventh-arc-published-bto-v1
+status: FROZEN_PROPOSED_PENDING_FINAL_ADMISSION_REVIEW
+
+purpose: >
+  Freeze the canonical deterministic sampling and serialization rule used to
+  materialize the seventh-arc WGS84 zero-ellipsoidal-height benchmark fixture.
+  This artifact defines the exact sampled coordinate sequence but does not
+  promote the fixture to ADMITTED status.
+
+upstream:
+  transform_artifact_id: mh370-seventh-arc-bto-wgs84-transform-v1
+  transform_sha256: 4142c33134df8704a466e037b0e1cb065116daea06b74307a986274509f2db21
+  independent_reproduction_artifact_id: mh370-seventh-arc-bto-wgs84-independent-reproduction-v1
+  independent_reproduction_sha256: 7d5945d3c1d1cbb0328d6316ee0ac3508c3077af0c7457fd4c1b294ba03aa83e
+  satellite_to_aircraft_range_m: 37861969.39520467
+  surface:
+    horizontal_reference: WGS84
+    vertical_reference: WGS84_ELLIPSOID
+    ellipsoidal_height_m: 0.0
+
+sampling_rule:
+  longitude_domain: HALF_OPEN_NEGATIVE_180_TO_POSITIVE_180
+  minimum_longitude_deg: -180.0
+  maximum_longitude_deg_exclusive: 180.0
+  longitude_step_deg: 1.0
+  longitude_values: INTEGER_DEGREES
+  latitude_search_minimum_deg: -90.0
+  latitude_search_maximum_deg: 90.0
+  latitude_bracket_step_deg: 0.25
+  root_solver: BRACKETED_BISECTION
+  slant_range_residual_tolerance_m: 0.01
+  maximum_iterations: 80
+  root_inclusion: ALL_DISTINCT_ROOTS_AT_EACH_SAMPLED_LONGITUDE
+  branch_preference: NONE
+  ordering:
+    primary: longitude_deg_ascending
+    secondary: latitude_deg_ascending
+  endpoint_policy: >
+    Include only roots obtained at the declared integer-longitude samples.
+    Do not synthesize unsampled tangency endpoints between grid meridians.
+
+canonical_serialization:
+  encoding: UTF-8
+  line_ending: LF
+  final_newline: true
+  header: point_id,sequence_index,longitude_deg,latitude_deg,altitude_m
+  sequence_index_origin: 0
+  point_id_format: arc7-{sequence_index:04d}
+  longitude_decimal_places: 8
+  latitude_decimal_places: 10
+  altitude_literal: "0.0"
+  altitude_units: metres
+  coordinate_units: degrees
+  coordinate_reference_system: WGS84_GEODETIC_EPSG_4979_ZERO_ELLIPSOIDAL_HEIGHT
+
+derived_sequence_summary:
+  point_count: 176
+  first_sampled_root_longitude_deg: 21.0
+  last_sampled_root_longitude_deg: 108.0
+  sampled_longitude_count_with_roots: 88
+  roots_per_included_longitude: 2
+  output_classification: DERIVED_FROM_PUBLISHED_EVIDENCE
+  directly_published_coordinates: false
+
+fixture:
+  filename: data/satcom/published/benchmark_fixture.csv
+  sha256: 3ae049f3de7383a433cb8b0b2e1a83e503da99d0dd6e0e96bb9cc39b530cd5a7
+  byte_length: 7798
+  status: FROZEN_PROPOSED_PENDING_FINAL_ADMISSION_REVIEW
+
+governance:
+  benchmark_admitted: false
+  final_issue_172_admission_review_required: true
+  bfo_processing: false
+  inference_or_ranking: false
+  crash_location_claim: false
+
+next_gate: >
+  Run the final Issue #172 admission review over the frozen source metadata,
+  transformation chain, sampling contract, independently reviewed coordinate
+  sequence, fixture bytes, and fixture SHA-256 before any ADMITTED state change.
