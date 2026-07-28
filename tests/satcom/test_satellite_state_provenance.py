@@ -3,10 +3,9 @@
 from __future__ import annotations
 
 import hashlib
-from decimal import Decimal, getcontext
+import math
+from decimal import Decimal, localcontext
 from pathlib import Path
-
-import pytest
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -23,10 +22,6 @@ FROZEN_HASHES = {
     "inmarsat_3f1_target_state_20140308T001929416Z.yaml": TARGET_STATE_SHA256,
 }
 
-START_POSITION_M = (18_177_500.0, 38_051_700.0, 440_000.0)
-START_VELOCITY_M_S = (1.60, -1.51, -81.88)
-END_POSITION_M = (18_178_400.0, 38_050_800.0, 390_500.0)
-END_VELOCITY_M_S = (1.50, -1.58, -83.21)
 DURATION_S = 600.0
 TARGET_OFFSET_S = 569.416
 
@@ -46,15 +41,12 @@ def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def _hermite_component_binary64(
-    *,
+def _hermite_binary64(
     start_position: float,
     start_velocity: float,
     end_position: float,
     end_velocity: float,
 ) -> tuple[float, float]:
-    """Independent scalar binary64 implementation; does not call production code."""
-
     u = TARGET_OFFSET_S / DURATION_S
     h00 = 2.0 * u**3 - 3.0 * u**2 + 1.0
     h10 = u**3 - 2.0 * u**2 + u
@@ -79,45 +71,49 @@ def _hermite_component_binary64(
         + dh01 * end_position
         + dh11 * DURATION_S * end_velocity
     ) / DURATION_S
-
     return position, velocity
 
 
-def _hermite_component_decimal(
-    *,
+def _hermite_decimal(
     start_position: str,
     start_velocity: str,
     end_position: str,
     end_velocity: str,
 ) -> tuple[Decimal, Decimal]:
-    """High-precision audit implementation to bound binary64 round-off."""
+    with localcontext() as context:
+        context.prec = 60
+        duration = Decimal("600.0")
+        target = Decimal("569.416")
+        u = target / duration
 
-    getcontext().prec = 60
-    duration = Decimal("600.0")
-    target = Decimal("569.416")
-    u = target / duration
+        h00 = Decimal(2) * u**3 - Decimal(3) * u**2 + Decimal(1)
+        h10 = u**3 - Decimal(2) * u**2 + u
+        h01 = -Decimal(2) * u**3 + Decimal(3) * u**2
+        h11 = u**3 - u**2
 
-    h00 = Decimal(2) * u**3 - Decimal(3) * u**2 + Decimal(1)
-    h10 = u**3 - Decimal(2) * u**2 + u
-    h01 = -Decimal(2) * u**3 + Decimal(3) * u**2
-    h11 = u**3 - u**2
+        p0 = Decimal(start_position)
+        v0 = Decimal(start_velocity)
+        p1 = Decimal(end_position)
+        v1 = Decimal(end_velocity)
 
-    p0 = Decimal(start_position)
-    v0 = Decimal(start_velocity)
-    p1 = Decimal(end_position)
-    v1 = Decimal(end_velocity)
+        position = (
+            h00 * p0
+            + h10 * duration * v0
+            + h01 * p1
+            + h11 * duration * v1
+        )
 
-    position = h00 * p0 + h10 * duration * v0 + h01 * p1 + h11 * duration * v1
+        dh00 = Decimal(6) * u**2 - Decimal(6) * u
+        dh10 = Decimal(3) * u**2 - Decimal(4) * u + Decimal(1)
+        dh01 = -Decimal(6) * u**2 + Decimal(6) * u
+        dh11 = Decimal(3) * u**2 - Decimal(2) * u
 
-    dh00 = Decimal(6) * u**2 - Decimal(6) * u
-    dh10 = Decimal(3) * u**2 - Decimal(4) * u + Decimal(1)
-    dh01 = -Decimal(6) * u**2 + Decimal(6) * u
-    dh11 = Decimal(3) * u**2 - Decimal(2) * u
-
-    velocity = (
-        dh00 * p0 + dh10 * duration * v0 + dh01 * p1 + dh11 * duration * v1
-    ) / duration
-
+        velocity = (
+            dh00 * p0
+            + dh10 * duration * v0
+            + dh01 * p1
+            + dh11 * duration * v1
+        ) / duration
     return position, velocity
 
 
@@ -127,9 +123,8 @@ def test_frozen_repository_records_match_recorded_sha256() -> None:
 
 
 def test_provenance_chain_references_frozen_hashes_and_source_hash() -> None:
-    chain = (PUBLISHED_DIR / "satellite_state_provenance_chain.yaml").read_text(
-        encoding="utf-8"
-    )
+    chain_path = PUBLISHED_DIR / "satellite_state_provenance_chain.yaml"
+    chain = chain_path.read_text(encoding="utf-8")
 
     for expected_sha256 in FROZEN_HASHES.values():
         assert expected_sha256 in chain
@@ -139,48 +134,54 @@ def test_provenance_chain_references_frozen_hashes_and_source_hash() -> None:
 
 
 def test_independent_binary64_reproduction_matches_frozen_target_state() -> None:
-    reproduced = tuple(
-        _hermite_component_binary64(
-            start_position=start_position,
-            start_velocity=start_velocity,
-            end_position=end_position,
-            end_velocity=end_velocity,
-        )
-        for start_position, start_velocity, end_position, end_velocity in zip(
-            START_POSITION_M,
-            START_VELOCITY_M_S,
-            END_POSITION_M,
-            END_VELOCITY_M_S,
-            strict=True,
-        )
-    )
+    x_state = _hermite_binary64(18_177_500.0, 1.60, 18_178_400.0, 1.50)
+    y_state = _hermite_binary64(38_051_700.0, -1.51, 38_050_800.0, -1.58)
+    z_state = _hermite_binary64(440_000.0, -81.88, 390_500.0, -83.21)
 
-    reproduced_position = tuple(component[0] for component in reproduced)
-    reproduced_velocity = tuple(component[1] for component in reproduced)
+    reproduced_position = (x_state[0], y_state[0], z_state[0])
+    reproduced_velocity = (x_state[1], y_state[1], z_state[1])
 
-    assert reproduced_position == pytest.approx(FROZEN_POSITION_M, abs=1e-6)
-    assert reproduced_velocity == pytest.approx(FROZEN_VELOCITY_M_S, abs=1e-12)
+    for actual, expected in zip(
+        reproduced_position,
+        FROZEN_POSITION_M,
+        strict=True,
+    ):
+        assert math.isclose(actual, expected, rel_tol=0.0, abs_tol=1e-6)
+
+    for actual, expected in zip(
+        reproduced_velocity,
+        FROZEN_VELOCITY_M_S,
+        strict=True,
+    ):
+        assert math.isclose(actual, expected, rel_tol=0.0, abs_tol=1e-12)
 
 
 def test_high_precision_audit_bounds_binary64_roundoff() -> None:
-    decimal_inputs = (
-        ("18177500.0", "1.60", "18178400.0", "1.50"),
-        ("38051700.0", "-1.51", "38050800.0", "-1.58"),
-        ("440000.0", "-81.88", "390500.0", "-83.21"),
+    x_state = _hermite_decimal("18177500.0", "1.60", "18178400.0", "1.50")
+    y_state = _hermite_decimal("38051700.0", "-1.51", "38050800.0", "-1.58")
+    z_state = _hermite_decimal("440000.0", "-81.88", "390500.0", "-83.21")
+
+    high_precision_position = (
+        float(x_state[0]),
+        float(y_state[0]),
+        float(z_state[0]),
+    )
+    high_precision_velocity = (
+        float(x_state[1]),
+        float(y_state[1]),
+        float(z_state[1]),
     )
 
-    high_precision = tuple(
-        _hermite_component_decimal(
-            start_position=start_position,
-            start_velocity=start_velocity,
-            end_position=end_position,
-            end_velocity=end_velocity,
-        )
-        for start_position, start_velocity, end_position, end_velocity in decimal_inputs
-    )
+    for actual, expected in zip(
+        high_precision_position,
+        FROZEN_POSITION_M,
+        strict=True,
+    ):
+        assert math.isclose(actual, expected, rel_tol=0.0, abs_tol=1e-6)
 
-    high_precision_position = tuple(float(component[0]) for component in high_precision)
-    high_precision_velocity = tuple(float(component[1]) for component in high_precision)
-
-    assert FROZEN_POSITION_M == pytest.approx(high_precision_position, abs=1e-6)
-    assert FROZEN_VELOCITY_M_S == pytest.approx(high_precision_velocity, abs=5e-12)
+    for actual, expected in zip(
+        high_precision_velocity,
+        FROZEN_VELOCITY_M_S,
+        strict=True,
+    ):
+        assert math.isclose(actual, expected, rel_tol=0.0, abs_tol=5e-12)
