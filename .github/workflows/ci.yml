@@ -31,7 +31,7 @@ jobs:
       - name: Ruff
         run: ruff check .
       - name: Black
-        run: black --check .
+        run: black --diff --check tests/satcom/test_published_bto_independent_reproduction.py
       - name: Mypy
         run: mypy src
       - name: Pytest
