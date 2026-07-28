@@ -95,12 +95,7 @@ def _hermite_decimal(
         p1 = Decimal(end_position)
         v1 = Decimal(end_velocity)
 
-        position = (
-            h00 * p0
-            + h10 * duration * v0
-            + h01 * p1
-            + h11 * duration * v1
-        )
+        position = h00 * p0 + h10 * duration * v0 + h01 * p1 + h11 * duration * v1
 
         dh00 = Decimal(6) * u**2 - Decimal(6) * u
         dh10 = Decimal(3) * u**2 - Decimal(4) * u + Decimal(1)
@@ -108,10 +103,7 @@ def _hermite_decimal(
         dh11 = Decimal(3) * u**2 - Decimal(2) * u
 
         velocity = (
-            dh00 * p0
-            + dh10 * duration * v0
-            + dh01 * p1
-            + dh11 * duration * v1
+            dh00 * p0 + dh10 * duration * v0 + dh01 * p1 + dh11 * duration * v1
         ) / duration
     return position, velocity
 
