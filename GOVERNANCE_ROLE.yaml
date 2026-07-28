@@ -1,0 +1,27 @@
+schema_version: "1.0"
+repository: "bradshawdanni-collab/mh370-inverse-inference"
+repository_role: "bounded-domain-application"
+authoritative_for:
+  - "MH370 domain assumptions"
+  - "SATCOM geometry and arc reconstruction"
+  - "domain uncertainty bands"
+  - "debris, search and evidence-layer transformations"
+  - "competing impact-region evaluation"
+  - "domain validation tests"
+not_authoritative_for:
+  - "asserted MH370 crash location"
+  - "authoritative accident findings"
+  - "admissibility-state definitions"
+  - "kernel invariants"
+  - "state-transition contracts"
+  - "execution authority"
+  - "constitutional authority"
+  - "independent certification"
+canonical_upstream:
+  repository: "bradshawdanni-collab/aurum-v-kernel"
+  version: "1.0.1"
+  commit: "7f442326f37554aa34b91474648d8406ba99aa5b"
+required_reviews:
+  - "constitutional owner"
+  - "domain scientific reviewer"
+status: "active"
