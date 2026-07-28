@@ -60,6 +60,15 @@ geometry_artifacts:
     operational_reference_decision: USE_PUBLISHED_TABLE2_ECEF_VECTOR_WITHOUT_ADDITIONAL_GEOMETRIC_CORRECTION
     external_phase_centre_identity_claimed: false
     disposition: PASS_FOR_PROGRESS_TO_ALTITUDE_CONVENTION
+altitude_artifacts:
+  - artifact_id: mh370-seventh-arc-altitude-convention-v1
+    filename: data/satcom/published/altitude_convention_wgs84_zero_height_v1.yaml
+    sha256: 04006848dd912fc1d106cb095f2b8bd065689d947639c44e2dfcd37b80209319
+    status: FROZEN_PROPOSED
+    published_ring_altitude_m: 10000.0
+    canonical_fixture_ellipsoidal_height_m: 0.0
+    normalization_decision: RECOMPUTE_BTO_LOCUS_ON_WGS84_ZERO_ELLIPSOIDAL_HEIGHT
+    disposition: PASS_FOR_PROGRESS_TO_DETERMINISTIC_WGS84_TRANSFORMATION
 chain_semantics:
   - Published source bytes remain distinct from extracted values.
   - Extracted endpoint values remain distinct from deterministic interpolation.
@@ -67,7 +76,9 @@ chain_semantics:
   - The mathematical proof verifies the declared transform but does not promote admission state.
   - The method-independent review closes only the satellite-state review subgate and is not an external institutional sign-off.
   - The Perth GES artifact fixes the geometry reference used to reproduce the published BTO model without asserting a surveyed RF phase-centre coordinate.
+  - The publication's 10000 metre ring assumption remains distinct from the canonical WGS84 zero-ellipsoidal-height fixture surface.
+  - Zero-height fixture coordinates must be recomputed from the frozen BTO and geometry inputs and are derived artifacts, not directly published coordinates.
   - Historical TLE/SGP4 data is secondary corroboration only.
   - No layer in this chain independently admits benchmark_fixture.csv.
 next_gate:
-  - Define and freeze the altitude convention separating the publication's 10000 metre rings from the repository's WGS84 zero-altitude fixture contract.
+  - Implement and independently verify the deterministic BTO-to-WGS84 zero-ellipsoidal-height transformation before benchmark_fixture.csv is created.
