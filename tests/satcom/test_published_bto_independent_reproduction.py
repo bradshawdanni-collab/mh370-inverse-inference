@@ -208,10 +208,7 @@ def test_independent_surface_roots_match_production_regression_locus() -> None:
             abs(math.dist(production_ecef, SATELLITE_TUPLE) - FROZEN_TARGET_RANGE_M)
         )
         independent_residuals_m.append(
-            abs(
-                math.dist(independent_ecef, SATELLITE_TUPLE)
-                - independent_range
-            )
+            abs(math.dist(independent_ecef, SATELLITE_TUPLE) - independent_range)
         )
         latitude_differences_deg.append(
             abs(latitude_deg - production_point.geodetic.latitude_deg)
