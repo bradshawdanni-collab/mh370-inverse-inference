@@ -16,6 +16,7 @@ TRANSFORM_SHA256 = "ea135509fc6d1dcc9e2f5dad07780ad74e976337a02ba073351f243c1b79
 TARGET_STATE_SHA256 = "c61f400c8b27b07b3acc57701d958068ee8cbb2654a5e325e3f2d0f0cb166452"
 SOURCE_PDF_SHA256 = "2ff0f10c1cf0bad299e5398ad9019a113963f6a5bd86b96bf4d04d330bc08028"
 PROOF_SHA256 = "6ac053c8417707c71766b5a90981e406d77a4f3e6cdbc36553b705ce6284ae4a"
+REVIEW_SHA256 = "f661f502be4d267a583b7efd1f770a445cbdbe478f17acfa8339978bde1d0dce"
 
 FROZEN_HASHES = {
     "inmarsat_3f1_table4_endpoints.yaml": ENDPOINTS_SHA256,
@@ -120,6 +121,13 @@ def test_frozen_hermite_proof_matches_recorded_sha256() -> None:
     assert _sha256(proof_path) == PROOF_SHA256
 
 
+def test_satellite_state_review_matches_recorded_sha256() -> None:
+    review_path = (
+        PUBLISHED_DIR / "inmarsat_3f1_satellite_state_method_independent_review_v1.yaml"
+    )
+    assert _sha256(review_path) == REVIEW_SHA256
+
+
 def test_provenance_chain_references_frozen_hashes_and_source_hash() -> None:
     chain_path = PUBLISHED_DIR / "satellite_state_provenance_chain.yaml"
     chain = chain_path.read_text(encoding="utf-8")
@@ -128,6 +136,8 @@ def test_provenance_chain_references_frozen_hashes_and_source_hash() -> None:
         assert expected_sha256 in chain
     assert SOURCE_PDF_SHA256 in chain
     assert PROOF_SHA256 in chain
+    assert REVIEW_SHA256 in chain
+    assert "PASS_FOR_PROGRESS_TO_PERTH_GES" in chain
     assert "benchmark_fixture.csv" in chain
     assert "status: NOT_CREATED" in chain
 
