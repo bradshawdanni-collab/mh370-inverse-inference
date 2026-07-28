@@ -1,0 +1,101 @@
+schema_version: 1
+review_id: inmarsat-3f1-satellite-state-method-independent-review-v1
+issue: 172
+review_date_utc: "2026-07-29"
+review_scope: satellite_state_only
+review_status: REVIEWED_METHOD_INDEPENDENT
+external_third_party_signoff: NOT_CLAIMED
+
+independence_boundary:
+  - The review uses the primary publication directly for endpoint transcription.
+  - The mathematical reproduction is independent of the production interpolation function.
+  - This is a method-and-source cross-check, not an external human or institutional sign-off.
+  - Overall benchmark admission remains unchanged.
+
+primary_source_check:
+  artifact_id: inmarsat-search-for-mh370-2014
+  doi: 10.1017/S037346331400068X
+  publication_section: "Table 4 - Satellite Location and Velocity (ECEF)"
+  recorded_source_sha256: 2ff0f10c1cf0bad299e5398ad9019a113963f6a5bd86b96bf4d04d330bc08028
+  source_hash_evidence:
+    status: VERIFIED_BY_PRIOR_BYTE_CAPTURE_CHECKPOINT
+    commit: ca7c013eb052e28791b3cd500bd7ac42619089f8
+    limitation: The captured PDF bytes are not stored in the repository, so this review verifies the published Table 4 content directly and relies on the recorded byte-capture checkpoint for the exact PDF digest.
+  table4_transcription:
+    status: PASS
+    start:
+      epoch_utc: "2014-03-08T00:10:00Z"
+      ecef_position_km: [18177.5, 38051.7, 440.0]
+      ecef_velocity_km_s: [0.00160, -0.00151, -0.08188]
+    end:
+      epoch_utc: "2014-03-08T00:20:00Z"
+      ecef_position_km: [18178.4, 38050.8, 390.5]
+      ecef_velocity_km_s: [0.00150, -0.00158, -0.08321]
+
+frozen_artifact_checks:
+  endpoint_record:
+    artifact_id: inmarsat-3f1-table4-endpoints-20140308
+    sha256: 835c5a93ca9af0c618bb692404a8af59a079aa08af3188df0abcaa3b515eebbc
+    status: PASS_REPOSITORY_REHASH
+  transform_specification:
+    artifact_id: inmarsat-3f1-hermite-transform-v1
+    sha256: ea135509fc6d1dcc9e2f5dad07780ad74e976337a02ba073351f243c1b79ee82
+    status: PASS_REPOSITORY_REHASH
+  target_state:
+    artifact_id: inmarsat-3f1-table4-target-state-20140308T001929416Z
+    sha256: c61f400c8b27b07b3acc57701d958068ee8cbb2654a5e325e3f2d0f0cb166452
+    status: PASS_REPOSITORY_REHASH
+  mathematical_proof:
+    artifact_id: inmarsat-3f1-hermite-mathematical-proof-v1
+    sha256: 6ac053c8417707c71766b5a90981e406d77a4f3e6cdbc36553b705ce6284ae4a
+    status: PASS_REPOSITORY_REHASH
+
+target_epoch_check:
+  start_epoch_utc: "2014-03-08T00:10:00Z"
+  target_epoch_utc: "2014-03-08T00:19:29.416Z"
+  target_offset_seconds: 569.416
+  interval_seconds: 600.0
+  normalized_parameter: 0.9490266666666666666666666667
+  status: PASS
+
+mathematical_review:
+  method: CUBIC_HERMITE
+  boundary_conditions:
+    H_0_equals_r0: PASS
+    H_T_equals_r1: PASS
+    Hprime_0_equals_v0: PASS
+    Hprime_T_equals_v1: PASS
+  derivative_convention: physical_time_derivative_with_du_dt_equal_1_over_T
+  status: PASS
+
+independent_high_precision_reproduction:
+  arithmetic: decimal_high_precision
+  position_m:
+    x: 18178354.271950260939804444444444444
+    y: 38050848.064847291020842666666666667
+    z: 393043.654617182220842666666666667
+  velocity_m_s:
+    x: 1.490584817546666666666666666667
+    y: -1.563370602458666666666666666667
+    z: -83.129144202458666666666666666667
+  frozen_state_residuals:
+    max_abs_position_m: 1.0208426666666667e-9
+    max_abs_velocity_m_s: 2.2002666666666667e-12
+  tolerance_check:
+    position_abs_tolerance_m: 1.0e-6
+    velocity_abs_tolerance_m_s: 5.0e-12
+    status: PASS
+
+review_disposition:
+  satellite_state_subgate: PASS_FOR_PROGRESS_TO_PERTH_GES
+  frozen_artifacts_mutated: false
+  benchmark_admission_promoted: false
+  benchmark_fixture_created: false
+  next_gate: PERTH_GES_GEOMETRY
+
+limitations:
+  - Published Table 4 endpoint values are rounded.
+  - The target state is interpolation-derived and is not an exact published ephemeris row.
+  - The review does not establish cubic Hermite interpolation as uniquely physically optimal between published nodes.
+  - Historical TLE/SGP4 remains secondary corroboration only.
+  - No Earth-surface coordinates or crash-location claims are produced.

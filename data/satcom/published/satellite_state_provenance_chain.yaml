@@ -45,12 +45,20 @@ verification_artifacts:
       - inmarsat-3f1-table4-endpoints-20140308
       - inmarsat-3f1-hermite-transform-v1
       - inmarsat-3f1-table4-target-state-20140308T001929416Z
+review_artifacts:
+  - review_id: inmarsat-3f1-satellite-state-method-independent-review-v1
+    filename: data/satcom/published/inmarsat_3f1_satellite_state_method_independent_review_v1.yaml
+    sha256: f661f502be4d267a583b7efd1f770a445cbdbe478f17acfa8339978bde1d0dce
+    status: REVIEWED_METHOD_INDEPENDENT
+    external_third_party_signoff: NOT_CLAIMED
+    disposition: PASS_FOR_PROGRESS_TO_PERTH_GES
 chain_semantics:
   - Published source bytes remain distinct from extracted values.
   - Extracted endpoint values remain distinct from deterministic interpolation.
   - The derived target state is not represented as an exact published ephemeris row.
   - The mathematical proof verifies the declared transform but does not promote admission state.
+  - The method-independent review closes only the satellite-state review subgate and is not an external institutional sign-off.
   - Historical TLE/SGP4 data is secondary corroboration only.
   - No layer in this chain independently admits benchmark_fixture.csv.
 next_gate:
-  - Independent review of the frozen endpoint extraction, Hermite proof, derived state, and recorded hashes.
+  - Freeze and review the Perth GES ECEF geometry and its operational reference treatment.
