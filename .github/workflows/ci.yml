@@ -31,7 +31,7 @@ jobs:
       - name: Ruff
         run: ruff check .
       - name: Black
-        run: black --diff --check src/mh370_inverse_inference/provenance/models.py
+        run: black --check .
       - name: Mypy
         run: mypy src
       - name: Pytest
