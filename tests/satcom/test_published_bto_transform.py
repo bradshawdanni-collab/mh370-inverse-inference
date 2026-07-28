@@ -19,7 +19,7 @@ from mh370_inverse_inference.satcom import (
 REPO_ROOT = Path(__file__).resolve().parents[2]
 PUBLISHED_DIR = REPO_ROOT / "data" / "satcom" / "published"
 TRANSFORM_SHA256 = "4142c33134df8704a466e037b0e1cb065116daea06b74307a986274509f2db21"
-PENDING_FIXTURE_STATUS = "FROZEN_PROPOSED_PENDING_FINAL_ADMISSION_REVIEW"
+ADMITTED_FIXTURE_STATUS = "ADMITTED"
 
 SATELLITE = SatellitePosition(
     epoch_utc="2014-03-08T00:19:29.416Z",
@@ -111,7 +111,7 @@ def test_zero_height_locus_is_deterministic_and_range_consistent() -> None:
     )
 
 
-def test_provenance_chain_preserves_transform_gate_after_fixture_freeze() -> None:
+def test_provenance_chain_preserves_transform_gate_after_admission() -> None:
     chain = (PUBLISHED_DIR / "satellite_state_provenance_chain.yaml").read_text(
         encoding="utf-8"
     )
@@ -120,6 +120,6 @@ def test_provenance_chain_preserves_transform_gate_after_fixture_freeze() -> Non
     assert TRANSFORM_SHA256 in chain
     assert "IMPLEMENTED_PENDING_INDEPENDENT_REPRODUCTION" in chain
     assert "benchmark_fixture.csv" in chain
-    assert f"status: {PENDING_FIXTURE_STATUS}" in chain
+    assert f"status: {ADMITTED_FIXTURE_STATUS}" in chain
+    assert "mh370-seventh-arc-final-admission-review-v1" in chain
     assert fixture_path.exists()
-    assert "status: ADMITTED" not in chain
