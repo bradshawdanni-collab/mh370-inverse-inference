@@ -2,7 +2,7 @@ schema_version: 1
 chain_id: inmarsat-3f1-table4-satellite-state-provenance-v1
 issue: 172
 benchmark_id: mh370-seventh-arc-published-bto-v1
-chain_status: PROPOSED_PENDING_INDEPENDENT_REVIEW
+chain_status: PROPOSED_PENDING_FINAL_ADMISSION_REVIEW
 hash_algorithm: SHA-256
 hash_encoding: lowercase_hex
 layers:
@@ -33,9 +33,11 @@ layers:
     layer: benchmark_fixture
     artifact_id: mh370-seventh-arc-published-bto-v1-fixture
     filename: data/satcom/published/benchmark_fixture.csv
-    sha256: null
-    status: NOT_CREATED
-    prohibition: Do not create until all remaining Issue #172 admission gates are complete.
+    sha256: 3ae049f3de7383a433cb8b0b2e1a83e503da99d0dd6e0e96bb9cc39b530cd5a7
+    status: FROZEN_PROPOSED_PENDING_FINAL_ADMISSION_REVIEW
+    point_count: 176
+    output_classification: DERIVED_FROM_PUBLISHED_EVIDENCE
+    admission_gate: Do not mark ADMITTED until the final Issue #172 admission review passes.
 verification_artifacts:
   - artifact_id: inmarsat-3f1-hermite-mathematical-proof-v1
     filename: docs/satcom/inmarsat_3f1_hermite_mathematical_proof_v1.md
@@ -88,6 +90,25 @@ transformation_review_artifacts:
     matched_point_count: 16
     maximum_ecef_point_separation_m: 1.5278604724812659
     disposition: PASS_FOR_PROGRESS_TO_CANONICAL_FIXTURE_SAMPLING_AND_FREEZE
+sampling_artifacts:
+  - artifact_id: mh370-seventh-arc-canonical-fixture-sampling-v1
+    filename: data/satcom/published/seventh_arc_canonical_fixture_sampling_v1.yaml
+    sha256: 1974f6c5e4be64b211248a34fecbf9d51aa74a9e68e03081a20e5aae4b1a8732
+    status: FROZEN_PROPOSED_PENDING_FINAL_ADMISSION_REVIEW
+    point_count: 176
+    longitude_step_deg: 1.0
+    latitude_bracket_step_deg: 0.25
+    slant_range_residual_tolerance_m: 0.01
+    branch_preference: NONE
+fixture_review_artifacts:
+  - review_id: mh370-seventh-arc-canonical-fixture-independent-review-v1
+    filename: data/satcom/published/seventh_arc_canonical_fixture_independent_review_v1.yaml
+    sha256: efc2f18255b934c0d1986e106b722c1fff5dc1f85fe82cacacb00a8b6639a66c
+    status: REVIEWED_METHOD_INDEPENDENT
+    external_third_party_signoff: NOT_CLAIMED
+    reviewed_point_count: 176
+    maximum_ecef_point_separation_m: 0.0762897467236152
+    disposition: PASS_FOR_PROGRESS_TO_FINAL_ADMISSION_REVIEW
 chain_semantics:
   - Published source bytes remain distinct from extracted values.
   - Extracted endpoint values remain distinct from deterministic interpolation.
@@ -96,11 +117,10 @@ chain_semantics:
   - The method-independent review closes only the satellite-state review subgate and is not an external institutional sign-off.
   - The Perth GES artifact fixes the geometry reference used to reproduce the published BTO model without asserting a surveyed RF phase-centre coordinate.
   - The publication's 10000 metre ring assumption remains distinct from the canonical WGS84 zero-ellipsoidal-height fixture surface.
-  - Zero-height fixture coordinates must be recomputed from the frozen BTO and geometry inputs and are derived artifacts, not directly published coordinates.
-  - The deterministic BTO transformation derives a zero-height WGS84 locus but does not create or admit benchmark_fixture.csv.
-  - The independent transformation review reproduces the range and zero-height locus without using the production published-BTO wrapper for its independent calculation.
-  - The independent review's coordinate separation is evaluated against the implementation-regression solver configuration and does not freeze canonical fixture sampling.
+  - Zero-height fixture coordinates are recomputed from the frozen BTO and geometry inputs and are derived artifacts, not directly published coordinates.
+  - The deterministic BTO transformation and independent reproduction remain distinct from canonical fixture sampling and serialization.
+  - The canonical fixture includes both distinct roots at each sampled integer longitude and applies no north/south branch preference.
+  - The exact fixture bytes and SHA-256 are frozen, but the fixture is not admitted until the final Issue #172 admission review passes.
   - Historical TLE/SGP4 data is secondary corroboration only.
-  - No layer in this chain independently admits benchmark_fixture.csv.
 next_gate:
-  - Define and freeze canonical benchmark fixture sampling, generate and independently review the exact zero-height coordinate sequence, then freeze benchmark_fixture.csv bytes and SHA-256 before final Issue #172 admission review.
+  - Run the final Issue #172 admission review before changing the benchmark or fixture to ADMITTED or unblocking Issue #7.
