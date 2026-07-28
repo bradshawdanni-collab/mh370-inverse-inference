@@ -331,7 +331,7 @@ def serialize_bto_validation_result_json(result: BTOValidationResult) -> bytes:
         separators=(",", ":"),
         sort_keys=True,
     )
-    return f"{text}\n".encode("utf-8")
+    return f"{text}\n".encode()
 
 
 def nearest_reference_distance_m(
