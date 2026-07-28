@@ -131,11 +131,10 @@ def test_register_and_provenance_stop_at_final_admission_review() -> None:
     chain = (PUBLISHED_DIR / "satellite_state_provenance_chain.yaml").read_text(
         encoding="utf-8"
     )
+    expected_admission_status = "FROZEN_PROPOSED_PENDING_FINAL_ADMISSION_REVIEW"
 
     assert "register_status: PROPOSED_PENDING_FINAL_ADMISSION_REVIEW" in register
-    assert (
-        "admission_status: FROZEN_PROPOSED_PENDING_FINAL_ADMISSION_REVIEW" in register
-    )
+    assert f"admission_status: {expected_admission_status}" in register
     assert FIXTURE_SHA256 in register
     assert SAMPLING_SHA256 in register
     assert REVIEW_SHA256 in register
