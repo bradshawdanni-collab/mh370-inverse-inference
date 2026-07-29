@@ -1,0 +1,67 @@
+schema_version: 1
+linkage_id: mh370-seventh-arc-l0.4-provenance-linkage-v1
+issue: 9
+stage: 9D
+status: LINKED_WITHOUT_REGENERATION
+base_main_commit: 741afb12b7f2bf9287cf880325c0d3c703c72b75
+
+fixture:
+  path: data/satcom/published/benchmark_fixture.csv
+  artifact_id: mh370-seventh-arc-published-bto
+  version: v1
+  sha256: 3ae049f3de7383a433cb8b0b2e1a83e503da99d0dd6e0e96bb9cc39b530cd5a7
+  byte_length: 7798
+  point_count: 176
+  admission_state: ADMITTED
+  artifact_kind: DERIVED
+  classification: DERIVED_FROM_PUBLISHED_EVIDENCE
+
+validation_output:
+  artifact_id: mh370-seventh-arc-l0.4-validation-output
+  version: v1
+  sha256: 6d4b73fd19afaf3aabec46520551be9d05ab89aa25db11126cad747103452982
+  byte_length: 14757
+  sample_count: 176
+  maximum_deviation_m: 5.553530299628166e-06
+  mean_deviation_m: 2.895962970892908e-06
+  model_version: l0.4-wgs84-v1
+  configuration_id: sequence-index-aligned-geodesic-v1
+  admission_state: ADMITTED
+  artifact_kind: VALIDATION
+  validation_output_bytes_vendored: false
+
+registry_linkage:
+  provenance_contract_version: PROVENANCE-1
+  registry_contract_version: PROVENANCE-REGISTRY-1
+  attribution_contract_version: PROVENANCE-ATTRIBUTION-1
+  linkage_contract_version: SATCOM-PROVENANCE-LINKAGE-1
+  validation_id: mh370-seventh-arc-l0.4-validation
+  validation_version: v1
+  input_artifact_id: mh370-seventh-arc-published-bto
+  output_artifact_id: mh370-seventh-arc-l0.4-validation-output
+
+attribution:
+  context_id: mh370-seventh-arc-l0.4-validation-v1
+  retrieved_record_id: mh370-seventh-arc-fixture-retrieval-v1
+  citation_record_id: mh370-seventh-arc-fixture-citation-v1
+  citation_locator: $.fixture_sha256
+  use_record_id: mh370-seventh-arc-fixture-use-v1
+  use_kind: COMPUTATION
+
+constraints:
+  fixture_regenerated: false
+  validation_output_regenerated: false
+  source_provenance_recalculated: false
+  fixture_bytes_modified: false
+  admission_state_reinterpreted: false
+  nearest_or_latest_version_fallback: false
+
+scope_exclusions:
+  - BFO processing
+  - aircraft dynamics
+  - trajectory inference
+  - debris modelling
+  - probability or ranking
+  - endpoint selection
+  - search recommendation
+  - crash-location claim
