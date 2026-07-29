@@ -11,9 +11,11 @@ from mh370_inverse_inference.provenance.attribution import EvidenceUseKind
 from mh370_inverse_inference.provenance.models import (
     ArtifactAdmissionState,
     ArtifactKind,
-    ArtifactReference,
 )
-from mh370_inverse_inference.provenance.registry import contains_reference, lookup_record
+from mh370_inverse_inference.provenance.registry import (
+    contains_reference,
+    lookup_record,
+)
 from mh370_inverse_inference.provenance.satcom_linkage import (
     SEVENTH_ARC_FIXTURE_REFERENCE,
     SEVENTH_ARC_VALIDATION_CONFIGURATION_ID,
