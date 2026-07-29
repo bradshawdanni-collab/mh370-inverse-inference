@@ -15,6 +15,7 @@ from mh370_inverse_inference.provenance import (
     ArtifactKind,
     ArtifactProvenanceRecord,
     ArtifactReference,
+    SourceReference,
     build_registry_snapshot,
 )
 
@@ -22,6 +23,20 @@ SOURCE_REFERENCE = ArtifactReference(
     artifact_id="radar-source-example",
     version="v1",
     sha256="1" * 64,
+)
+SUPERSEDING_REFERENCE = ArtifactReference(
+    artifact_id="radar-source-example",
+    version="v2",
+    sha256="2" * 64,
+)
+SOURCE_METADATA = SourceReference(
+    source_id="radar-source-example",
+    publisher="Example Radar Authority",
+    title="Example radar source",
+    reference_uri="https://example.invalid/radar-source",
+    retrieved_at_utc="2026-07-29T00:00:00Z",
+    licence_or_terms="Test fixture terms",
+    content_hash=SOURCE_REFERENCE.sha256,
 )
 
 
@@ -32,10 +47,15 @@ def _registry(state: ArtifactAdmissionState = ArtifactAdmissionState.PROPOSED):
                 artifact=SOURCE_REFERENCE,
                 kind=ArtifactKind.SOURCE,
                 admission_state=state,
-                source=None,
+                source=SOURCE_METADATA,
                 transformation_history=(),
                 uncertainty_notes=(),
                 limitations=(),
+                superseded_by=(
+                    SUPERSEDING_REFERENCE
+                    if state is ArtifactAdmissionState.SUPERSEDED
+                    else None
+                ),
             ),
         )
     )
