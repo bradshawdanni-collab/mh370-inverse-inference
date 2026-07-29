@@ -67,7 +67,13 @@ class RadarTrackPoint:
             raise TypeError("groundspeed_mps must be numeric")
         if self.groundspeed_mps < 0:
             raise ValueError("groundspeed_mps must be non-negative")
-        _validate_range("heading_deg", self.heading_deg, 0.0, 360.0, upper_open=True)
+        _validate_range(
+            "heading_deg",
+            self.heading_deg,
+            0.0,
+            360.0,
+            upper_open=True,
+        )
         if not self.source_id.strip():
             raise ValueError("source_id cannot be blank")
         if not self.source_version.strip():
