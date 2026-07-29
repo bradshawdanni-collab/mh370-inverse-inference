@@ -69,13 +69,8 @@ def test_linkage_builds_exact_registry_and_validation_report() -> None:
         linkage.registry_snapshot,
         SEVENTH_ARC_VALIDATION_OUTPUT_REFERENCE,
     )
-    assert linkage.validation_report.inputs == (
-        SEVENTH_ARC_FIXTURE_REFERENCE,
-    )
-    assert (
-        linkage.validation_report.output
-        == SEVENTH_ARC_VALIDATION_OUTPUT_REFERENCE
-    )
+    assert linkage.validation_report.inputs == (SEVENTH_ARC_FIXTURE_REFERENCE,)
+    assert linkage.validation_report.output == SEVENTH_ARC_VALIDATION_OUTPUT_REFERENCE
     assert linkage.validation_report.model_version == "l0.4-wgs84-v1"
     assert linkage.validation_report.configuration_id == (
         "sequence-index-aligned-geodesic-v1"
@@ -84,9 +79,7 @@ def test_linkage_builds_exact_registry_and_validation_report() -> None:
 
 def test_linkage_preserves_admission_and_artifact_kinds() -> None:
     linkage = build_admitted_seventh_arc_l04_linkage()
-    records = {
-        record.artifact: record for record in linkage.registry_snapshot.records
-    }
+    records = {record.artifact: record for record in linkage.registry_snapshot.records}
 
     fixture_record = records[SEVENTH_ARC_FIXTURE_REFERENCE]
     output_record = records[SEVENTH_ARC_VALIDATION_OUTPUT_REFERENCE]
