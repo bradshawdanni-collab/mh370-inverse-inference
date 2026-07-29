@@ -70,8 +70,9 @@ class SATCOMProvenanceLinkage:
             raise TypeError("validation_report must be ValidationReportRecord")
         if type(self.attribution_snapshot) is not AttributionSnapshot:
             raise TypeError("attribution_snapshot must be AttributionSnapshot")
-        if self.contract_version != SATCOM_LINKAGE_CONTRACT_VERSION:
-            raise ValueError(f"contract_version must be {SATCOM_LINKAGE_CONTRACT_VERSION}")
+        expected_version = SATCOM_LINKAGE_CONTRACT_VERSION
+        if self.contract_version != expected_version:
+            raise ValueError(f"contract_version must be {expected_version}")
         if not contains_reference(
             self.registry_snapshot,
             SEVENTH_ARC_FIXTURE_REFERENCE,
