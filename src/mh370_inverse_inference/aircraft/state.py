@@ -1,4 +1,4 @@
-"""Immutable aircraft state records for L1 dynamics."""
+"""Immutable aircraft state and deterministic transition contracts for L1.1."""
 
 from __future__ import annotations
 
@@ -7,16 +7,27 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 from typing import Any
 
+from mh370_inverse_inference.aircraft.radar import RadarTrackPoint
+
+AIRCRAFT_STATE_CONTRACT_VERSION = "AIRCRAFT-STATE-1"
+
 
 def _validate_timestamp(value: str) -> None:
-    if not value.endswith("Z"):
-        raise ValueError("timestamp_utc must end with Z")
-    parsed = datetime.fromisoformat(value.removesuffix("Z") + "+00:00")
+    if type(value) is not str:
+        raise TypeError("timestamp_utc must be a string")
+    if "T" not in value or not value.endswith("Z"):
+        raise ValueError("timestamp_utc must use canonical UTC Z notation")
+    try:
+        parsed = datetime.fromisoformat(value.removesuffix("Z") + "+00:00")
+    except ValueError as exc:
+        raise ValueError("timestamp_utc must be valid ISO 8601 UTC") from exc
     if parsed.tzinfo != UTC:
-        raise ValueError("timestamp_utc must be UTC")
+        raise ValueError("timestamp_utc must resolve to UTC")
 
 
 def _finite(value: float, name: str) -> float:
+    if type(value) not in (int, float):
+        raise TypeError(f"{name} must be numeric")
     resolved = float(value)
     if not math.isfinite(resolved):
         raise ValueError(f"{name} must be finite")
@@ -31,77 +42,103 @@ class AircraftState:
     latitude_deg: float
     longitude_deg: float
     altitude_m: float
-    true_airspeed_mps: float
+    groundspeed_mps: float
     heading_deg: float
-    mass_kg: float
-    model_version: str
+    source_id: str
+    source_version: str
+    contract_version: str = AIRCRAFT_STATE_CONTRACT_VERSION
 
     def __post_init__(self) -> None:
         _validate_timestamp(self.timestamp_utc)
         latitude = _finite(self.latitude_deg, "latitude_deg")
         longitude = _finite(self.longitude_deg, "longitude_deg")
         altitude = _finite(self.altitude_m, "altitude_m")
-        speed = _finite(self.true_airspeed_mps, "true_airspeed_mps")
+        speed = _finite(self.groundspeed_mps, "groundspeed_mps")
         heading = _finite(self.heading_deg, "heading_deg")
-        mass = _finite(self.mass_kg, "mass_kg")
 
         if not -90.0 <= latitude <= 90.0:
             raise ValueError("latitude_deg must be between -90 and 90")
+        if not -180.0 <= longitude <= 180.0:
+            raise ValueError("longitude_deg must be between -180 and 180")
         if altitude < 0.0:
             raise ValueError("altitude_m cannot be negative")
         if speed < 0.0:
-            raise ValueError("true_airspeed_mps cannot be negative")
-        if mass <= 0.0:
-            raise ValueError("mass_kg must be positive")
-        if not self.model_version.strip():
-            raise ValueError("model_version cannot be blank")
-
-        object.__setattr__(self, "latitude_deg", latitude)
-        object.__setattr__(self, "longitude_deg", ((longitude + 180.0) % 360.0) - 180.0)
-        object.__setattr__(self, "altitude_m", altitude)
-        object.__setattr__(self, "true_airspeed_mps", speed)
-        object.__setattr__(self, "heading_deg", heading % 360.0)
-        object.__setattr__(self, "mass_kg", mass)
-
-    @property
-    def latitude(self) -> float:
-        """Latitude in radians."""
-        return math.radians(self.latitude_deg)
-
-    @property
-    def longitude(self) -> float:
-        """Longitude in radians."""
-        return math.radians(self.longitude_deg)
-
-    @property
-    def altitude(self) -> float:
-        """Altitude in metres."""
-        return self.altitude_m
-
-    @property
-    def speed_tas(self) -> float:
-        """True airspeed in m/s."""
-        return self.true_airspeed_mps
-
-    @property
-    def heading(self) -> float:
-        """Heading in radians."""
-        return math.radians(self.heading_deg)
-
-    @property
-    def mass(self) -> float:
-        """Mass in kg."""
-        return self.mass_kg
+            raise ValueError("groundspeed_mps cannot be negative")
+        if not 0.0 <= heading < 360.0:
+            raise ValueError("heading_deg must be within [0, 360)")
+        if not self.source_id.strip():
+            raise ValueError("source_id cannot be blank")
+        if not self.source_version.strip():
+            raise ValueError("source_version cannot be blank")
+        if self.contract_version != AIRCRAFT_STATE_CONTRACT_VERSION:
+            raise ValueError(
+                f"contract_version must be {AIRCRAFT_STATE_CONTRACT_VERSION}"
+            )
 
     def to_payload(self) -> dict[str, Any]:
         """Return a canonical JSON-compatible state payload."""
         return {
-            "altitude_m": self.altitude_m,
-            "heading_deg": self.heading_deg,
-            "latitude_deg": self.latitude_deg,
-            "longitude_deg": self.longitude_deg,
-            "mass_kg": self.mass_kg,
-            "model_version": self.model_version,
+            "altitude_m": float(self.altitude_m),
+            "contract_version": self.contract_version,
+            "groundspeed_mps": float(self.groundspeed_mps),
+            "heading_deg": float(self.heading_deg),
+            "latitude_deg": float(self.latitude_deg),
+            "longitude_deg": float(self.longitude_deg),
+            "source_id": self.source_id,
+            "source_version": self.source_version,
             "timestamp_utc": self.timestamp_utc,
-            "true_airspeed_mps": self.true_airspeed_mps,
         }
+
+
+@dataclass(frozen=True, slots=True)
+class AircraftStateTransition:
+    """Explicit deterministic transition between two aircraft states."""
+
+    previous: AircraftState
+    current: AircraftState
+    transition_id: str
+    contract_version: str = AIRCRAFT_STATE_CONTRACT_VERSION
+
+    def __post_init__(self) -> None:
+        if type(self.previous) is not AircraftState:
+            raise TypeError("previous must be AircraftState")
+        if type(self.current) is not AircraftState:
+            raise TypeError("current must be AircraftState")
+        if not self.transition_id.strip():
+            raise ValueError("transition_id cannot be blank")
+        previous_time = datetime.fromisoformat(
+            self.previous.timestamp_utc.removesuffix("Z") + "+00:00"
+        )
+        current_time = datetime.fromisoformat(
+            self.current.timestamp_utc.removesuffix("Z") + "+00:00"
+        )
+        if current_time <= previous_time:
+            raise ValueError("current state timestamp must be later than previous state")
+        if self.contract_version != AIRCRAFT_STATE_CONTRACT_VERSION:
+            raise ValueError(
+                f"contract_version must be {AIRCRAFT_STATE_CONTRACT_VERSION}"
+            )
+
+    def to_payload(self) -> dict[str, Any]:
+        return {
+            "contract_version": self.contract_version,
+            "current": self.current.to_payload(),
+            "previous": self.previous.to_payload(),
+            "transition_id": self.transition_id,
+        }
+
+
+def aircraft_state_from_radar(point: RadarTrackPoint) -> AircraftState:
+    """Initialize an aircraft state deterministically from one governed radar point."""
+    if type(point) is not RadarTrackPoint:
+        raise TypeError("point must be RadarTrackPoint")
+    return AircraftState(
+        timestamp_utc=point.timestamp_utc,
+        latitude_deg=point.latitude_deg,
+        longitude_deg=point.longitude_deg,
+        altitude_m=point.altitude_m,
+        groundspeed_mps=point.groundspeed_mps,
+        heading_deg=point.heading_deg,
+        source_id=point.source_id,
+        source_version=point.source_version,
+    )
