@@ -9,13 +9,13 @@ from pathlib import Path
 import pytest
 
 from mh370_inverse_inference.provenance import (
+    SEVENTH_ARC_FIXTURE_REFERENCE,
+    SEVENTH_ARC_VALIDATION_OUTPUT_REFERENCE,
     ArtifactAdmissionState,
     ArtifactKind,
     ArtifactReference,
     EvidenceUseKind,
     SATCOMProvenanceLinkage,
-    SEVENTH_ARC_FIXTURE_REFERENCE,
-    SEVENTH_ARC_VALIDATION_OUTPUT_REFERENCE,
     build_admitted_seventh_arc_l04_linkage,
     citations_for_artifact,
     contains_reference,
