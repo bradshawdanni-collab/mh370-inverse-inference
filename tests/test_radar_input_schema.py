@@ -4,18 +4,18 @@ from dataclasses import FrozenInstanceError, replace
 
 import pytest
 
+from mh370_inverse_inference.aircraft.radar import (
+    RADAR_INPUT_CONTRACT_VERSION,
+    RadarTrackPoint,
+    RadarUncertainty,
+    validate_radar_source,
+)
 from mh370_inverse_inference.provenance import (
     ArtifactAdmissionState,
     ArtifactKind,
     ArtifactProvenanceRecord,
     ArtifactReference,
     build_registry_snapshot,
-)
-from mh370_inverse_inference.aircraft.radar import (
-    RADAR_INPUT_CONTRACT_VERSION,
-    RadarTrackPoint,
-    RadarUncertainty,
-    validate_radar_source,
 )
 
 SOURCE_REFERENCE = ArtifactReference(
