@@ -249,18 +249,21 @@ def build_attribution_snapshot(
     if type(uses) is not tuple:
         raise TypeError("uses must be tuple")
 
-    for record in retrieved:
-        if type(record) is not RetrievedEvidenceRecord:
+    for retrieval_record in retrieved:
+        if type(retrieval_record) is not RetrievedEvidenceRecord:
             raise TypeError("retrieved must contain RetrievedEvidenceRecord values")
-        _registered_record(provenance_snapshot, record.artifact)
-    for record in citations:
-        if type(record) is not CitationRecord:
+        _registered_record(provenance_snapshot, retrieval_record.artifact)
+    for citation_record in citations:
+        if type(citation_record) is not CitationRecord:
             raise TypeError("citations must contain CitationRecord values")
-        _registered_record(provenance_snapshot, record.artifact)
-    for record in uses:
-        if type(record) is not EvidenceUseRecord:
+        _registered_record(provenance_snapshot, citation_record.artifact)
+    for use_record in uses:
+        if type(use_record) is not EvidenceUseRecord:
             raise TypeError("uses must contain EvidenceUseRecord values")
-        provenance_record = _registered_record(provenance_snapshot, record.artifact)
+        provenance_record = _registered_record(
+            provenance_snapshot,
+            use_record.artifact,
+        )
         if provenance_record.admission_state is not ArtifactAdmissionState.ADMITTED:
             raise ValueError("used evidence must reference an ADMITTED artifact")
 
