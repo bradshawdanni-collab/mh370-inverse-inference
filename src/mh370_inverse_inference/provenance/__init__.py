@@ -1,5 +1,18 @@
 """Repository-level deterministic provenance contracts."""
 
+from mh370_inverse_inference.provenance.attribution import (
+    ATTRIBUTION_CONTRACT_VERSION,
+    AttributionSnapshot,
+    CitationRecord,
+    EvidenceUseKind,
+    EvidenceUseRecord,
+    RetrievedEvidenceRecord,
+    attribution_identity_payload,
+    build_attribution_snapshot,
+    citations_for_artifact,
+    retrieved_for_artifact,
+    uses_for_artifact,
+)
 from mh370_inverse_inference.provenance.checksum import (
     ChecksumVerification,
     compute_sha256,
@@ -30,18 +43,27 @@ from mh370_inverse_inference.provenance.registry import (
 )
 
 __all__ = [
+    "ATTRIBUTION_CONTRACT_VERSION",
     "PROVENANCE_CONTRACT_VERSION",
     "REGISTRY_CONTRACT_VERSION",
     "ArtifactAdmissionState",
     "ArtifactKind",
     "ArtifactProvenanceRecord",
     "ArtifactReference",
+    "AttributionSnapshot",
     "ChecksumVerification",
+    "CitationRecord",
+    "EvidenceUseKind",
+    "EvidenceUseRecord",
     "ProvenanceRegistrySnapshot",
+    "RetrievedEvidenceRecord",
     "SourceReference",
     "TransformationStep",
     "ValidationReportRecord",
+    "attribution_identity_payload",
+    "build_attribution_snapshot",
     "build_registry_snapshot",
+    "citations_for_artifact",
     "compute_sha256",
     "contains_reference",
     "list_artifact_versions",
@@ -49,6 +71,8 @@ __all__ = [
     "lookup_record",
     "register_record",
     "registry_identity_payload",
+    "retrieved_for_artifact",
+    "uses_for_artifact",
     "verify_artifact_bytes",
     "verify_sha256",
     "verify_source_bytes",
