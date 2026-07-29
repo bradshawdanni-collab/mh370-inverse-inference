@@ -280,8 +280,7 @@ def audit_satcom_provenance_linkage(
         ),
         _check(
             "output-kind-validation",
-            output_record is not None
-            and output_record.kind is ArtifactKind.VALIDATION,
+            output_record is not None and output_record.kind is ArtifactKind.VALIDATION,
             "Validation-output artifact kind is VALIDATION.",
         ),
         _check(
@@ -291,8 +290,7 @@ def audit_satcom_provenance_linkage(
         ),
         _check(
             "validation-output-exact",
-            linkage.validation_report.output
-            == SEVENTH_ARC_VALIDATION_OUTPUT_REFERENCE,
+            linkage.validation_report.output == SEVENTH_ARC_VALIDATION_OUTPUT_REFERENCE,
             "Validation report references the exact validation output.",
         ),
         _check(
@@ -349,6 +347,4 @@ def audit_satcom_provenance_linkage(
 
 def build_issue_9_full_audit() -> ProvenanceAuditReport:
     """Build the complete deterministic #9E audit over the frozen #9D linkage."""
-    return audit_satcom_provenance_linkage(
-        build_admitted_seventh_arc_l04_linkage()
-    )
+    return audit_satcom_provenance_linkage(build_admitted_seventh_arc_l04_linkage())
