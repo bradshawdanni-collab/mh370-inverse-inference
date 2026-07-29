@@ -9,6 +9,8 @@ import pytest
 
 from mh370_inverse_inference.engine.hashing import sha256_payload
 from mh370_inverse_inference.provenance import (
+    SEVENTH_ARC_FIXTURE_REFERENCE,
+    SEVENTH_ARC_VALIDATION_OUTPUT_REFERENCE,
     ArtifactAdmissionState,
     ArtifactKind,
     ArtifactProvenanceRecord,
@@ -16,9 +18,6 @@ from mh370_inverse_inference.provenance import (
     AuditStatus,
     DeterministicReplayReport,
     ProvenanceAuditCheck,
-    ReplayStep,
-    SEVENTH_ARC_FIXTURE_REFERENCE,
-    SEVENTH_ARC_VALIDATION_OUTPUT_REFERENCE,
     audit_satcom_provenance_linkage,
     build_admitted_seventh_arc_l04_linkage,
     build_issue_9_full_audit,
