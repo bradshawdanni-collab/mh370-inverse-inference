@@ -177,7 +177,9 @@ class AttributionSnapshot:
             raise TypeError("citations must be tuple")
         if type(self.uses) is not tuple:
             raise TypeError("uses must be tuple")
-        if any(type(record) is not RetrievedEvidenceRecord for record in self.retrieved):
+        if any(
+            type(record) is not RetrievedEvidenceRecord for record in self.retrieved
+        ):
             raise TypeError("retrieved must contain RetrievedEvidenceRecord values")
         if any(type(record) is not CitationRecord for record in self.citations):
             raise TypeError("citations must contain CitationRecord values")
@@ -197,7 +199,9 @@ class AttributionSnapshot:
             )
         )
         if self.snapshot_sha256 != expected:
-            raise ValueError("snapshot_sha256 does not match canonical attribution records")
+            raise ValueError(
+                "snapshot_sha256 does not match canonical attribution records"
+            )
 
     def _validate_order_and_identity(self) -> None:
         retrieval_ids = tuple(record.retrieval_id for record in self.retrieved)
@@ -230,7 +234,9 @@ def _registered_record(
 ) -> ArtifactProvenanceRecord:
     record = lookup_record(snapshot, artifact.artifact_id, artifact.version)
     if record is None or record.artifact != artifact:
-        raise ValueError("attribution artifact must match an exact registered reference")
+        raise ValueError(
+            "attribution artifact must match an exact registered reference"
+        )
     return record
 
 
