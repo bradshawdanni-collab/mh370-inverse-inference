@@ -81,9 +81,7 @@ class RadarTrackPoint:
         if type(self.uncertainty) is not RadarUncertainty:
             raise TypeError("uncertainty must be RadarUncertainty")
         if self.contract_version != RADAR_INPUT_CONTRACT_VERSION:
-            raise ValueError(
-                f"contract_version must be {RADAR_INPUT_CONTRACT_VERSION}"
-            )
+            raise ValueError(f"contract_version must be {RADAR_INPUT_CONTRACT_VERSION}")
 
     def to_payload(self) -> dict[str, Any]:
         return {
