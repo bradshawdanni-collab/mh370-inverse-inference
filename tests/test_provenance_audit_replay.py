@@ -26,18 +26,10 @@ from mh370_inverse_inference.provenance import (
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 AUDIT_MODULE_PATH = (
-    REPO_ROOT
-    / "src"
-    / "mh370_inverse_inference"
-    / "provenance"
-    / "audit.py"
+    REPO_ROOT / "src" / "mh370_inverse_inference" / "provenance" / "audit.py"
 )
 SATCOM_LINKAGE_PATH = (
-    REPO_ROOT
-    / "src"
-    / "mh370_inverse_inference"
-    / "provenance"
-    / "satcom_linkage.py"
+    REPO_ROOT / "src" / "mh370_inverse_inference" / "provenance" / "satcom_linkage.py"
 )
 
 
@@ -78,9 +70,11 @@ def test_wrong_fixture_digest_fails_closed() -> None:
         sha256="0" * 64,
     )
     records = tuple(
-        replace(record, artifact=wrong_fixture)
-        if record.artifact == SEVENTH_ARC_FIXTURE_REFERENCE
-        else record
+        (
+            replace(record, artifact=wrong_fixture)
+            if record.artifact == SEVENTH_ARC_FIXTURE_REFERENCE
+            else record
+        )
         for record in linkage.registry_snapshot.records
     )
 
@@ -120,9 +114,11 @@ def test_missing_registry_record_fails_closed() -> None:
 def test_non_admitted_used_evidence_fails_closed() -> None:
     linkage = build_admitted_seventh_arc_l04_linkage()
     records = tuple(
-        replace(record, admission_state=ArtifactAdmissionState.VERIFIED)
-        if record.artifact == SEVENTH_ARC_FIXTURE_REFERENCE
-        else record
+        (
+            replace(record, admission_state=ArtifactAdmissionState.VERIFIED)
+            if record.artifact == SEVENTH_ARC_FIXTURE_REFERENCE
+            else record
+        )
         for record in linkage.registry_snapshot.records
     )
     registry = build_registry_snapshot(records)
