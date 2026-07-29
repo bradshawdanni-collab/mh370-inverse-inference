@@ -43,7 +43,6 @@ from mh370_inverse_inference.provenance.registry import (
 )
 from mh370_inverse_inference.provenance.satcom_linkage import (
     SATCOM_LINKAGE_CONTRACT_VERSION,
-    SATCOMProvenanceLinkage,
     SEVENTH_ARC_FIXTURE_REFERENCE,
     SEVENTH_ARC_SAMPLING_REFERENCE,
     SEVENTH_ARC_TRANSFORM_REFERENCE,
@@ -51,6 +50,7 @@ from mh370_inverse_inference.provenance.satcom_linkage import (
     SEVENTH_ARC_VALIDATION_CONTEXT_ID,
     SEVENTH_ARC_VALIDATION_MODEL_VERSION,
     SEVENTH_ARC_VALIDATION_OUTPUT_REFERENCE,
+    SATCOMProvenanceLinkage,
     build_admitted_seventh_arc_l04_linkage,
 )
 
