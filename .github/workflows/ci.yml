@@ -31,7 +31,7 @@ jobs:
       - name: Ruff
         run: ruff check .
       - name: Black
-        run: black --check .
+        run: black --check --diff .
       - name: Mypy
         run: mypy src
       - name: Pytest
