@@ -3,15 +3,16 @@
 ## Status
 
 This document defines the repository-level provenance foundation implemented by
-**Issue #9A** and the bounded checksum/registry layer implemented by **Issue
-#9B**.
+**Issue #9A**, the checksum/registry layer implemented by **Issue #9B**, and the
+bounded attribution/evidence-use layer implemented by **Issue #9C**.
 
 #9A established immutable artifact, source, transformation, lifecycle, and
-validation-linkage records. #9B adds deterministic exact-byte SHA-256
-verification and an immutable local provenance registry.
+validation-linkage records. #9B added deterministic exact-byte SHA-256
+verification and an immutable local provenance registry. #9C separates evidence
+that was retrieved, cited, and actually used by a computation or judgement.
 
-Attribution linkage, SATCOM migration, and the final Issue #9 audit remain
-separately gated as #9C through #9E.
+SATCOM migration/linkage and the final Issue #9 audit remain separately gated as
+#9D and #9E.
 
 ## Purpose
 
@@ -38,12 +39,19 @@ The immutable local registry contract is:
 PROVENANCE-REGISTRY-1
 ```
 
+The attribution contract is:
+
+```text
+PROVENANCE-ATTRIBUTION-1
+```
+
 The implementation is in:
 
 ```text
 src/mh370_inverse_inference/provenance/models.py
 src/mh370_inverse_inference/provenance/checksum.py
 src/mh370_inverse_inference/provenance/registry.py
+src/mh370_inverse_inference/provenance/attribution.py
 ```
 
 ## Artifact identity
@@ -84,10 +92,10 @@ REJECTED
 SUPERSEDED
 ```
 
-All provenance records are frozen dataclasses. The #9B registry stores the
-explicit state carried by each record but does not silently promote, demote, or
-reinterpret that state. Scientific admission authority remains with the
-appropriate governed review process.
+All provenance records are frozen dataclasses. The registry stores the explicit
+state carried by each record but does not silently promote, demote, or reinterpret
+that state. Scientific admission authority remains with the appropriate governed
+review process.
 
 ## Source reference
 
@@ -101,8 +109,8 @@ A `SourceReference` records:
 - licence or documented usage terms;
 - exact lowercase SHA-256 content hash.
 
-For a `SOURCE` artifact, the artifact SHA-256 must exactly equal the source
-content hash, and no transformation history is permitted.
+For a `SOURCE` artifact, the artifact SHA-256 must exactly equal the source content
+hash, and no transformation history is permitted.
 
 ## Transformation history
 
@@ -169,21 +177,68 @@ The registry exposes bounded deterministic queries for:
 - listing all versions of one stable artifact ID;
 - listing records by explicit admission state.
 
+## Attribution and evidence-use linkage
+
+#9C introduces three separate immutable record classes rather than one overloaded
+provenance flag:
+
+```text
+RetrievedEvidenceRecord
+CitationRecord
+EvidenceUseRecord
+```
+
+A `RetrievedEvidenceRecord` states only that one exact artifact was available to
+a named context. It does not imply citation, admission, or use.
+
+A `CitationRecord` states that one exact artifact was cited in a named output
+context and records a stable citation locator. Citation does not imply admission
+or computational use. This permits a candidate or rejected artifact to be cited
+when documenting why it was not admitted.
+
+An `EvidenceUseRecord` states that one exact artifact affected a named computation
+or judgement. The use kind is explicit:
+
+```text
+COMPUTATION
+JUDGEMENT
+```
+
+Evidence use is fail-closed. The exact artifact reference must exist in the bound
+provenance registry snapshot and its admission state must be `ADMITTED`.
+
+`AttributionSnapshot` binds all three collections to one exact
+`ProvenanceRegistrySnapshot` by storing its `snapshot_sha256`. The attribution
+snapshot:
+
+- verifies every referenced artifact against that exact registry snapshot;
+- keeps retrieved, cited, and used evidence separate;
+- canonicalizes each collection by stable record ID;
+- rejects duplicate IDs across the three attribution record classes;
+- hashes its canonical payload deterministically;
+- never infers a missing retrieval, citation, or use record from another role.
+
+This distinction makes it possible to audit whether a source was merely available,
+was actually cited, or materially affected a computation or judgement.
+
+Additional #9C boundary detail is documented in `docs/references.md`.
+
 ## Relationship to the existing evidence registry
 
-The repository already contains `mh370_inverse_inference.evidence.registry`,
-which is the L2.4 registry for registered evidence identities and observation
-lineage.
+The repository already contains `mh370_inverse_inference.evidence.registry`, which
+is the L2.4 registry for registered evidence identities and observation lineage.
 
-The #9B provenance registry does not replace that component. Its namespace and
-identity boundary are different:
+The repository-level provenance registry does not replace that component. Its
+namespace and identity boundary are different:
 
 - the evidence registry indexes registered evidence/observation identities;
 - the provenance registry indexes exact scientific artifact versions and their
-  provenance records.
+  provenance records;
+- the attribution layer records downstream relationship to exact provenance
+  artifacts without merging either registry.
 
-#9C and #9D may link those boundaries explicitly, but #9B does not merge them or
-create hidden cross-registry authority.
+#9D may create explicit adapters between those boundaries, but #9C does not create
+hidden cross-registry authority.
 
 ## Uncertainty and limitations
 
@@ -191,7 +246,8 @@ create hidden cross-registry authority.
 explicit immutable fields. These fields preserve scientific caveats alongside
 artifact identity rather than leaving them only in narrative documentation.
 
-The checksum and registry layer does not interpret, weight, or score uncertainty.
+The checksum, registry, and attribution layers do not interpret, weight, or score
+uncertainty.
 
 ## Supersession
 
@@ -210,8 +266,9 @@ Supersession does not delete or rewrite the older artifact identity.
 - model version;
 - configuration ID.
 
-Issue #9D will use this contract to link the already-admitted seventh-arc fixture
-and the completed L0.4 validation output without regenerating either artifact.
+Issue #9D will use this contract together with #9C attribution to link the
+already-admitted seventh-arc fixture and the completed L0.4 validation output
+without regenerating either artifact.
 
 ## Explicit exclusions
 
@@ -219,7 +276,7 @@ This stage does not add:
 
 - automatic filesystem discovery or registry population;
 - in-place registry mutation;
-- citation or evidence-use attribution;
+- implicit admission based on retrieval or citation;
 - automatic source discovery;
 - network retrieval;
 - source-authority promotion;
@@ -238,9 +295,9 @@ This stage does not add:
 ```text
 #9A provenance schemas and immutable contracts      complete
  ↓
-#9B checksum verification and local registry        current
+#9B checksum verification and local registry        complete
  ↓
-#9C attribution and evidence-use linkage
+#9C attribution and evidence-use linkage            current
  ↓
 #9D SATCOM fixture + L0.4 validation provenance linkage
  ↓
