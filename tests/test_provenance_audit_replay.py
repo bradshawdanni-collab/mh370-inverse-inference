@@ -69,17 +69,16 @@ def test_wrong_fixture_digest_fails_closed() -> None:
         version=SEVENTH_ARC_FIXTURE_REFERENCE.version,
         sha256="0" * 64,
     )
-    records = tuple(
-        (
-            replace(record, artifact=wrong_fixture)
-            if record.artifact == SEVENTH_ARC_FIXTURE_REFERENCE
-            else record
-        )
-        for record in linkage.registry_snapshot.records
-    )
 
-    with pytest.raises(ValueError):
-        replace(linkage, registry_snapshot=build_registry_snapshot(records))
+    with pytest.raises(ValueError, match="final transformation output"):
+        tuple(
+            (
+                replace(record, artifact=wrong_fixture)
+                if record.artifact == SEVENTH_ARC_FIXTURE_REFERENCE
+                else record
+            )
+            for record in linkage.registry_snapshot.records
+        )
 
 
 def test_wrong_validation_output_digest_fails_closed() -> None:
@@ -144,13 +143,12 @@ def test_wrong_validation_input_fails_closed() -> None:
 
 def test_wrong_registry_snapshot_binding_fails_closed() -> None:
     linkage = build_admitted_seventh_arc_l04_linkage()
-    attribution = replace(
-        linkage.attribution_snapshot,
-        provenance_snapshot_sha256="0" * 64,
-    )
 
-    with pytest.raises(ValueError):
-        replace(linkage, attribution_snapshot=attribution)
+    with pytest.raises(ValueError, match="snapshot_sha256"):
+        replace(
+            linkage.attribution_snapshot,
+            provenance_snapshot_sha256="0" * 64,
+        )
 
 
 def test_wrong_attribution_snapshot_hash_fails_closed() -> None:
