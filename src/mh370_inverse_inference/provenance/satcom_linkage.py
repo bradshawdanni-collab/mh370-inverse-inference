@@ -30,9 +30,7 @@ from mh370_inverse_inference.provenance.registry import (
 SATCOM_LINKAGE_CONTRACT_VERSION = "SATCOM-PROVENANCE-LINKAGE-1"
 SEVENTH_ARC_VALIDATION_CONTEXT_ID = "mh370-seventh-arc-l0.4-validation-v1"
 SEVENTH_ARC_VALIDATION_MODEL_VERSION = "l0.4-wgs84-v1"
-SEVENTH_ARC_VALIDATION_CONFIGURATION_ID = (
-    "sequence-index-aligned-geodesic-v1"
-)
+SEVENTH_ARC_VALIDATION_CONFIGURATION_ID = "sequence-index-aligned-geodesic-v1"
 
 SEVENTH_ARC_TRANSFORM_REFERENCE = ArtifactReference(
     artifact_id="mh370-seventh-arc-bto-wgs84-transform",
@@ -73,10 +71,7 @@ class SATCOMProvenanceLinkage:
         if type(self.attribution_snapshot) is not AttributionSnapshot:
             raise TypeError("attribution_snapshot must be AttributionSnapshot")
         if self.contract_version != SATCOM_LINKAGE_CONTRACT_VERSION:
-            raise ValueError(
-                "contract_version must be "
-                f"{SATCOM_LINKAGE_CONTRACT_VERSION}"
-            )
+            raise ValueError(f"contract_version must be {SATCOM_LINKAGE_CONTRACT_VERSION}")
         if not contains_reference(
             self.registry_snapshot,
             SEVENTH_ARC_FIXTURE_REFERENCE,
@@ -89,10 +84,7 @@ class SATCOMProvenanceLinkage:
             raise ValueError("registry must contain the exact L0.4 output")
         if self.validation_report.inputs != (SEVENTH_ARC_FIXTURE_REFERENCE,):
             raise ValueError("validation report must reference the exact fixture")
-        if (
-            self.validation_report.output
-            != SEVENTH_ARC_VALIDATION_OUTPUT_REFERENCE
-        ):
+        if self.validation_report.output != SEVENTH_ARC_VALIDATION_OUTPUT_REFERENCE:
             raise ValueError("validation report must reference the exact output")
         if (
             self.attribution_snapshot.provenance_snapshot_sha256
@@ -129,9 +121,7 @@ def _fixture_record() -> ArtifactProvenanceRecord:
                     "data/satcom/published/"
                     "seventh_arc_canonical_fixture_sampling_v1.yaml"
                 ),
-                configuration_id=(
-                    "seventh-arc-canonical-fixture-sampling-v1"
-                ),
+                configuration_id="seventh-arc-canonical-fixture-sampling-v1",
             ),
         ),
         uncertainty_notes=(
