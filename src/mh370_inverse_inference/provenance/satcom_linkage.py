@@ -125,9 +125,7 @@ def _fixture_record() -> ArtifactProvenanceRecord:
                 configuration_id="seventh-arc-canonical-fixture-sampling-v1",
             ),
         ),
-        uncertainty_notes=(
-            "Coordinates are rounded to the frozen fixture precision.",
-        ),
+        uncertainty_notes=("Coordinates are rounded to the frozen fixture precision.",),
         limitations=(
             "Derived validation reference; not a directly published path.",
             "Not a trajectory, endpoint, search area, or crash-location claim.",
