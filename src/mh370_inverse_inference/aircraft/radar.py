@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 from mh370_inverse_inference.provenance import (
@@ -118,7 +118,7 @@ def _validate_timestamp(value: str) -> None:
         parsed = datetime.fromisoformat(value[:-1] + "+00:00")
     except ValueError as exc:
         raise ValueError("timestamp_utc must be valid ISO 8601 UTC") from exc
-    if parsed.tzinfo != timezone.utc:
+    if parsed.tzinfo != UTC:
         raise ValueError("timestamp_utc must resolve to UTC")
 
 
