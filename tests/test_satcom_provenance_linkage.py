@@ -24,9 +24,7 @@ from mh370_inverse_inference.provenance import (
 )
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-FIXTURE_PATH = (
-    REPO_ROOT / "data" / "satcom" / "published" / "benchmark_fixture.csv"
-)
+FIXTURE_PATH = REPO_ROOT / "data" / "satcom" / "published" / "benchmark_fixture.csv"
 LINKAGE_MANIFEST_PATH = (
     REPO_ROOT
     / "data"
