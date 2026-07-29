@@ -55,9 +55,7 @@ class RetrievedEvidenceRecord:
         _artifact_reference(self.artifact, "artifact")
         _non_empty(self.context_id, "context_id")
         if self.contract_version != ATTRIBUTION_CONTRACT_VERSION:
-            raise ValueError(
-                f"contract_version must be {ATTRIBUTION_CONTRACT_VERSION}"
-            )
+            raise ValueError(f"contract_version must be {ATTRIBUTION_CONTRACT_VERSION}")
 
     def to_payload(self) -> dict[str, Any]:
         """Return the canonical retrieved-evidence payload."""
@@ -86,9 +84,7 @@ class CitationRecord:
         _non_empty(self.context_id, "context_id")
         _non_empty(self.locator, "locator")
         if self.contract_version != ATTRIBUTION_CONTRACT_VERSION:
-            raise ValueError(
-                f"contract_version must be {ATTRIBUTION_CONTRACT_VERSION}"
-            )
+            raise ValueError(f"contract_version must be {ATTRIBUTION_CONTRACT_VERSION}")
 
     def to_payload(self) -> dict[str, Any]:
         """Return the canonical citation payload."""
@@ -121,9 +117,7 @@ class EvidenceUseRecord:
             raise TypeError("use_kind must be EvidenceUseKind")
         _non_empty(self.operation_reference, "operation_reference")
         if self.contract_version != ATTRIBUTION_CONTRACT_VERSION:
-            raise ValueError(
-                f"contract_version must be {ATTRIBUTION_CONTRACT_VERSION}"
-            )
+            raise ValueError(f"contract_version must be {ATTRIBUTION_CONTRACT_VERSION}")
 
     def to_payload(self) -> dict[str, Any]:
         """Return the canonical evidence-use payload."""
@@ -186,9 +180,7 @@ class AttributionSnapshot:
         if any(type(record) is not EvidenceUseRecord for record in self.uses):
             raise TypeError("uses must contain EvidenceUseRecord values")
         if self.contract_version != ATTRIBUTION_CONTRACT_VERSION:
-            raise ValueError(
-                f"contract_version must be {ATTRIBUTION_CONTRACT_VERSION}"
-            )
+            raise ValueError(f"contract_version must be {ATTRIBUTION_CONTRACT_VERSION}")
         self._validate_order_and_identity()
         expected = sha256_payload(
             attribution_identity_payload(
