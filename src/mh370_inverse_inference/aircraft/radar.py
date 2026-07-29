@@ -116,8 +116,8 @@ def validate_radar_source(
 def _validate_timestamp(value: str) -> None:
     if type(value) is not str:
         raise TypeError("timestamp_utc must be a string")
-    if not value.endswith("Z"):
-        raise ValueError("timestamp_utc must use canonical UTC Z notation")
+    if len(value) < 20 or value[10] != "T" or not value.endswith("Z"):
+        raise ValueError("timestamp_utc must use canonical ISO 8601 UTC Z notation")
     try:
         parsed = datetime.fromisoformat(value[:-1] + "+00:00")
     except ValueError as exc:
