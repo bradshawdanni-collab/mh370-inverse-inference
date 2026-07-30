@@ -12,7 +12,7 @@ from mh370_inverse_inference.aircraft.radar import RadarTrackPoint
 AIRCRAFT_STATE_CONTRACT_VERSION = "AIRCRAFT-STATE-1"
 
 
-def _validate_timestamp(value: str) -> None:
+def _parse_timestamp(value: str) -> datetime:
     if type(value) is not str:
         raise TypeError("timestamp_utc must be a string")
     if "T" not in value or not value.endswith("Z"):
@@ -23,6 +23,7 @@ def _validate_timestamp(value: str) -> None:
         raise ValueError("timestamp_utc must be valid ISO 8601 UTC") from exc
     if parsed.tzinfo != UTC:
         raise ValueError("timestamp_utc must resolve to UTC")
+    return parsed
 
 
 def _finite(value: float, name: str) -> float:
@@ -49,7 +50,7 @@ class AircraftState:
     contract_version: str = AIRCRAFT_STATE_CONTRACT_VERSION
 
     def __post_init__(self) -> None:
-        _validate_timestamp(self.timestamp_utc)
+        _parse_timestamp(self.timestamp_utc)
         latitude = _finite(self.latitude_deg, "latitude_deg")
         longitude = _finite(self.longitude_deg, "longitude_deg")
         altitude = _finite(self.altitude_m, "altitude_m")
@@ -75,6 +76,22 @@ class AircraftState:
                 f"contract_version must be {AIRCRAFT_STATE_CONTRACT_VERSION}"
             )
 
+    @classmethod
+    def from_radar_track_point(cls, point: RadarTrackPoint) -> AircraftState:
+        """Initialize state by copying one governed radar point exactly."""
+        if type(point) is not RadarTrackPoint:
+            raise TypeError("point must be RadarTrackPoint")
+        return cls(
+            timestamp_utc=point.timestamp_utc,
+            latitude_deg=point.latitude_deg,
+            longitude_deg=point.longitude_deg,
+            altitude_m=point.altitude_m,
+            groundspeed_mps=point.groundspeed_mps,
+            heading_deg=point.heading_deg,
+            source_id=point.source_id,
+            source_version=point.source_version,
+        )
+
     def to_payload(self) -> dict[str, Any]:
         """Return a canonical JSON-compatible state payload."""
         return {
@@ -92,11 +109,11 @@ class AircraftState:
 
 @dataclass(frozen=True, slots=True)
 class AircraftStateTransition:
-    """Explicit deterministic transition between two aircraft states."""
+    """Explicit transition description without a reachability claim."""
 
     previous: AircraftState
     current: AircraftState
-    transition_id: str
+    elapsed_seconds: float
     contract_version: str = AIRCRAFT_STATE_CONTRACT_VERSION
 
     def __post_init__(self) -> None:
@@ -104,41 +121,33 @@ class AircraftStateTransition:
             raise TypeError("previous must be AircraftState")
         if type(self.current) is not AircraftState:
             raise TypeError("current must be AircraftState")
-        if not self.transition_id.strip():
-            raise ValueError("transition_id cannot be blank")
-        previous_time = datetime.fromisoformat(
-            self.previous.timestamp_utc.removesuffix("Z") + "+00:00"
-        )
-        current_time = datetime.fromisoformat(
-            self.current.timestamp_utc.removesuffix("Z") + "+00:00"
-        )
-        if current_time <= previous_time:
-            raise ValueError("current state timestamp must be later than previous state")
+        elapsed = _finite(self.elapsed_seconds, "elapsed_seconds")
+        if elapsed <= 0.0:
+            raise ValueError("elapsed_seconds must be positive")
+        if self.previous.contract_version != self.current.contract_version:
+            raise ValueError("state contract versions must match")
         if self.contract_version != AIRCRAFT_STATE_CONTRACT_VERSION:
             raise ValueError(
                 f"contract_version must be {AIRCRAFT_STATE_CONTRACT_VERSION}"
             )
+        previous_time = _parse_timestamp(self.previous.timestamp_utc)
+        current_time = _parse_timestamp(self.current.timestamp_utc)
+        if current_time <= previous_time:
+            raise ValueError("current state timestamp must be later than previous state")
+        calculated = (current_time - previous_time).total_seconds()
+        if elapsed != calculated:
+            raise ValueError("elapsed_seconds must match the timestamp difference")
 
     def to_payload(self) -> dict[str, Any]:
+        """Return a canonical JSON-compatible transition payload."""
         return {
             "contract_version": self.contract_version,
             "current": self.current.to_payload(),
+            "elapsed_seconds": float(self.elapsed_seconds),
             "previous": self.previous.to_payload(),
-            "transition_id": self.transition_id,
         }
 
 
 def aircraft_state_from_radar(point: RadarTrackPoint) -> AircraftState:
-    """Initialize an aircraft state deterministically from one governed radar point."""
-    if type(point) is not RadarTrackPoint:
-        raise TypeError("point must be RadarTrackPoint")
-    return AircraftState(
-        timestamp_utc=point.timestamp_utc,
-        latitude_deg=point.latitude_deg,
-        longitude_deg=point.longitude_deg,
-        altitude_m=point.altitude_m,
-        groundspeed_mps=point.groundspeed_mps,
-        heading_deg=point.heading_deg,
-        source_id=point.source_id,
-        source_version=point.source_version,
-    )
+    """Compatibility wrapper for exact governed radar initialisation."""
+    return AircraftState.from_radar_track_point(point)
