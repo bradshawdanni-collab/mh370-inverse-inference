@@ -133,7 +133,9 @@ class AircraftStateTransition:
         previous_time = _parse_timestamp(self.previous.timestamp_utc)
         current_time = _parse_timestamp(self.current.timestamp_utc)
         if current_time <= previous_time:
-            raise ValueError("current state timestamp must be later than previous state")
+            raise ValueError(
+                "current state timestamp must be later than previous state"
+            )
         calculated = (current_time - previous_time).total_seconds()
         if elapsed != calculated:
             raise ValueError("elapsed_seconds must match the timestamp difference")
