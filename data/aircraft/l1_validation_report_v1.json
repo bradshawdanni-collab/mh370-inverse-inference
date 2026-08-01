@@ -1,6 +1,6 @@
 {
-  "admission_state": "PROPOSED",
-  "disposition": "PENDING_CI",
+  "admission_state": "ADMITTED",
+  "disposition": "FINAL_ADMISSION_REVIEW_PASS",
   "exclusions": [
     "NO_PRODUCTION_PROPAGATION_CALL",
     "NO_PRODUCTION_REACHABILITY_CALL",
@@ -14,8 +14,14 @@
   "scope": "Independent deterministic reproduction and L1 admission review",
   "source_merge_commits": {
     "l1_3": "462e2ac5aec7872d7c43f57c6c65fc946620a3cd",
-    "l1_4": "1ba5e3f567bdef1bfc577d007123bf413c98e831"
+    "l1_4": "1ba5e3f567bdef1bfc577d007123bf413c98e831",
+    "l1_5": "ecff5d2b903f8d9d7db88c6ba13c119f1185ee6e"
   },
-  "status_note": "Final PASS/FAIL disposition requires CI and independent test completion.",
+  "status_note": "CI and DX.2 completed successfully for the L1.5 head commit. L1.1 through L1.5 are complete and admitted within the stated exclusions.",
+  "validation_checks": {
+    "ci": "PASS",
+    "dx2": "PASS",
+    "independent_reproduction": "PASS"
+  },
   "version": "L1-REPRODUCTION-1"
 }
