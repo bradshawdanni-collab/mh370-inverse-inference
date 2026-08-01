@@ -1,3 +1,5 @@
+> **Namespace notice (ED1.0):** This document historically used an L5.x label. The canonical namespace is now ED1.0 under the Layer Namespace Registry. Existing contract versions and artifact identities remain unchanged.
+
 # L5.0 Additional Evidence-Domain Admission Contract
 
 ## Purpose

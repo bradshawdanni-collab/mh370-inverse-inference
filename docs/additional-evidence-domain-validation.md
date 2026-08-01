@@ -1,3 +1,5 @@
+> **Namespace notice (ED1.1):** This document historically used an L5.x label. The canonical namespace is now ED1.1 under the Layer Namespace Registry. Existing contract versions and artifact identities remain unchanged.
+
 # Additional Evidence-Domain Validation and Deterministic Replay
 
 ## Purpose
