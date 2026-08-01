@@ -1,5 +1,7 @@
 """Tests for deterministic propagation against an admitted envelope."""
 
+# fmt: off
+
 from dataclasses import FrozenInstanceError
 
 import pytest
