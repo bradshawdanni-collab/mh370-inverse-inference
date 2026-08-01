@@ -44,6 +44,10 @@ def _canonical_registry_hash(registry: dict[str, Any]) -> str:
     return hashlib.sha256(encoded).hexdigest()
 
 
+def _namespace_map(items: list[dict[str, Any]]) -> dict[str, str]:
+    return {item["namespace"]: item["name"] for item in items}
+
+
 def _validate_registry(registry: dict[str, Any]) -> None:
     frozen = registry["frozen_namespaces"]["contracts"]
     canonical = registry["canonical_namespaces"]
@@ -56,8 +60,7 @@ def _validate_registry(registry: dict[str, Any]) -> None:
     if len(canonical_ids) != len(set(canonical_ids)):
         raise ValueError("duplicate canonical namespace identifier")
 
-    frozen_map = {item["namespace"]: item["name"] for item in frozen}
-    if frozen_map != FROZEN_L5:
+    if _namespace_map(frozen) != FROZEN_L5:
         raise ValueError("frozen L5 namespace mapping changed")
     if any(identifier.startswith("L5.") for identifier in canonical_ids):
         raise ValueError("evidence-domain namespace cannot use frozen L5")
@@ -73,8 +76,9 @@ def test_registry_hash_reproduces_deterministically() -> None:
     registry = _load_registry()
 
     assert registry["registry_hash"] == _canonical_registry_hash(registry)
+    copied_registry = copy.deepcopy(registry)
     assert _canonical_registry_hash(registry) == _canonical_registry_hash(
-        copy.deepcopy(registry)
+        copied_registry
     )
 
 
@@ -82,13 +86,10 @@ def test_namespace_identifiers_are_unique() -> None:
     registry = _load_registry()
     _validate_registry(registry)
 
-    frozen_ids = [
-        item["namespace"]
-        for item in registry["frozen_namespaces"]["contracts"]
-    ]
-    canonical_ids = [
-        item["namespace"] for item in registry["canonical_namespaces"]
-    ]
+    frozen = registry["frozen_namespaces"]["contracts"]
+    canonical = registry["canonical_namespaces"]
+    frozen_ids = [item["namespace"] for item in frozen]
+    canonical_ids = [item["namespace"] for item in canonical]
 
     assert len(frozen_ids) == len(set(frozen_ids))
     assert len(canonical_ids) == len(set(canonical_ids))
@@ -100,53 +101,40 @@ def test_frozen_l5_release_mapping_is_preserved() -> None:
 
     assert frozen["release"] == "l5-v1.0.0"
     assert frozen["preservation_status"] == "FROZEN_UNCHANGED"
-    assert {item["namespace"]: item["name"] for item in frozen["contracts"]} == (
-        FROZEN_L5
-    )
+    assert _namespace_map(frozen["contracts"]) == FROZEN_L5
 
 
 def test_ed1_contract_versions_are_preserved() -> None:
     registry = _load_registry()
-    canonical = {
-        item["namespace"]: item for item in registry["canonical_namespaces"]
-    }
+    canonical = {item["namespace"]: item for item in registry["canonical_namespaces"]}
 
-    assert canonical["ED1.0"]["contract_version"] == (
-        "EVIDENCE-DOMAIN-ADMISSION-1"
-    )
-    assert canonical["ED1.1"]["contract_version"] == (
-        "EVIDENCE-DOMAIN-VALIDATION-1"
-    )
-    assert canonical["ED1.0"]["existing_identities_preserved"] is True
-    assert canonical["ED1.1"]["existing_identities_preserved"] is True
+    ed1_0 = canonical["ED1.0"]
+    ed1_1 = canonical["ED1.1"]
+    assert ed1_0["contract_version"] == "EVIDENCE-DOMAIN-ADMISSION-1"
+    assert ed1_1["contract_version"] == "EVIDENCE-DOMAIN-VALIDATION-1"
+    assert ed1_0["existing_identities_preserved"] is True
+    assert ed1_1["existing_identities_preserved"] is True
 
 
 def test_historical_aliases_are_non_authoritative() -> None:
     registry = _load_registry()
     aliases = registry["historical_aliases"]
 
-    assert {item["alias"]: item["canonical_namespace"] for item in aliases} == {
+    alias_map = {item["alias"]: item["canonical_namespace"] for item in aliases}
+    assert alias_map == {
         "L5.0": "ED1.0",
         "L5.1": "ED1.1",
     }
-    assert all(
-        item["classification"] == "LEGACY_COLLIDING_ALIAS"
-        for item in aliases
-    )
+    assert all(item["classification"] == "LEGACY_COLLIDING_ALIAS" for item in aliases)
     assert all(item["authoritative"] is False for item in aliases)
-    assert all(
-        item["retention"] == "HISTORICAL_TRACEABILITY_ONLY"
-        for item in aliases
-    )
+    assert all(item["retention"] == "HISTORICAL_TRACEABILITY_ONLY" for item in aliases)
 
 
 def test_canonical_evidence_namespaces_do_not_use_l5() -> None:
     registry = _load_registry()
+    canonical = registry["canonical_namespaces"]
 
-    assert all(
-        not item["namespace"].startswith("L5.")
-        for item in registry["canonical_namespaces"]
-    )
+    assert all(not item["namespace"].startswith("L5.") for item in canonical)
 
 
 def test_ed1_2_is_reserved_and_unimplemented() -> None:
@@ -163,14 +151,10 @@ def test_ed1_2_is_reserved_and_unimplemented() -> None:
 
 def test_duplicate_namespace_identifier_is_rejected() -> None:
     registry = _load_registry()
-    registry["canonical_namespaces"].append(
-        copy.deepcopy(registry["canonical_namespaces"][0])
-    )
+    duplicate = copy.deepcopy(registry["canonical_namespaces"][0])
+    registry["canonical_namespaces"].append(duplicate)
 
-    with pytest.raises(
-        ValueError,
-        match="duplicate canonical namespace identifier",
-    ):
+    with pytest.raises(ValueError, match="duplicate canonical namespace identifier"):
         _validate_registry(registry)
 
 
