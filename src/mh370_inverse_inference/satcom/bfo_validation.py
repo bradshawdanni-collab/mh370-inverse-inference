@@ -11,7 +11,7 @@ from mh370_inverse_inference.provenance import ArtifactAdmissionState
 from mh370_inverse_inference.satcom.bfo_components import (
     BFOComponentInputs,
     BFOComponentResult,
-    calculate_bfo_components,
+    evaluate_bfo_components,
 )
 from mh370_inverse_inference.satcom.bfo_contract import BFOObservation
 
@@ -34,10 +34,13 @@ def _canonical_hash(payload: dict[str, Any]) -> str:
 
 def _independent_components(inputs: BFOComponentInputs) -> tuple[tuple[str, float], ...]:
     return (
-        ("satellite_motion_hz", float(inputs.satellite_motion_hz)),
-        ("aircraft_motion_hz", float(inputs.aircraft_motion_hz)),
-        ("earth_rotation_reference_frame_hz", float(inputs.earth_rotation_reference_frame_hz)),
-        ("fixed_calibration_hz", float(inputs.fixed_calibration_hz)),
+        ("SATELLITE_MOTION", float(inputs.satellite_motion_hz)),
+        ("AIRCRAFT_MOTION", float(inputs.aircraft_motion_hz)),
+        (
+            "EARTH_ROTATION_REFERENCE_FRAME",
+            float(inputs.earth_rotation_reference_frame_hz),
+        ),
+        ("FIXED_CALIBRATION", float(inputs.fixed_calibration_hz)),
     )
 
 
@@ -91,12 +94,12 @@ def validate_bfo_model(
     if inputs.admission_state is not ArtifactAdmissionState.ADMITTED:
         raise ValueError("BFO component inputs must be ADMITTED")
 
-    production: BFOComponentResult = calculate_bfo_components(observation, inputs)
+    production: BFOComponentResult = evaluate_bfo_components(observation, inputs)
     independent_components = _independent_components(inputs)
     independent_predicted_hz = sum(value for _, value in independent_components)
     independent_residual_hz = observation.bfo_hz - independent_predicted_hz
 
-    production_components = tuple(production.ordered_components)
+    production_components = tuple(production.components_hz)
     component_differences = tuple(
         abs(prod_value - independent_value)
         for (_, prod_value), (_, independent_value) in zip(
@@ -117,11 +120,11 @@ def validate_bfo_model(
     provenance = {
         "observation_id": observation.observation_id,
         "observation_source_artifact_id": observation.source_artifact_id,
-        "observation_source_version": observation.source_version,
+        "observation_source_artifact_version": observation.source_artifact_version,
         "calibration_source_id": observation.calibration_source_id,
-        "calibration_version": observation.calibration_version,
+        "calibration_source_version": observation.calibration_source_version,
         "constants_source_id": inputs.constants_source_id,
-        "constants_version": inputs.constants_version,
+        "constants_source_version": inputs.constants_source_version,
         "component_model_version": production.model_version,
     }
     if not all(value.strip() for value in provenance.values()):
