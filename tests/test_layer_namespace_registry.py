@@ -9,12 +9,8 @@ from typing import Any
 import pytest
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-REGISTRY_PATH = (
-    REPO_ROOT / "data" / "governance" / "layer_namespace_registry_v1.json"
-)
-VALIDATION_ARTIFACT_PATH = (
-    REPO_ROOT / "data" / "evidence" / "l5_validation_v1.json"
-)
+REGISTRY_PATH = REPO_ROOT / "data" / "governance" / "layer_namespace_registry_v1.json"
+VALIDATION_ARTIFACT_PATH = REPO_ROOT / "data" / "evidence" / "l5_validation_v1.json"
 VALIDATION_ARTIFACT_SHA256 = (
     "ea9579227f162614e01eb2fb3f6281c58b7aaa6f7570721d7d99742a31c1577e"
 )
@@ -75,11 +71,12 @@ def _validate_registry(registry: dict[str, Any]) -> None:
 def test_registry_hash_reproduces_deterministically() -> None:
     registry = _load_registry()
 
-    assert registry["registry_hash"] == _canonical_registry_hash(registry)
-    copied_registry = copy.deepcopy(registry)
-    assert _canonical_registry_hash(registry) == _canonical_registry_hash(
-        copied_registry
-    )
+    expected_hash = registry["registry_hash"]
+    original_hash = _canonical_registry_hash(registry)
+    copied_hash = _canonical_registry_hash(copy.deepcopy(registry))
+
+    assert expected_hash == original_hash
+    assert original_hash == copied_hash
 
 
 def test_namespace_identifiers_are_unique() -> None:
