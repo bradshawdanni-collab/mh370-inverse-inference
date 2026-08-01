@@ -76,7 +76,9 @@ class InverseExplanation:
         if self.evaluated_constraints != COMBINED_CONSTRAINT_ORDER:
             raise ValueError("evaluated_constraints must preserve canonical order")
         expected_failed = tuple(
-            item for item in COMBINED_CONSTRAINT_ORDER if item in self.failed_constraints
+            item
+            for item in COMBINED_CONSTRAINT_ORDER
+            if item in self.failed_constraints
         )
         if self.failed_constraints != expected_failed:
             raise ValueError("failed_constraints must preserve canonical order")
