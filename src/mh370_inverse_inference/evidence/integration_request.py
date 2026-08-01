@@ -9,10 +9,12 @@ from typing import Any
 from mh370_inverse_inference.engine.hashing import sha256_payload
 from mh370_inverse_inference.evidence.domain_admission import (
     EVIDENCE_DOMAIN_ADMISSION_VERSION,
-    EXCLUSIONS as ADMISSION_EXCLUSIONS,
     SUPPORTED_DOMAINS,
     EvidenceAdmissionState,
     EvidenceDomainAdmissionRecord,
+)
+from mh370_inverse_inference.evidence.domain_admission import (
+    EXCLUSIONS as ADMISSION_EXCLUSIONS,
 )
 from mh370_inverse_inference.evidence.domain_validation import (
     EVIDENCE_DOMAIN_VALIDATION_VERSION,
