@@ -45,13 +45,15 @@ class AircraftOperatingEnvelope:
     contract_version: str = AIRCRAFT_ENVELOPE_CONTRACT_VERSION
 
     def __post_init__(self) -> None:
+        minimum_speed_name = "minimum_speed_mps"
+        maximum_speed_name = "maximum_speed_mps"
         minimum_speed = _finite_non_negative(
             self.minimum_speed_mps,
-            "minimum_speed_mps",
+            minimum_speed_name,
         )
         maximum_speed = _finite_non_negative(
             self.maximum_speed_mps,
-            "maximum_speed_mps",
+            maximum_speed_name,
         )
         minimum_altitude = _finite_non_negative(
             self.minimum_altitude_m,
