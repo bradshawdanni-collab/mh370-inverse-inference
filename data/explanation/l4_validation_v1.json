@@ -1,6 +1,6 @@
 {
-  "admission_state": "PROPOSED",
-  "disposition": "PENDING_CI",
+  "admission_state": "ADMITTED",
+  "disposition": "FINAL_ADMISSION_REVIEW_PASS",
   "exclusions": [
     "NO_PROBABILITY_ASSIGNMENT",
     "NO_TRAJECTORY_OR_HYPOTHESIS_RANKING",
@@ -26,8 +26,18 @@
   "scope": "Inverse explanation validation and deterministic replay",
   "source_merge_commits": {
     "l3": "5efbb5bbfa6e3393a2961637d866702471cb3187",
-    "l4_0": "e7355ec4fd9814e567ea1d2e4606afc6ddce06ac"
+    "l4_0": "e7355ec4fd9814e567ea1d2e4606afc6ddce06ac",
+    "l4_1": "95f9329f8570ef4e7a47065c5d983b35d2fb6f5e"
   },
-  "status_note": "Final admission requires successful CI, DX.2, representative explanation reproduction, provenance checks, explanation hash verification, and deterministic replay.",
+  "source_validation_head": "ae4415d135a5480d012e322c2a9cbdc5a9258a31",
+  "verification_results": {
+    "ci": "PASS",
+    "counterfactual_mapping_verification": "PASS",
+    "deterministic_replay": "PASS",
+    "dx_2": "PASS",
+    "provenance_preservation": "PASS",
+    "representative_explanation_reproduction": "PASS"
+  },
+  "status_note": "Final admission review passed after successful CI, DX.2, representative explanation reproduction, counterfactual mapping verification, provenance preservation, explanation hash verification, and deterministic replay.",
   "version": "INVERSE-EXPLANATION-VALIDATION-1"
 }
