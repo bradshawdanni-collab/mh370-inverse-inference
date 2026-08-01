@@ -1,5 +1,7 @@
 """Independent deterministic reproduction for the L1 aircraft layer."""
 
+# fmt: off
+
 from __future__ import annotations
 
 import hashlib
