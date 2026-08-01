@@ -1,6 +1,11 @@
 {
-  "admission_state": "PROPOSED",
-  "disposition": "PENDING_CI",
+  "admission_state": "ADMITTED",
+  "checks": {
+    "ci": "PASS",
+    "dx2": "PASS",
+    "independent_reproduction": "PASS"
+  },
+  "disposition": "FINAL_ADMISSION_REVIEW_PASS",
   "exclusions": [
     "NO_BFO_TRAJECTORY_INVERSION",
     "NO_AIRCRAFT_VELOCITY_SELECTION",
@@ -23,8 +28,10 @@
   "scope": "Deterministic BFO model validation and independent reproduction",
   "source_merge_commits": {
     "l2_0": "5f286321f526cdc6f9f4730fbc21f08692d5a49f",
-    "l2_1": "f9ca67b5645fa9d1dae1b8adafa539c0fa4acb2f"
+    "l2_1": "f9ca67b5645fa9d1dae1b8adafa539c0fa4acb2f",
+    "l2_2": "f6cc7042c738c22bc68951b9be1c5bdeb274c46e"
   },
-  "status_note": "Final admission disposition requires successful CI, DX.2, and independent reproduction checks.",
+  "status_note": "Final admission review passed after successful CI, DX.2, and independent reproduction checks.",
+  "validation_head_commit": "3060f8844ce11f0ec1749e1839ea060a6f5e2edc",
   "version": "BFO-VALIDATION-1"
 }
