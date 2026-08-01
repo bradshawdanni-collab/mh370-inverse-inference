@@ -1,0 +1,25 @@
+register_id: BFO-SOURCE-REGISTER-V1
+contract_version: BFO-CONTRACT-1
+admission_state: PROPOSED
+disposition: PENDING_SOURCE_ADMISSION
+frequency_unit: Hz
+uncertainty_unit: Hz
+required_fields:
+  - observation_id
+  - timestamp_utc
+  - bfo_hz
+  - uncertainty_hz
+  - source_artifact_id
+  - source_artifact_version
+  - source_citation
+  - calibration_source_id
+  - calibration_source_version
+  - admission_state
+exclusions:
+  - NO_BFO_INVERSION
+  - NO_AIRCRAFT_VELOCITY_ESTIMATION
+  - NO_TRAJECTORY_RANKING
+  - NO_ENDPOINT_INFERENCE
+  - NO_SEARCH_AREA_RECOMMENDATION
+  - NO_LOCATION_CLAIM
+status_note: Source artifacts, citations, calibration records, CI, and independent reproduction are required before admission.
