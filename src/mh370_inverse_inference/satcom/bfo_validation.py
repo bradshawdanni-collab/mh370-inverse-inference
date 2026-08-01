@@ -32,7 +32,9 @@ def _canonical_hash(payload: dict[str, Any]) -> str:
     return hashlib.sha256(encoded).hexdigest()
 
 
-def _independent_components(inputs: BFOComponentInputs) -> tuple[tuple[str, float], ...]:
+def _independent_components(
+    inputs: BFOComponentInputs,
+) -> tuple[tuple[str, float], ...]:
     return (
         ("SATELLITE_MOTION", float(inputs.satellite_motion_hz)),
         ("AIRCRAFT_MOTION", float(inputs.aircraft_motion_hz)),
@@ -67,11 +69,15 @@ class BFOValidationReport:
             "disposition": self.disposition,
             "exclusions": list(self.exclusions),
             "failed_checks": list(self.failed_checks),
-            "independent_components": [list(item) for item in self.independent_components],
+            "independent_components": [
+                list(item) for item in self.independent_components
+            ],
             "independent_residual_hz": self.independent_residual_hz,
             "maximum_component_difference_hz": self.maximum_component_difference_hz,
             "ordered_checks": list(self.ordered_checks),
-            "production_components": [list(item) for item in self.production_components],
+            "production_components": [
+                list(item) for item in self.production_components
+            ],
             "production_residual_hz": self.production_residual_hz,
             "provenance": dict(self.provenance),
             "report_hash": self.report_hash,
