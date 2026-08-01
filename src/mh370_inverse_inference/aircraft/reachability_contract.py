@@ -1,5 +1,7 @@
 """Deterministic reachability contract against an admitted envelope."""
 
+# fmt: off
+
 from __future__ import annotations
 
 from dataclasses import dataclass
