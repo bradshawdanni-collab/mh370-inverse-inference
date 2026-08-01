@@ -82,14 +82,10 @@ class CombinedAdmissibilityValidationReport:
             "exclusions": list(self.exclusions),
             "failed_checks": list(self.failed_checks),
             "independent_disposition": self.independent_disposition,
-            "independent_failed_constraints": list(
-                self.independent_failed_constraints
-            ),
+            "independent_failed_constraints": list(self.independent_failed_constraints),
             "ordered_checks": list(self.ordered_checks),
             "production_disposition": self.production_disposition,
-            "production_failed_constraints": list(
-                self.production_failed_constraints
-            ),
+            "production_failed_constraints": list(self.production_failed_constraints),
             "provenance": dict(self.provenance),
             "replay_hash": self.replay_hash,
             "report_hash": self.report_hash,
