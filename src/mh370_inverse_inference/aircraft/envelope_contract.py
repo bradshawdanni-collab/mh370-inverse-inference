@@ -1,5 +1,7 @@
 """Immutable source-bounded aircraft operating envelope contract for L1.2."""
 
+# fmt: off
+
 from __future__ import annotations
 
 import math
@@ -45,7 +47,6 @@ class AircraftOperatingEnvelope:
     contract_version: str = AIRCRAFT_ENVELOPE_CONTRACT_VERSION
 
     def __post_init__(self) -> None:
-        # fmt: off
         minimum_speed_name = "minimum_speed_mps"
         maximum_speed_name = "maximum_speed_mps"
         minimum_speed = _finite_non_negative(
@@ -76,7 +77,6 @@ class AircraftOperatingEnvelope:
             self.maximum_turn_rate_deg_s,
             "maximum_turn_rate_deg_s",
         )
-        # fmt: on
 
         if minimum_speed > maximum_speed:
             raise ValueError("minimum_speed_mps cannot exceed maximum_speed_mps")
