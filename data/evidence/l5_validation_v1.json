@@ -1,0 +1,37 @@
+{
+  "admission_state": "PROPOSED",
+  "disposition": "PENDING_CI",
+  "exclusions": [
+    "NO_EVIDENCE_FUSION",
+    "NO_HYPOTHESIS_RANKING",
+    "NO_ENDPOINT_SELECTION",
+    "NO_SEARCH_AREA_RECOMMENDATION",
+    "NO_LOCATION_CLAIM",
+    "NO_AUTOMATIC_L3_EFFECT"
+  ],
+  "ordered_checks": [
+    "SOURCE_IDENTITY_AND_CITATION",
+    "SOURCE_SHA256",
+    "TRANSFORMATION_ORDER",
+    "UNCERTAINTY_REPRESENTATION",
+    "VALIDATION_IDENTITY",
+    "ADMISSION_STATE_RULES",
+    "CANONICAL_RECORD_HASH",
+    "L3_EFFECT_PRESERVED",
+    "DETERMINISTIC_REPLAY"
+  ],
+  "report_id": "L5-EVIDENCE-DOMAIN-VALIDATION-V1",
+  "representative_domains": [
+    "RADAR_UNCERTAINTY",
+    "DEBRIS_DRIFT",
+    "PRIOR_SEARCH_NON_DETECTION",
+    "SEARCH_COVERAGE"
+  ],
+  "scope": "Additional evidence-domain validation and deterministic replay",
+  "source_merge_commits": {
+    "l4": "f7a3ea37576777d4b4a9489599c1e13dbd6b90f1",
+    "l5_0": "79a8cfe58f52b998e4497df6274dfc7ad511515a"
+  },
+  "status_note": "Final admission requires successful CI, DX.2, representative domain reproduction, provenance and uncertainty checks, record-hash verification, preserved L3 isolation, and deterministic replay.",
+  "version": "EVIDENCE-DOMAIN-VALIDATION-1"
+}
