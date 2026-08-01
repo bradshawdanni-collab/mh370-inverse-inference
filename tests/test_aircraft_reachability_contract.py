@@ -38,11 +38,12 @@ def _state(
 
 def _envelope(
     admission_state: ArtifactAdmissionState = ArtifactAdmissionState.ADMITTED,
+    minimum_altitude_m: float = 0.0,
 ) -> AircraftOperatingEnvelope:
     return AircraftOperatingEnvelope(
         minimum_speed_mps=180.0,
         maximum_speed_mps=280.0,
-        minimum_altitude_m=0.0,
+        minimum_altitude_m=minimum_altitude_m,
         maximum_altitude_m=13_000.0,
         maximum_climb_rate_mps=10.0,
         maximum_descent_rate_mps=12.0,
@@ -121,9 +122,9 @@ def test_descent_and_end_altitude_failures_are_reported() -> None:
         _state(timestamp_utc="2014-03-07T18:22:00Z", altitude_m=1_000.0),
         _state(
             timestamp_utc="2014-03-07T18:22:10Z",
-            altitude_m=-1.0,
+            altitude_m=400.0,
         ),
-        _envelope(),
+        _envelope(minimum_altitude_m=500.0),
     )
 
     assert result.failed_constraints == (
