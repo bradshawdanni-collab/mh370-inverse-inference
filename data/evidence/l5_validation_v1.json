@@ -1,6 +1,6 @@
 {
-  "admission_state": "PROPOSED",
-  "disposition": "PENDING_CI",
+  "admission_state": "ADMITTED",
+  "disposition": "FINAL_ADMISSION_REVIEW_PASS",
   "exclusions": [
     "NO_EVIDENCE_FUSION",
     "NO_HYPOTHESIS_RANKING",
@@ -30,8 +30,26 @@
   "scope": "Additional evidence-domain validation and deterministic replay",
   "source_merge_commits": {
     "l4": "f7a3ea37576777d4b4a9489599c1e13dbd6b90f1",
-    "l5_0": "79a8cfe58f52b998e4497df6274dfc7ad511515a"
+    "l5_0": "79a8cfe58f52b998e4497df6274dfc7ad511515a",
+    "l5_1": "95a902adf930dda32c087b32b6d80cb5a5f58062"
   },
-  "status_note": "Final admission requires successful CI, DX.2, representative domain reproduction, provenance and uncertainty checks, record-hash verification, preserved L3 isolation, and deterministic replay.",
+  "source_validation_head": "25636dd90d113d733441539329b6875e4521181a",
+  "verification_results": {
+    "ci": "PASS",
+    "dx_2": "PASS"
+  },
+  "workflow_evidence": {
+    "ci": {
+      "conclusion": "success",
+      "run_id": 30694008322,
+      "run_number": 524
+    },
+    "dx_2": {
+      "conclusion": "success",
+      "run_id": 30694008326,
+      "run_number": 332
+    }
+  },
+  "status_note": "Final admission review passed after successful CI and DX.2 on the canonical L5.1 validation head. No validation logic was changed by this promotion.",
   "version": "EVIDENCE-DOMAIN-VALIDATION-1"
 }
