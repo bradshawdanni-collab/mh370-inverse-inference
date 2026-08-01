@@ -1,12 +1,13 @@
 from __future__ import annotations
 
-from dataclasses import replace
+from dataclasses import fields
 
 import pytest
 
 from mh370_inverse_inference.evidence.domain_admission import (
     EXCLUSIONS,
     EvidenceAdmissionState,
+    EvidenceDomainAdmissionRecord,
     EvidenceSource,
     TransformationStep,
     UncertaintyRepresentation,
@@ -19,7 +20,7 @@ from mh370_inverse_inference.evidence.domain_validation import (
 )
 
 
-def _record(domain_type: str):
+def _record(domain_type: str) -> EvidenceDomainAdmissionRecord:
     return create_evidence_domain_admission_record(
         domain_id=f"domain-{domain_type.lower()}",
         domain_version="v1",
@@ -57,6 +58,18 @@ def _record(domain_type: str):
     )
 
 
+def _forge_record_hash(
+    record: EvidenceDomainAdmissionRecord,
+    record_hash: str,
+) -> EvidenceDomainAdmissionRecord:
+    """Bypass construction validation to simulate corrupted stored bytes."""
+    forged = object.__new__(EvidenceDomainAdmissionRecord)
+    for field in fields(record):
+        value = record_hash if field.name == "record_hash" else getattr(record, field.name)
+        object.__setattr__(forged, field.name, value)
+    return forged
+
+
 @pytest.mark.parametrize(
     "domain_type",
     (
@@ -92,7 +105,7 @@ def test_rejects_wrong_input_type() -> None:
 
 def test_detects_tampered_record_hash() -> None:
     record = _record("DEBRIS_DRIFT")
-    tampered = replace(record, record_hash="0" * 64)
+    tampered = _forge_record_hash(record, "0" * 64)
 
     report = validate_evidence_domain_record(tampered)
 
