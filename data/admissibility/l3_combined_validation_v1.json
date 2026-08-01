@@ -1,0 +1,36 @@
+{
+  "admission_state": "PROPOSED",
+  "disposition": "PENDING_CI",
+  "exclusions": [
+    "NO_PROBABILITY_ASSIGNMENT",
+    "NO_TRAJECTORY_OR_HYPOTHESIS_RANKING",
+    "NO_ENDPOINT_SELECTION",
+    "NO_SEARCH_AREA_RECOMMENDATION",
+    "NO_DEBRIS_EVIDENCE_FUSION",
+    "NO_LOCATION_CLAIM"
+  ],
+  "ordered_checks": [
+    "PRODUCTION_EVALUATION",
+    "INDEPENDENT_REPRODUCTION",
+    "DISPOSITION_MATCH",
+    "FAILED_CONSTRAINT_ORDER_MATCH",
+    "L0_PROVENANCE_MATCH",
+    "L1_PROVENANCE_MATCH",
+    "L2_PROVENANCE_MATCH",
+    "DETERMINISTIC_REPLAY_MATCH"
+  ],
+  "report_id": "L3-COMBINED-VALIDATION-V1",
+  "representative_outcomes": [
+    "ADMISSIBLE",
+    "NOT_ADMISSIBLE"
+  ],
+  "scope": "Combined BTO, BFO, and reachability admissibility validation and deterministic replay",
+  "source_merge_commits": {
+    "l0": "741afb12b7f2bf9287cf880325c0d3c703c72b75",
+    "l1": "d88b0990a67b8458349a9702789d22513c7b6d68",
+    "l2": "7db55dd40a4ed7e8048f680c81c2b9737e31499d",
+    "l3_0": "38fe96d50cc22da21160f882971c7040fd8c7b1c"
+  },
+  "status_note": "Final admission requires successful CI, DX.2, representative outcome reproduction, provenance checks, and deterministic replay.",
+  "version": "SATCOM-AIRCRAFT-VALIDATION-1"
+}
