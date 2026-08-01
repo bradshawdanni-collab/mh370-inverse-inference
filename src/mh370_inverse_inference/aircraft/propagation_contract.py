@@ -1,5 +1,7 @@
 """Deterministic propagation contract against an admitted operating envelope."""
 
+# fmt: off
+
 from __future__ import annotations
 
 import math
