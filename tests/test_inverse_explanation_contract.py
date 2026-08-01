@@ -9,8 +9,8 @@ from mh370_inverse_inference.admissibility.satcom_aircraft import (
     CombinedAdmissibilityResult,
 )
 from mh370_inverse_inference.explanation.inverse import (
-    EXCLUSIONS,
     COUNTERFACTUAL_ACTIONS,
+    EXCLUSIONS,
     CounterfactualChange,
     explain_combined_admissibility,
 )
