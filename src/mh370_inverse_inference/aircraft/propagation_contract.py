@@ -135,9 +135,17 @@ def propagate_state(
         raise ValueError("operating envelope must be ADMITTED")
 
     elapsed = float(command.elapsed_seconds)
-    if not envelope.minimum_speed_mps <= command.target_speed_mps <= envelope.maximum_speed_mps:
+    if not (
+        envelope.minimum_speed_mps
+        <= command.target_speed_mps
+        <= envelope.maximum_speed_mps
+    ):
         raise ValueError("target speed is outside the admitted envelope")
-    if not envelope.minimum_altitude_m <= command.target_altitude_m <= envelope.maximum_altitude_m:
+    if not (
+        envelope.minimum_altitude_m
+        <= command.target_altitude_m
+        <= envelope.maximum_altitude_m
+    ):
         raise ValueError("target altitude is outside the admitted envelope")
 
     altitude_delta = command.target_altitude_m - state.altitude_m
