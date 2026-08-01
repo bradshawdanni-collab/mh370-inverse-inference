@@ -1,0 +1,33 @@
+{
+  "admission_state": "PROPOSED",
+  "disposition": "PENDING_CI",
+  "exclusions": [
+    "NO_PROBABILITY_ASSIGNMENT",
+    "NO_TRAJECTORY_OR_HYPOTHESIS_RANKING",
+    "NO_ENDPOINT_SELECTION",
+    "NO_SEARCH_AREA_RECOMMENDATION",
+    "NO_DEBRIS_EVIDENCE_FUSION",
+    "NO_LOCATION_CLAIM"
+  ],
+  "ordered_checks": [
+    "PRODUCTION_EXPLANATION",
+    "INDEPENDENT_CONSTRAINT_ORDER",
+    "INDEPENDENT_FAILED_CONSTRAINT_ORDER",
+    "INDEPENDENT_COUNTERFACTUAL_MAPPING",
+    "PROVENANCE_COMPLETENESS",
+    "EXPLANATION_HASH_MATCH",
+    "DETERMINISTIC_REPLAY_MATCH"
+  ],
+  "report_id": "L4-EXPLANATION-VALIDATION-V1",
+  "representative_outcomes": [
+    "ADMISSIBLE",
+    "NOT_ADMISSIBLE"
+  ],
+  "scope": "Inverse explanation validation and deterministic replay",
+  "source_merge_commits": {
+    "l3": "5efbb5bbfa6e3393a2961637d866702471cb3187",
+    "l4_0": "e7355ec4fd9814e567ea1d2e4606afc6ddce06ac"
+  },
+  "status_note": "Final admission requires successful CI, DX.2, representative explanation reproduction, provenance checks, explanation hash verification, and deterministic replay.",
+  "version": "INVERSE-EXPLANATION-VALIDATION-1"
+}
