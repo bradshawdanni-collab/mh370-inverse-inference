@@ -219,9 +219,7 @@ class EvidenceDomainAdmissionRecord:
             "exclusions": list(self.exclusions),
             "l3_effect": self.l3_effect,
             "sources": [item.to_payload() for item in self.sources],
-            "transformations": [
-                item.to_payload() for item in self.transformations
-            ],
+            "transformations": [item.to_payload() for item in self.transformations],
             "uncertainty": self.uncertainty.to_payload(),
             "validation": self.validation.to_payload(),
         }
