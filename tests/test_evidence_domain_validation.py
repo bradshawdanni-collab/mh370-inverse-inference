@@ -65,11 +65,10 @@ def _forge_record_hash(
     """Bypass construction validation to simulate corrupted stored bytes."""
     forged = object.__new__(EvidenceDomainAdmissionRecord)
     for field in fields(record):
-        value = (
-            record_hash
-            if field.name == "record_hash"
-            else getattr(record, field.name)
-        )
+        if field.name == "record_hash":
+            value = record_hash
+        else:
+            value = getattr(record, field.name)
         object.__setattr__(forged, field.name, value)
     return forged
 
