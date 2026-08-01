@@ -65,9 +65,7 @@ class ReachabilityResult:
         if self.elapsed_seconds <= 0.0:
             raise ValueError("elapsed_seconds must be positive")
         if self.contract_version != AIRCRAFT_REACHABILITY_CONTRACT_VERSION:
-            raise ValueError(
-                "contract_version must be AIRCRAFT-REACHABILITY-1"
-            )
+            raise ValueError("contract_version must be AIRCRAFT-REACHABILITY-1")
 
     def to_payload(self) -> dict[str, Any]:
         return {
