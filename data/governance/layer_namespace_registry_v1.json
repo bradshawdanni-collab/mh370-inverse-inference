@@ -1,5 +1,5 @@
 {
-  "admission_state": "PROPOSED",
+  "admission_state": "ADMITTED",
   "canonical_namespaces": [
     {
       "contract_version": "EVIDENCE-DOMAIN-ADMISSION-1",
@@ -19,7 +19,7 @@
       "validation_artifact": "data/evidence/l5_validation_v1.json"
     }
   ],
-  "disposition": "PENDING_CI",
+  "disposition": "FINAL_ADMISSION_REVIEW_PASS",
   "frozen_namespaces": {
     "contracts": [
       {
@@ -87,5 +87,27 @@
     "NO_SEARCH_AREA_RECOMMENDATION",
     "NO_LOCATION_CLAIM"
   ],
-  "registry_hash": "c881b790b514bf57bb3293ff1007f9edb0d8b77abccb06e389bda929084cab6e"
+  "registry_hash": "9b6b97506728d95ab4551f4d97a5a9147f565bdeb10c6796548d414ca811b79c",
+  "source_merge_commit": "a1fbdb2f4fd605977cf52962d73c97eea1331288",
+  "source_namespace_head": "7b0551f6e8266ea5fc63702c610e35b882059e15",
+  "verification_results": {
+    "ci": "PASS",
+    "dx_2": "PASS",
+    "namespace_invariants": "PASS",
+    "frozen_l5_preservation": "PASS",
+    "identity_preservation": "PASS"
+  },
+  "workflow_evidence": {
+    "ci": {
+      "conclusion": "success",
+      "run_id": 30695500992,
+      "run_number": 530
+    },
+    "dx_2": {
+      "conclusion": "success",
+      "run_id": 30695500936,
+      "run_number": 336
+    }
+  },
+  "status_note": "Final namespace admission review passed after successful CI and DX.2 on the canonical reconciliation head. This promotion changes governance status only and introduces no runtime or scientific-behaviour change."
 }
