@@ -75,7 +75,9 @@ class CombinedAdmissibilityResult:
         if self.disposition == "NOT_ADMISSIBLE" and not self.failed_constraints:
             raise ValueError("NOT_ADMISSIBLE results require failed constraints")
         expected = tuple(
-            item for item in COMBINED_CONSTRAINT_ORDER if item in self.failed_constraints
+            item
+            for item in COMBINED_CONSTRAINT_ORDER
+            if item in self.failed_constraints
         )
         if self.failed_constraints != expected:
             raise ValueError("failed_constraints must preserve canonical order")
