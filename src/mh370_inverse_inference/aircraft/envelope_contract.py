@@ -46,22 +46,20 @@ class AircraftOperatingEnvelope:
 
     def __post_init__(self) -> None:
         minimum_speed = _finite_non_negative(
-            self.minimum_speed_mps,
-            "minimum_speed_mps",
+            self.minimum_speed_mps, "minimum_speed_mps"
         )
         maximum_speed = _finite_non_negative(
-            self.maximum_speed_mps,
-            "maximum_speed_mps",
+            self.maximum_speed_mps, "maximum_speed_mps"
         )
         minimum_altitude = _finite_non_negative(
-            self.minimum_altitude_m,
-            "minimum_altitude_m",
+            self.minimum_altitude_m, "minimum_altitude_m"
         )
         maximum_altitude = _finite_non_negative(
-            self.maximum_altitude_m,
-            "maximum_altitude_m",
+            self.maximum_altitude_m, "maximum_altitude_m"
         )
-        _finite_non_negative(self.maximum_climb_rate_mps, "maximum_climb_rate_mps")
+        _finite_non_negative(
+            self.maximum_climb_rate_mps, "maximum_climb_rate_mps"
+        )
         _finite_non_negative(
             self.maximum_descent_rate_mps, "maximum_descent_rate_mps"
         )
@@ -72,7 +70,9 @@ class AircraftOperatingEnvelope:
         if minimum_speed > maximum_speed:
             raise ValueError("minimum_speed_mps cannot exceed maximum_speed_mps")
         if minimum_altitude > maximum_altitude:
-            raise ValueError("minimum_altitude_m cannot exceed maximum_altitude_m")
+            raise ValueError(
+                "minimum_altitude_m cannot exceed maximum_altitude_m"
+            )
         if not self.source_id.strip():
             raise ValueError("source_id cannot be blank")
         if not self.source_version.strip():
