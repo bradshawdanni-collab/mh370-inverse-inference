@@ -259,8 +259,7 @@ def test_accepts_all_supported_domains_without_fusion() -> None:
         "SEARCH_COVERAGE",
     )
     records = tuple(
-        _record(domain_type, index)
-        for index, domain_type in enumerate(domain_types)
+        _record(domain_type, index) for index, domain_type in enumerate(domain_types)
     )
     reports = tuple(validate_evidence_domain_record(record) for record in records)
 
