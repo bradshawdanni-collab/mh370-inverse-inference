@@ -5,7 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 from dataclasses import dataclass
-from enum import Enum
+from enum import StrEnum
 from typing import Any
 
 EVIDENCE_DOMAIN_ADMISSION_VERSION = "EVIDENCE-DOMAIN-ADMISSION-1"
@@ -25,7 +25,7 @@ EXCLUSIONS = (
 )
 
 
-class EvidenceAdmissionState(str, Enum):
+class EvidenceAdmissionState(StrEnum):
     """Governed lifecycle states for an evidence-domain record."""
 
     PROPOSED = "PROPOSED"
