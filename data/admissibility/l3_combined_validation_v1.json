@@ -1,6 +1,13 @@
 {
-  "admission_state": "PROPOSED",
-  "disposition": "PENDING_CI",
+  "admission_state": "ADMITTED",
+  "checks": {
+    "ci": "PASS",
+    "deterministic_replay": "PASS",
+    "dx2": "PASS",
+    "provenance_preservation": "PASS",
+    "representative_outcome_reproduction": "PASS"
+  },
+  "disposition": "FINAL_ADMISSION_REVIEW_PASS",
   "exclusions": [
     "NO_PROBABILITY_ASSIGNMENT",
     "NO_TRAJECTORY_OR_HYPOTHESIS_RANKING",
@@ -29,8 +36,10 @@
     "l0": "741afb12b7f2bf9287cf880325c0d3c703c72b75",
     "l1": "d88b0990a67b8458349a9702789d22513c7b6d68",
     "l2": "7db55dd40a4ed7e8048f680c81c2b9737e31499d",
-    "l3_0": "38fe96d50cc22da21160f882971c7040fd8c7b1c"
+    "l3_0": "38fe96d50cc22da21160f882971c7040fd8c7b1c",
+    "l3_1": "231d7c45a3d74f46810863bb19ca9b0a79f29380"
   },
-  "status_note": "Final admission requires successful CI, DX.2, representative outcome reproduction, provenance checks, and deterministic replay.",
+  "status_note": "Final admission review passed after successful CI, DX.2, representative outcome reproduction, provenance checks, and deterministic replay.",
+  "validation_head_commit": "736158c6b900895b4d739e0d28c4c0937991094b",
   "version": "SATCOM-AIRCRAFT-VALIDATION-1"
 }
