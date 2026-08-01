@@ -1,19 +1,19 @@
-"""Tests for the bounded L1.1 aircraft-state contract."""
+"""Tests for the bounded L1.1 aircraft-state input contract."""
 
 from dataclasses import FrozenInstanceError, replace
 
 import pytest
 
 from mh370_inverse_inference.aircraft.radar import RadarTrackPoint, RadarUncertainty
-from mh370_inverse_inference.aircraft.state import (
+from mh370_inverse_inference.aircraft.state_contract import (
     AIRCRAFT_STATE_CONTRACT_VERSION,
-    AircraftState,
+    AircraftStateInput,
     AircraftStateTransition,
 )
 
 
-def _state(timestamp: str = "2014-03-07T18:22:00Z") -> AircraftState:
-    return AircraftState(
+def _state(timestamp: str = "2014-03-07T18:22:00Z") -> AircraftStateInput:
+    return AircraftStateInput(
         timestamp_utc=timestamp,
         latitude_deg=6.0,
         longitude_deg=100.0,
@@ -96,7 +96,7 @@ def test_blank_source_identity_and_wrong_contract_fail_closed() -> None:
 
 def test_radar_initialisation_preserves_exact_values_without_inference() -> None:
     point = _radar_point()
-    state = AircraftState.from_radar_track_point(point)
+    state = AircraftStateInput.from_radar_track_point(point)
     assert state.to_payload() == {
         "altitude_m": 10_668.0,
         "contract_version": AIRCRAFT_STATE_CONTRACT_VERSION,
