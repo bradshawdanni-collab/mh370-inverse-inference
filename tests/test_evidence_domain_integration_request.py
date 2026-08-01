@@ -13,9 +13,7 @@ from mh370_inverse_inference.evidence.domain_admission import (
     ValidationIdentity,
     create_evidence_domain_admission_record,
 )
-from mh370_inverse_inference.evidence.domain_validation import (
-    validate_evidence_domain_record,
-)
+from mh370_inverse_inference.evidence.domain_validation import validate_evidence_domain_record
 from mh370_inverse_inference.evidence.integration_request import (
     CONTRACT_NAMESPACE,
     CONTRACT_VERSION,
