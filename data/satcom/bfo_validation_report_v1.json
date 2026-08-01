@@ -1,0 +1,30 @@
+{
+  "admission_state": "PROPOSED",
+  "disposition": "PENDING_CI",
+  "exclusions": [
+    "NO_BFO_TRAJECTORY_INVERSION",
+    "NO_AIRCRAFT_VELOCITY_SELECTION",
+    "NO_TRAJECTORY_RANKING",
+    "NO_DEBRIS_OR_SEARCH_EVIDENCE_FUSION",
+    "NO_ENDPOINT_INFERENCE",
+    "NO_SEARCH_AREA_SELECTION",
+    "NO_LOCATION_CLAIM"
+  ],
+  "ordered_checks": [
+    "OBSERVATION_ADMITTED",
+    "COMPONENT_INPUTS_ADMITTED",
+    "PRODUCTION_COMPONENT_MODEL",
+    "INDEPENDENT_COMPONENT_REPRODUCTION",
+    "COMPONENT_COMPARISON",
+    "RESIDUAL_COMPARISON",
+    "PROVENANCE_PRESERVATION"
+  ],
+  "report_id": "BFO-VALIDATION-REPORT-V1",
+  "scope": "Deterministic BFO model validation and independent reproduction",
+  "source_merge_commits": {
+    "l2_0": "5f286321f526cdc6f9f4730fbc21f08692d5a49f",
+    "l2_1": "f9ca67b5645fa9d1dae1b8adafa539c0fa4acb2f"
+  },
+  "status_note": "Final admission disposition requires successful CI, DX.2, and independent reproduction checks.",
+  "version": "BFO-VALIDATION-1"
+}
