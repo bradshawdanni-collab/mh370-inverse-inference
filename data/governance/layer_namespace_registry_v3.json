@@ -1,0 +1,129 @@
+{
+  "admission_state": "PROPOSED",
+  "canonical_namespaces": [
+    {
+      "contract_version": "EVIDENCE-DOMAIN-ADMISSION-1",
+      "existing_identities_preserved": true,
+      "implementation": "src/mh370_inverse_inference/evidence/domain_admission.py",
+      "name": "AdditionalEvidenceDomainAdmission",
+      "namespace": "ED1.0",
+      "status": "ADMITTED"
+    },
+    {
+      "contract_version": "EVIDENCE-DOMAIN-VALIDATION-1",
+      "existing_identities_preserved": true,
+      "implementation": "src/mh370_inverse_inference/evidence/domain_validation.py",
+      "name": "EvidenceDomainValidation",
+      "namespace": "ED1.1",
+      "status": "ADMITTED",
+      "validation_artifact": "data/evidence/l5_validation_v1.json"
+    },
+    {
+      "authority": "REQUEST_CONSTRUCTION_ONLY",
+      "contract_version": "EVIDENCE-DOMAIN-INTEGRATION-REQUEST-1",
+      "existing_identities_preserved": true,
+      "implementation": "src/mh370_inverse_inference/evidence/integration_request.py",
+      "name": "EvidenceDomainIntegrationRequest",
+      "namespace": "ED1.2",
+      "status": "ADMITTED"
+    }
+  ],
+  "disposition": "PENDING_CI",
+  "frozen_namespaces": {
+    "contracts": [
+      {
+        "name": "HypothesisEvaluationRequest",
+        "namespace": "L5.0"
+      },
+      {
+        "name": "HypothesisDefinition",
+        "namespace": "L5.1"
+      },
+      {
+        "name": "EvidenceHypothesisRelationRecord",
+        "namespace": "L5.2"
+      },
+      {
+        "name": "HypothesisEvaluationResult",
+        "namespace": "L5.3"
+      },
+      {
+        "name": "HypothesisEvaluationTrace",
+        "namespace": "L5.4"
+      },
+      {
+        "name": "ReleaseFreeze",
+        "namespace": "L5.5"
+      }
+    ],
+    "preservation_status": "FROZEN_UNCHANGED",
+    "release": "l5-v1.0.0"
+  },
+  "historical_aliases": [
+    {
+      "alias": "L5.0",
+      "authoritative": false,
+      "canonical_namespace": "ED1.0",
+      "classification": "LEGACY_COLLIDING_ALIAS",
+      "context": "ADDITIONAL_EVIDENCE_DOMAIN",
+      "retention": "HISTORICAL_TRACEABILITY_ONLY"
+    },
+    {
+      "alias": "L5.1",
+      "authoritative": false,
+      "canonical_namespace": "ED1.1",
+      "classification": "LEGACY_COLLIDING_ALIAS",
+      "context": "ADDITIONAL_EVIDENCE_DOMAIN",
+      "retention": "HISTORICAL_TRACEABILITY_ONLY"
+    }
+  ],
+  "registry_version": "LAYER-NAMESPACE-REGISTRY-3",
+  "reserved_next_namespace": {
+    "authority_status": "NONE_UNTIL_IMPLEMENTED_TESTED_AND_ADMITTED",
+    "implementation_status": "NOT_IMPLEMENTED",
+    "input_contract": "EVIDENCE-DOMAIN-INTEGRATION-REQUEST-1",
+    "name": "EvidenceDomainIntegrationResult",
+    "namespace": "ED1.3",
+    "proposed_capabilities": [
+      "CONSUME_ONE_VALID_ED1_2_REQUEST",
+      "VERIFY_REQUEST_HASH_AND_REFERENCED_RECORDS",
+      "COMBINE_EVIDENCE_DOMAINS_UNDER_EXPLICIT_INTEGRATION_POLICY",
+      "PRESERVE_EACH_DOMAIN_CONTRIBUTION",
+      "IDENTIFY_AGREEMENTS_CONFLICTS_AND_UNRESOLVED_GAPS",
+      "PRODUCE_DETERMINISTIC_INTEGRATION_RESULT",
+      "RECORD_ASSUMPTIONS_EXCLUSIONS_POLICY_IDENTITY_AND_REPLAY_HASHES"
+    ],
+    "proposed_contract_version": "EVIDENCE-DOMAIN-INTEGRATION-RESULT-1",
+    "proposed_scope_exclusions": [
+      "NO_HYPOTHESIS_RANKING",
+      "NO_TRAJECTORY_RANKING",
+      "NO_ENDPOINT_SELECTION",
+      "NO_SEARCH_AREA_RECOMMENDATION",
+      "NO_LOCATION_CLAIM",
+      "NO_L3_MODIFICATION",
+      "NO_RUNTIME_EXECUTION"
+    ],
+    "reservation_effect": "NO_IMPLEMENTATION_OR_AUTHORITY"
+  },
+  "scope_exclusions": [
+    "NO_ED1_3_IMPLEMENTATION",
+    "NO_INTEGRATION_RESULT",
+    "NO_EVIDENCE_FUSION",
+    "NO_SCORING",
+    "NO_WEIGHTING",
+    "NO_HYPOTHESIS_RANKING",
+    "NO_TRAJECTORY_RANKING",
+    "NO_L3_MODIFICATION",
+    "NO_ENDPOINT_SELECTION",
+    "NO_SEARCH_AREA_RECOMMENDATION",
+    "NO_LOCATION_CLAIM",
+    "NO_RUNTIME_AUTHORITY"
+  ],
+  "source_registry": {
+    "admission_state": "ADMITTED",
+    "path": "data/governance/layer_namespace_registry_v2.json",
+    "registry_hash": "1ddf9bb4ee65cc6d7f46efabb1b3bdc9af3f316a7d5e31c1d7fab4e588ab28b0"
+  },
+  "status_note": "ED1.3 is reserved as a proposed bounded evidence-domain integration-result contract. This reservation grants no implementation, fusion, result-generation, scoring, weighting, ranking, L3 modification, endpoint selection, search-area recommendation, location-claim, or runtime authority. ED1.0 through ED1.2 and frozen L5 remain unchanged.",
+  "registry_hash": "d865afc01e587b3a34290cd3a85e9450560a51cb47d893d7ea7c148999ca0e29"
+}
