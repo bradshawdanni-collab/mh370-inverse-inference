@@ -69,9 +69,7 @@ def _canonical_hash(registry: dict[str, Any]) -> str:
 
 def _validate_registry_v3(registry: dict[str, Any]) -> None:
     reservation = registry["reserved_next_namespace"]
-    canonical_ids = {
-        item["namespace"] for item in registry["canonical_namespaces"]
-    }
+    canonical_ids = {item["namespace"] for item in registry["canonical_namespaces"]}
 
     if registry["admission_state"] != "PROPOSED":
         raise ValueError("registry v3 must remain PROPOSED pending review")
@@ -85,19 +83,13 @@ def _validate_registry_v3(registry: dict[str, Any]) -> None:
         raise ValueError("reserved ED1.3 name changed")
     if reservation["implementation_status"] != "NOT_IMPLEMENTED":
         raise ValueError("ED1.3 must remain not implemented")
-    if (
-        reservation["authority_status"]
-        != "NONE_UNTIL_IMPLEMENTED_TESTED_AND_ADMITTED"
-    ):
+    if reservation["authority_status"] != "NONE_UNTIL_IMPLEMENTED_TESTED_AND_ADMITTED":
         raise ValueError("ED1.3 cannot have authority before admission")
     if reservation["reservation_effect"] != "NO_IMPLEMENTATION_OR_AUTHORITY":
         raise ValueError("ED1.3 reservation effect changed")
     if tuple(reservation["proposed_capabilities"]) != PROPOSED_CAPABILITIES:
         raise ValueError("ED1.3 proposed capabilities changed")
-    if (
-        tuple(reservation["proposed_scope_exclusions"])
-        != PROPOSED_SCOPE_EXCLUSIONS
-    ):
+    if tuple(reservation["proposed_scope_exclusions"]) != PROPOSED_SCOPE_EXCLUSIONS:
         raise ValueError("ED1.3 proposed scope exclusions changed")
     if tuple(registry["scope_exclusions"]) != CURRENT_SCOPE_EXCLUSIONS:
         raise ValueError("current no-authority exclusions changed")
@@ -138,17 +130,14 @@ def test_ed1_3_is_reservation_only() -> None:
     assert reservation["proposed_contract_version"] == (
         "EVIDENCE-DOMAIN-INTEGRATION-RESULT-1"
     )
-    assert reservation["input_contract"] == (
-        "EVIDENCE-DOMAIN-INTEGRATION-REQUEST-1"
-    )
+    assert reservation["input_contract"] == "EVIDENCE-DOMAIN-INTEGRATION-REQUEST-1"
     assert reservation["implementation_status"] == "NOT_IMPLEMENTED"
     assert reservation["authority_status"] == (
         "NONE_UNTIL_IMPLEMENTED_TESTED_AND_ADMITTED"
     )
     assert reservation["reservation_effect"] == "NO_IMPLEMENTATION_OR_AUTHORITY"
     assert all(
-        item["namespace"] != "ED1.3"
-        for item in registry["canonical_namespaces"]
+        item["namespace"] != "ED1.3" for item in registry["canonical_namespaces"]
     )
 
 
@@ -157,10 +146,7 @@ def test_ed1_3_proposed_boundary_is_exact() -> None:
     reservation = registry["reserved_next_namespace"]
 
     assert tuple(reservation["proposed_capabilities"]) == PROPOSED_CAPABILITIES
-    assert (
-        tuple(reservation["proposed_scope_exclusions"])
-        == PROPOSED_SCOPE_EXCLUSIONS
-    )
+    assert tuple(reservation["proposed_scope_exclusions"]) == PROPOSED_SCOPE_EXCLUSIONS
     assert tuple(registry["scope_exclusions"]) == CURRENT_SCOPE_EXCLUSIONS
 
 
