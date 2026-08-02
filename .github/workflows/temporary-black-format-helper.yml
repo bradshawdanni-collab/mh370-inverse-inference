@@ -1,9 +1,9 @@
 name: Temporary Black Format Helper
 
 on:
-  push:
+  pull_request:
     branches:
-      - agent/ed13-integration-result-reservation
+      - main
 
 permissions:
   contents: read
