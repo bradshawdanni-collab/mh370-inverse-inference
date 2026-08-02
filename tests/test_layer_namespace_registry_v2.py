@@ -25,6 +25,23 @@ FROZEN_L5 = {
     "L5.5": "ReleaseFreeze",
 }
 
+PROPOSED_LIFECYCLE = (
+    "PROPOSED",
+    "PENDING_CI",
+    "PROPOSED",
+    "NONE_UNTIL_FINAL_ADMISSION",
+)
+ADMITTED_LIFECYCLE = (
+    "ADMITTED",
+    "FINAL_ADMISSION_REVIEW_PASS",
+    "ADMITTED",
+    "REQUEST_CONSTRUCTION_ONLY",
+)
+ALLOWED_ED1_2_LIFECYCLES = {
+    PROPOSED_LIFECYCLE,
+    ADMITTED_LIFECYCLE,
+}
+
 
 def _load(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
@@ -43,6 +60,18 @@ def _canonical_hash(registry: dict[str, Any]) -> str:
 
 def _namespace_map(items: list[dict[str, Any]]) -> dict[str, str]:
     return {item["namespace"]: item["name"] for item in items}
+
+
+def _ed1_2_lifecycle(
+    registry: dict[str, Any],
+    ed1_2: dict[str, Any],
+) -> tuple[str, str, str, str]:
+    return (
+        registry["admission_state"],
+        registry["disposition"],
+        ed1_2["status"],
+        ed1_2["authority"],
+    )
 
 
 def _validate_registry_v2(registry: dict[str, Any]) -> None:
@@ -66,10 +95,8 @@ def _validate_registry_v2(registry: dict[str, Any]) -> None:
     )
     if ed1_2 is None:
         raise ValueError("ED1.2 canonical namespace is required")
-    if ed1_2["status"] != "PROPOSED":
-        raise ValueError("ED1.2 must remain PROPOSED pending admission")
-    if ed1_2["authority"] != "NONE_UNTIL_FINAL_ADMISSION":
-        raise ValueError("ED1.2 cannot have authority before final admission")
+    if _ed1_2_lifecycle(registry, ed1_2) not in ALLOWED_ED1_2_LIFECYCLES:
+        raise ValueError("ED1.2 lifecycle state or authority is invalid")
     if registry["reserved_next_namespace"] is not None:
         raise ValueError("no namespace beyond ED1.2 is reserved")
 
@@ -113,22 +140,34 @@ def test_ed1_0_and_ed1_1_identities_are_unchanged() -> None:
     assert v2["ED1.1"] == v1["ED1.1"]
 
 
-def test_ed1_2_is_proposed_without_authority() -> None:
+def test_current_ed1_2_lifecycle_is_governed() -> None:
     registry = _load(REGISTRY_V2_PATH)
     canonical = {item["namespace"]: item for item in registry["canonical_namespaces"]}
     ed1_2 = canonical["ED1.2"]
 
-    assert registry["admission_state"] == "PROPOSED"
-    assert registry["disposition"] == "PENDING_CI"
-    assert ed1_2 == {
-        "authority": "NONE_UNTIL_FINAL_ADMISSION",
-        "contract_version": "EVIDENCE-DOMAIN-INTEGRATION-REQUEST-1",
-        "existing_identities_preserved": True,
-        "implementation": "src/mh370_inverse_inference/evidence/integration_request.py",
-        "name": "EvidenceDomainIntegrationRequest",
-        "namespace": "ED1.2",
-        "status": "PROPOSED",
-    }
+    assert _ed1_2_lifecycle(registry, ed1_2) in ALLOWED_ED1_2_LIFECYCLES
+    assert ed1_2["contract_version"] == "EVIDENCE-DOMAIN-INTEGRATION-REQUEST-1"
+    assert ed1_2["existing_identities_preserved"] is True
+    assert (
+        ed1_2["implementation"]
+        == "src/mh370_inverse_inference/evidence/integration_request.py"
+    )
+    assert ed1_2["name"] == "EvidenceDomainIntegrationRequest"
+
+
+def test_registry_v2_accepts_final_request_construction_admission() -> None:
+    registry = _load(REGISTRY_V2_PATH)
+    ed1_2 = next(
+        item
+        for item in registry["canonical_namespaces"]
+        if item["namespace"] == "ED1.2"
+    )
+    registry["admission_state"] = "ADMITTED"
+    registry["disposition"] = "FINAL_ADMISSION_REVIEW_PASS"
+    ed1_2["status"] = "ADMITTED"
+    ed1_2["authority"] = "REQUEST_CONSTRUCTION_ONLY"
+
+    _validate_registry_v2(registry)
 
 
 def test_no_namespace_beyond_ed1_2_is_reserved() -> None:
@@ -162,7 +201,7 @@ def test_registry_v2_rejects_frozen_l5_2_remap() -> None:
         _validate_registry_v2(registry)
 
 
-def test_registry_v2_rejects_premature_ed1_2_authority() -> None:
+def test_registry_v2_rejects_unauthorized_ed1_2_authority() -> None:
     registry = _load(REGISTRY_V2_PATH)
     ed1_2 = next(
         item
@@ -171,5 +210,21 @@ def test_registry_v2_rejects_premature_ed1_2_authority() -> None:
     )
     ed1_2["authority"] = "ACTIVE"
 
-    with pytest.raises(ValueError, match="cannot have authority"):
+    with pytest.raises(ValueError, match="lifecycle state or authority is invalid"):
+        _validate_registry_v2(registry)
+
+
+def test_registry_v2_rejects_broad_authority_after_admission() -> None:
+    registry = _load(REGISTRY_V2_PATH)
+    ed1_2 = next(
+        item
+        for item in registry["canonical_namespaces"]
+        if item["namespace"] == "ED1.2"
+    )
+    registry["admission_state"] = "ADMITTED"
+    registry["disposition"] = "FINAL_ADMISSION_REVIEW_PASS"
+    ed1_2["status"] = "ADMITTED"
+    ed1_2["authority"] = "ACTIVE"
+
+    with pytest.raises(ValueError, match="lifecycle state or authority is invalid"):
         _validate_registry_v2(registry)
