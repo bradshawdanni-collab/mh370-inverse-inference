@@ -164,9 +164,9 @@ def test_registry_v3_rejects_ed1_3_implementation() -> None:
 
 def test_registry_v3_rejects_ed1_3_authority() -> None:
     registry = _load(REGISTRY_V3_PATH)
-    registry["reserved_next_namespace"]["authority_status"] = (
-        "INTEGRATION_RESULT_AUTHORITY"
-    )
+    registry["reserved_next_namespace"][
+        "authority_status"
+    ] = "INTEGRATION_RESULT_AUTHORITY"
 
     with pytest.raises(ValueError, match="cannot have authority"):
         _validate_registry_v3(registry)
