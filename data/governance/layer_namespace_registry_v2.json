@@ -1,5 +1,5 @@
 {
-  "admission_state": "PROPOSED",
+  "admission_state": "ADMITTED",
   "canonical_namespaces": [
     {
       "contract_version": "EVIDENCE-DOMAIN-ADMISSION-1",
@@ -19,16 +19,16 @@
       "validation_artifact": "data/evidence/l5_validation_v1.json"
     },
     {
-      "authority": "NONE_UNTIL_FINAL_ADMISSION",
+      "authority": "REQUEST_CONSTRUCTION_ONLY",
       "contract_version": "EVIDENCE-DOMAIN-INTEGRATION-REQUEST-1",
       "existing_identities_preserved": true,
       "implementation": "src/mh370_inverse_inference/evidence/integration_request.py",
       "name": "EvidenceDomainIntegrationRequest",
       "namespace": "ED1.2",
-      "status": "PROPOSED"
+      "status": "ADMITTED"
     }
   ],
-  "disposition": "PENDING_CI",
+  "disposition": "FINAL_ADMISSION_REVIEW_PASS",
   "frozen_namespaces": {
     "contracts": [
       {
@@ -97,6 +97,30 @@
     "path": "data/governance/layer_namespace_registry_v1.json",
     "registry_hash": "9b6b97506728d95ab4551f4d97a5a9147f565bdeb10c6796548d414ca811b79c"
   },
-  "status_note": "ED1.2 is proposed as a deterministic request-only contract. The admitted ED1.0 and ED1.1 identities and the frozen L5 release remain unchanged. ED1.2 has no authority until separate final admission.",
-  "registry_hash": "6412d2c39af5eef5eefe44a87358aecfce527fd9a832d58d177c6a913bf317e3"
+  "source_pr": 214,
+  "source_merge_commit": "dce06b23b091bf7609d88137233cb46ebb9f2d49",
+  "source_implementation_head": "22157f7d66943b376a44a310abc14d644e7c1959",
+  "verification_results": {
+    "ci": "PASS",
+    "dx_2": "PASS",
+    "request_contract_tests": "PASS",
+    "deterministic_replay_and_hash": "PASS",
+    "ed1_0_ed1_1_identity_preservation": "PASS",
+    "frozen_l5_preservation": "PASS",
+    "scope_boundary_preservation": "PASS"
+  },
+  "workflow_evidence": {
+    "ci": {
+      "conclusion": "success",
+      "run_id": 30697073005,
+      "run_number": 539
+    },
+    "dx_2": {
+      "conclusion": "success",
+      "run_id": 30697073009,
+      "run_number": 343
+    }
+  },
+  "status_note": "Final ED1.2 admission review passed after successful CI and DX.2 on the canonical implementation head. ED1.2 authorizes deterministic request construction only and does not authorize evidence fusion, weighting, scoring, ranking, L3 modification, endpoint selection, search-area recommendation, or location claims.",
+  "registry_hash": "1ddf9bb4ee65cc6d7f46efabb1b3bdc9af3f316a7d5e31c1d7fab4e588ab28b0"
 }
