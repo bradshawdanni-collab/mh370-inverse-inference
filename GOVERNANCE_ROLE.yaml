@@ -20,7 +20,7 @@ not_authoritative_for:
 canonical_upstream:
   repository: "bradshawdanni-collab/aurum-v-kernel"
   version: "1.0.1"
-  commit: "7f442326f37554aa34b91474648d8406ba99aa5b"
+  commit: "ecb6e7f5bb9686ced5f583ab72a73fc613633ad2"
 required_reviews:
   - "constitutional owner"
   - "domain scientific reviewer"
