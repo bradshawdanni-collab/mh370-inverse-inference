@@ -9,10 +9,12 @@ It is authoritative only for repository-local domain assumptions, transforms, va
 ## Canonical upstream
 
 ```text
-repository: bradshawdanni-collab/aurum-v-kernel
-version:    1.0.1
-commit:     7f442326f37554aa34b91474648d8406ba99aa5b
+public_identifier: AURUMV_CONTROLLED_CANONICAL_UPSTREAM
+version:           1.0.1
+binding:           AURUMV_UPSTREAM_BINDING_MH370_BOUNDARY_V1_0_1
 ```
+
+The public identifier denotes the controlled canonical AURUM-V upstream. Exact repository topology and source revision are intentionally not disclosed on this public surface.
 
 AURUM-V kernel semantics govern admissibility states, invariants, state transitions, refusal semantics, and execution authority.
 
@@ -24,7 +26,7 @@ This repository does not:
 - issue authoritative accident findings;
 - redefine AURUM-V kernel states or invariants;
 - weaken a kernel denial in order to preserve a domain hypothesis;
-- create execution authority absent from the pinned kernel;
+- create execution authority absent from the controlled canonical upstream;
 - independently certify its own conclusions.
 
 ## Domain rule
