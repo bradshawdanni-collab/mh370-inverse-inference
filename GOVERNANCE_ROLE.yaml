@@ -18,9 +18,9 @@ not_authoritative_for:
   - "constitutional authority"
   - "independent certification"
 canonical_upstream:
-  repository: "bradshawdanni-collab/aurum-v-kernel"
+  repository: "AURUMV_CONTROLLED_CANONICAL_UPSTREAM"
   version: "1.0.1"
-  commit: "ecb6e7f5bb9686ced5f583ab72a73fc613633ad2"
+  commit: "AURUMV_UPSTREAM_BINDING_MH370_ROLE_V1_0_1"
 required_reviews:
   - "constitutional owner"
   - "domain scientific reviewer"
